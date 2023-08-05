@@ -1,11 +1,10 @@
 'use client';
 
 import { ReactNode } from 'react';
-
 import { useEffect, useState } from 'react';
 
 // next
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 // hooks
@@ -59,39 +58,30 @@ function getSystemAlertIcon(level: SystemAlertLevel) {
   }
 }
 
-export default function DefaultNavBar({ children }: { children: ReactNode }) {
+export default function DefaultNavBar({
+  user,
+  children,
+}: {
+  user: User;
+  children: ReactNode;
+}) {
   // state
   const [visible, setVisible] = useState<boolean>(false);
 
   // router
   const router = useRouter();
+  const pathname = usePathname();
 
   // store
   const dispatch = useAppDispatch();
   const { alerts } = useAppSelector((state) => state.common);
-  const { user } = useAppSelector((state) => state.user);
   const { countOfUnread } = useAppSelector((state) => state.notice);
 
   // useeffect
   useEffect(() => {
-    if (user) {
+    if (!user) {
       return;
     }
-    dispatch(
-      requestGetUser({
-        exceptionHandle: () =>
-          router.push('/api/oauth2/authorization/bob-works'),
-        handleAfter: () => {
-          dispatch(
-            requestCountOfUnread({
-              exceptionHandle: {
-                handleAuthError: handleLogout,
-              },
-            }),
-          );
-        },
-      }),
-    );
   }, []);
 
   useEffect(() => {
@@ -110,8 +100,6 @@ export default function DefaultNavBar({ children }: { children: ReactNode }) {
   };
 
   const activeMenuItem = (menuPath: string): string => {
-    const pathname = location.pathname;
-
     if (menuPath === '/') {
       return pathname.length === 1 ? 'active' : '';
     }
