@@ -213,7 +213,7 @@ export default function DefaultNavBar({
                 Bob Works
               </div>
             </Navbar.Start>
-            <Navbar.End className="lg:w-11/12">
+            <Navbar.End className="lg:w-full">
               <div className="mr-10">
                 <b>{user?.team?.name}</b> - <span>{user?.position?.name}</span>
                 <b className="ml-4">{user?.name}</b>
