@@ -82,6 +82,8 @@ export default function DefaultNavBar({
     if (!user) {
       return;
     }
+
+    dispatch(requestCountOfUnread({ exceptionHandle: {} }));
   }, []);
 
   useEffect(() => {

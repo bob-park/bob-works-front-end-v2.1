@@ -6,7 +6,6 @@ const AUTH_URL = '/api/oauth2/authorization/bob-works';
 const LOGOUT_URL = '/api/logout';
 
 const CLIENT_SERVICE_PATH = process.env.CLIENT_SERVICE_PATH;
-const COOKIE_SESSION_ID = 'JSESSIONID';
 
 const AUTH_UNCHECK_URLS = [AUTH_URL];
 
@@ -21,15 +20,21 @@ function checkedAuth(url: string) {
 async function apiCall(
   url: string,
   method: string,
-  headers: HeadersInit,
+  headers: Headers,
   params?: URLSearchParams,
   body?: any,
 ) {
-  const response = await fetch(`${CLIENT_SERVICE_PATH + url}?` + params, {
-    method,
-    body,
-    headers,
-  });
+  const response = await fetch(
+    `${CLIENT_SERVICE_PATH + url}${params ? `?${params}` : ''}`,
+    {
+      method,
+      headers: {
+        Cookie: headers.get('Cookie') || '',
+        'Content-Type': headers.get('Content-Type') || '',
+      },
+      body,
+    },
+  );
 
   return response;
 }
@@ -43,7 +48,7 @@ export async function middleware(req: NextRequest) {
 
     const params = req.nextUrl.searchParams;
 
-    let body = req.body;
+    const body = req.body;
 
     const apiResponse = await apiCall(
       requestUrl,
