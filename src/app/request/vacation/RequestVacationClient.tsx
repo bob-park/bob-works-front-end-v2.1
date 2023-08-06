@@ -205,175 +205,202 @@ export default function RequestVacationClient() {
   };
 
   return (
-    <Card className="bg-base-100">
-      <Card.Body>
-        <Form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-5 gap-10">
-            <div className="col-span-1 text-center pt-2">
-              <span className="">휴가 종류</span>
-            </div>
-            <div className="col-span-1">
-              {vacationTypes.map((vacationType) => (
-                <Form.Label key={vacationType.id} title={vacationType.name}>
-                  <Radio
-                    color="primary"
-                    name="vacationType"
-                    value={vacationType.id}
-                    checked={selectVacationType.id === vacationType.id}
-                    onChange={(e) =>
-                      setSelectVacationType(
-                        vacationTypes.find(
-                          (item) => item.id == e.target.value,
-                        ) || vacationTypes[0],
-                      )
-                    }
-                  />
-                </Form.Label>
-              ))}
-            </div>
-            <div className="col-span-1 text-center pt-2">
-              <span className="">휴가 종류</span>
-            </div>
-            <div className="col-span-1">
-              <Select
-                color="primary"
-                value={selectVacationSubType.id}
-                onChange={(e) =>
-                  setSelectVacationSubType(
-                    vacationSubTypes.find(
-                      (item) => item.id === e.target.value,
-                    ) || vacationSubTypes[0],
-                  )
-                }
-              >
-                <Select.Option value="ALL">종일</Select.Option>
-                <Select.Option value="AM">오전</Select.Option>
-                <Select.Option value="PM">오후</Select.Option>
-              </Select>
-            </div>
-            <div className="col-span-1"></div>
-            <div className="col-span-1 text-center pt-2">
-              <span className="">휴가일</span>
-            </div>
-            <div className="col-span-3">
-              <Datepicker
-                placeholder="날짜 선택"
-                inputClassName="input w-full input-primary input-bordered focus:outline-offset-0 z-100"
-                minDate={new Date(new Date().getFullYear(), 1, 1)}
-                maxDate={new Date(new Date().getFullYear(), 11, 31)}
-                value={dateValue}
-                showFooter
-                onChange={(value) => setDateValue(value as VacationDate)}
-                i18n="ko"
-                configs={{
-                  footer: {
-                    cancel: '취소',
-                    apply: '적용',
-                  },
-                }}
-              />
-            </div>
-            <div className="col-span-2"></div>
-            <div className="col-span-5">
-              {selectVacationType.id === 'ALTERNATIVE' && (
-                <div className="grid grid-cols-5 gap-10">
-                  <div className="col-span-1 text-center pt-2">
-                    <span className="">대체 휴가 선택</span>
-                  </div>
-                  <div className="col-span-1">
-                    <Button
-                      type="button"
-                      variant="outline"
+    <>
+      <Card className="bg-base-100">
+        <Card.Body>
+          <Form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-5 gap-10">
+              <div className="col-span-1 text-center pt-2">
+                <span className="">휴가 종류</span>
+              </div>
+              <div className="col-span-1">
+                {vacationTypes.map((vacationType) => (
+                  <Form.Label key={vacationType.id} title={vacationType.name}>
+                    <Radio
                       color="primary"
-                      onClick={() => setOpenSelectAlternative(true)}
-                    >
-                      선택
-                    </Button>
-                  </div>
-                  <div className="col-span-3">
-                    {selectAlternativeList
-                      .sort((o1, o2) => {
-                        const findO1 = alternativeVacations.find(
-                          (i) => i.id == o1,
-                        );
-
-                        const findO2 = alternativeVacations.find(
-                          (i) => i.id == o2,
-                        );
-
-                        if (!findO1 || !findO2) {
-                          return 0;
-                        }
-
-                        return findO1.effectiveDate > findO2.effectiveDate
-                          ? 1
-                          : -1;
-                      })
-                      .map((item) => {
-                        const findItem = alternativeVacations.find(
-                          (i) => i.id == item,
-                        );
-
-                        if (!findItem) {
-                          return;
-                        }
-
-                        return (
-                          <Badge
-                            key={`selected_alternative_${item}`}
-                            className="m-1"
-                            size="lg"
-                            color="accent"
-                          >
-                            {`${findItem.effectiveDate} (${
-                              findItem.effectiveCount - findItem.usedCount
-                            })`}
-                          </Badge>
-                        );
-                      })}
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="col-span-1 text-center pt-2">
-              <span className="">사유</span>
-            </div>
-            <div className="col-span-3">
-              <Input
-                className="w-full"
-                required
-                bordered
-                color="primary"
-                placeholder="사유"
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-              />
-            </div>
-
-            <div className="col-span-5">
-              <div className="flex justify-end gap-5">
-                <Button className="w-52" type="button" onClick={handleCancel}>
-                  <ImCancelCircle className="w-5 h-5" />
-                  취소
-                </Button>
-                <Button
-                  className="w-52"
-                  type="submit"
+                      name="vacationType"
+                      value={vacationType.id}
+                      checked={selectVacationType.id === vacationType.id}
+                      onChange={(e) =>
+                        setSelectVacationType(
+                          vacationTypes.find(
+                            (item) => item.id == e.target.value,
+                          ) || vacationTypes[0],
+                        )
+                      }
+                    />
+                  </Form.Label>
+                ))}
+              </div>
+              <div className="col-span-1 text-center pt-2">
+                <span className="">휴가 종류</span>
+              </div>
+              <div className="col-span-1">
+                <Select
                   color="primary"
-                  disabled={isLoading}
+                  value={selectVacationSubType.id}
+                  onChange={(e) =>
+                    setSelectVacationSubType(
+                      vacationSubTypes.find(
+                        (item) => item.id === e.target.value,
+                      ) || vacationSubTypes[0],
+                    )
+                  }
                 >
-                  {isLoading ? (
-                    <span className="loading loading-spinner loading-md" />
-                  ) : (
-                    <BsFileArrowUp className="w-5 h-5" />
-                  )}
-                  신청
-                </Button>
+                  <Select.Option value="ALL">종일</Select.Option>
+                  <Select.Option value="AM">오전</Select.Option>
+                  <Select.Option value="PM">오후</Select.Option>
+                </Select>
+              </div>
+              <div className="col-span-1"></div>
+              <div className="col-span-1 text-center pt-2">
+                <span className="">휴가일</span>
+              </div>
+              <div className="col-span-3">
+                <Datepicker
+                  placeholder="날짜 선택"
+                  inputClassName="input w-full input-primary input-bordered focus:outline-offset-0 z-100"
+                  minDate={new Date(new Date().getFullYear(), 1, 1)}
+                  maxDate={new Date(new Date().getFullYear(), 11, 31)}
+                  value={dateValue}
+                  showFooter
+                  onChange={(value) => setDateValue(value as VacationDate)}
+                  i18n="ko"
+                  configs={{
+                    footer: {
+                      cancel: '취소',
+                      apply: '적용',
+                    },
+                  }}
+                />
+              </div>
+              <div className="col-span-2"></div>
+              <div className="col-span-5">
+                {selectVacationType.id === 'ALTERNATIVE' && (
+                  <div className="grid grid-cols-5 gap-10">
+                    <div className="col-span-1 text-center pt-2">
+                      <span className="">대체 휴가 선택</span>
+                    </div>
+                    <div className="col-span-1">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        color="primary"
+                        onClick={() => setOpenSelectAlternative(true)}
+                      >
+                        선택
+                      </Button>
+                    </div>
+                    <div className="col-span-3">
+                      {selectAlternativeList
+                        .sort((o1, o2) => {
+                          const findO1 = alternativeVacations.find(
+                            (i) => i.id == o1,
+                          );
+
+                          const findO2 = alternativeVacations.find(
+                            (i) => i.id == o2,
+                          );
+
+                          if (!findO1 || !findO2) {
+                            return 0;
+                          }
+
+                          return findO1.effectiveDate > findO2.effectiveDate
+                            ? 1
+                            : -1;
+                        })
+                        .map((item) => {
+                          const findItem = alternativeVacations.find(
+                            (i) => i.id == item,
+                          );
+
+                          if (!findItem) {
+                            return;
+                          }
+
+                          return (
+                            <Badge
+                              key={`selected_alternative_${item}`}
+                              className="m-1"
+                              size="lg"
+                              color="accent"
+                            >
+                              {`${findItem.effectiveDate} (${
+                                findItem.effectiveCount - findItem.usedCount
+                              })`}
+                            </Badge>
+                          );
+                        })}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="col-span-1 text-center pt-2">
+                <span className="">사유</span>
+              </div>
+              <div className="col-span-3">
+                <Input
+                  className="w-full"
+                  required
+                  bordered
+                  color="primary"
+                  placeholder="사유"
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                />
+              </div>
+
+              <div className="col-span-5">
+                <div className="flex justify-end gap-5">
+                  <Button className="w-52" type="button" onClick={handleCancel}>
+                    <ImCancelCircle className="w-5 h-5" />
+                    취소
+                  </Button>
+                  <Button
+                    className="w-52"
+                    type="submit"
+                    color="primary"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <span className="loading loading-spinner loading-md" />
+                    ) : (
+                      <BsFileArrowUp className="w-5 h-5" />
+                    )}
+                    신청
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </Form>
-      </Card.Body>
-    </Card>
+          </Form>
+        </Card.Body>
+      </Card>
+      <Modal
+        className="w-11/12 max-w-5xl"
+        open={openSelectAlternative}
+        backdrop
+      >
+        <Modal.Header className="font-bold">대체 휴가 선택</Modal.Header>
+        <Modal.Body>
+          <DocumentTable
+            firstCheckbox
+            headers={alternativeHeaderList}
+            dataList={alternativeVacations}
+            checkedList={selectAlternativeList}
+            onChecked={handleAlternativeChecked}
+            onCheckedAll={handleAlternativeCheckedAll}
+          />
+        </Modal.Body>
+        <Modal.Actions>
+          <Button
+            color="primary"
+            onClick={() => setOpenSelectAlternative(false)}
+          >
+            완료
+          </Button>
+        </Modal.Actions>
+      </Modal>
+    </>
   );
 }
