@@ -30,6 +30,12 @@ import DocumentPagination from '@/components/DocumentPagination';
 import { getTotalPageCount } from '@/utils/paginationUtils';
 import { DocumentType, DocumentsStatus } from '@/store/document/types';
 
+import TimeAgo from 'timeago-react';
+import * as timeago from 'timeago.js';
+import ko from 'timeago.js/lib/lang/ko';
+
+timeago.register('ko', ko);
+
 type SelectValue = {
   id: string;
   name: string;
@@ -90,13 +96,12 @@ const headers = [
   {
     id: 'createdDate',
     value: '신청일',
-    parse: (input: Date) => format(new Date(input), 'yyyy-MM-dd hh:mm:ss'),
+    parse: (input: Date) => <TimeAgo datetime={input} locale="ko" />,
   },
   {
     id: 'approvedDateTime',
     value: '결재일',
-    parse: (input: Date) =>
-      input && format(new Date(input), 'yyyy-MM-dd hh:mm:ss'),
+    parse: (input: Date) => input && <TimeAgo datetime={input} locale="ko" />,
   },
 ];
 
