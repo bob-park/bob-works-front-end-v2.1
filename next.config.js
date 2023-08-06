@@ -3,10 +3,14 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/:path*',
-        destination: process.env.CLIENT_SERVICE_PATH + '/:path*',
+        source: '/api/oauth2/authorization/bob-works',
+        destination:
+          process.env.CLIENT_SERVICE_PATH + '/oauth2/authorization/bob-works',
       },
     ];
+  },
+  experimental: {
+    outputStandalone: true,
   },
 };
 

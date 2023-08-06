@@ -5,8 +5,19 @@ export type DocumentType = 'VACATION' | 'HOLIDAY_WORK';
 export type DocumentsState = {
   isLoading: boolean;
   types: DocumentsType[];
+  // document search params
+  searchParams: {
+    page: number;
+    size: number;
+  };
   pageable: Pageable<Documents>;
   vacationDetail: VacationDocumentDetail;
+
+  // approval search params
+  approvalSearchParams: {
+    page: number;
+    size: number;
+  };
   approvalList: Pageable<DocumentApproval>;
   approvalDetail?: DocumentApproval;
 };

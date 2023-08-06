@@ -82,6 +82,8 @@ export default function DefaultNavBar({
     if (!user) {
       return;
     }
+
+    dispatch(requestCountOfUnread({ exceptionHandle: {} }));
   }, []);
 
   useEffect(() => {
@@ -189,7 +191,7 @@ export default function DefaultNavBar({
         open={visible}
         onClickOverlay={toggleVisible}
       >
-        <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-sm">
+        <div className="sticky top-0 z-30 flex h-20 w-full justify-center bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-sm">
           <Navbar className="">
             <Navbar.Start className="flex-none lg:hidden">
               <div className="flex-none lg:hidden">
@@ -213,7 +215,7 @@ export default function DefaultNavBar({
                 Bob Works
               </div>
             </Navbar.Start>
-            <Navbar.End className="lg:w-11/12">
+            <Navbar.End className="lg:w-full">
               <div className="mr-10">
                 <b>{user?.team?.name}</b> - <span>{user?.position?.name}</span>
                 <b className="ml-4">{user?.name}</b>
@@ -223,8 +225,8 @@ export default function DefaultNavBar({
                   src={user?.avatar || '/default_avatar.jpg'}
                   size="sm"
                   shape="circle"
+                  border
                   online
-                  className="border rounded-full"
                 />
                 <Dropdown.Menu className="w-48 bg-base-100 shadow-xl ">
                   <li>
