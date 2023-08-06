@@ -106,14 +106,12 @@ export default function SearchDocumentApprovalClient() {
 
   // store
   const dispatch = useAppDispatch();
-  const { types, isLoading, approvalList } = useAppSelector(
-    (state) => state.document,
-  );
+  const { types, isLoading, approvalList, approvalSearchParams } =
+    useAppSelector((state) => state.document);
 
   // state
   const [page, setPage] = useState<PaginationParams>({
-    size: 10,
-    page: 0,
+    ...approvalSearchParams,
   });
 
   const dataList = approvalList.content.map((item) => {

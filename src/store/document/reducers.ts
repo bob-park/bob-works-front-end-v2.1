@@ -119,7 +119,10 @@ const reducers = {
       exceptionHandle: ExceptionHandle;
     }>,
   ) => {
+    const { params } = action.payload;
+
     state.isLoading = true;
+    state.approvalSearchParams = params;
   },
   successApprovalDocuments: (
     state: DocumentsState,

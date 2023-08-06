@@ -105,7 +105,7 @@ export default function SearchDocumentClient() {
   );
 
   // state
-  const [page, setPage] = useState<PaginationParams>(searchParams);
+  const [page, setPage] = useState<PaginationParams>({ ...searchParams });
 
   const dataList = pageable.content.map((item) => {
     return {
