@@ -100,15 +100,12 @@ export default function SearchDocumentClient() {
 
   // store
   const dispatch = useAppDispatch();
-  const { types, isLoading, pageable } = useAppSelector(
+  const { types, isLoading, searchParams, pageable } = useAppSelector(
     (state) => state.document,
   );
 
   // state
-  const [page, setPage] = useState<PaginationParams>({
-    size: 10,
-    page: 0,
-  });
+  const [page, setPage] = useState<PaginationParams>(searchParams);
 
   const dataList = pageable.content.map((item) => {
     return {
@@ -122,24 +119,14 @@ export default function SearchDocumentClient() {
 
   // useEffect
   useEffect(() => {
-    dispatch(
-      requestGetDocumentType({
-        handleAuthError: handleLogout,
-      }),
-    );
-
-    // handleSearch(page);
+    dispatch(requestGetDocumentType({}));
   }, []);
 
-  // useEffect
+  useEffect(() => {}, []);
+
   useEffect(() => {
     handleSearch(page);
   }, [page]);
-
-  // handle
-  const handleLogout = () => {
-    router.push('/api/logout');
-  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -149,9 +136,7 @@ export default function SearchDocumentClient() {
     dispatch(
       requestSearchDocument({
         params,
-        exceptionHandle: {
-          handleAuthError: handleLogout,
-        },
+        exceptionHandle: {},
       }),
     );
   };

@@ -6,6 +6,10 @@ import { DocumentsState } from './types';
 const initialState: DocumentsState = {
   isLoading: false,
   types: [],
+  searchParams: {
+    size: 10,
+    page: 0,
+  },
   pageable: {
     total: 0,
     content: [],
@@ -15,6 +19,10 @@ const initialState: DocumentsState = {
     },
   },
   vacationDetail: {},
+  approvalSearchParams: {
+    page: 0,
+    size: 10,
+  },
   approvalList: {
     content: [],
     total: 0,
