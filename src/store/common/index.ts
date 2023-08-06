@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import slice from './slice';
-import { RootState } from '@/store/store';
+import { RootState } from '@/store/rootStore';
 
 const selectorAllState = createSelector(
   (state: CommonState) => state.alerts,
