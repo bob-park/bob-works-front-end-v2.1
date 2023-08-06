@@ -20,6 +20,12 @@ import { PaginationParams } from '@/store/types';
 
 import { Notice } from '@/store/notice/types';
 
+import TimeAgo from 'timeago-react';
+import * as timeago from 'timeago.js';
+import ko from 'timeago.js/lib/lang/ko';
+
+timeago.register('ko', ko);
+
 // actions
 const { requestSearchNotice, requestReadNotice, requestGetNotice } =
   noticeActions;
@@ -42,7 +48,7 @@ const headers = [
   {
     id: 'createdDate',
     value: '공지 날짜',
-    parse: (input: Date) => format(new Date(input), 'yyyy-MM-dd hh:mm:ss'),
+    parse: (input: Date) => <TimeAgo datetime={input} locale="ko" />,
   },
 ];
 
