@@ -225,7 +225,6 @@ export default function DefaultNavBar({
                   shape="circle"
                   border
                   online
-                  // className="border rounded-full"
                 />
                 <Dropdown.Menu className="w-48 bg-base-100 shadow-xl ">
                   <li>
