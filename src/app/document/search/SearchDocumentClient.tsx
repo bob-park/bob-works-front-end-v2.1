@@ -142,7 +142,7 @@ export default function SearchDocumentClient() {
   };
 
   const handleMoveDetail = (id: number, type: DocumentType) => {
-    const moveUri = `/document/search/${type.toLowerCase()}?id=${id}`;
+    const moveUri = `/document/search/${type.toLowerCase()}/${id}`;
 
     router.push(moveUri);
   };
