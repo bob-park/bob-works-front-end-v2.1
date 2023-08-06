@@ -152,7 +152,7 @@ export default function SearchDocumentApprovalClient() {
   };
 
   const handleMoveDetail = (id: number, type: DocumentType) => {
-    const moveUri = `/document/approve/${type.toLowerCase()}?approvalId=${id}`;
+    const moveUri = `/document/approve/${type.toLowerCase()}/${id}`;
 
     router.push(moveUri);
   };
