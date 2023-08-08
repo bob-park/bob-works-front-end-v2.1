@@ -177,13 +177,13 @@ export default function DefaultNavBar({
                 </Link>
               </Menu.Item>
               <Menu.Item>
-                <a>
+                <Link
+                  className={activeMenuItem('/request/holiday')}
+                  href="/request/holiday"
+                >
                   <MdOutlineHolidayVillage />
                   휴일 근무 보고서 신청
-                  <Badge size="sm" color="secondary">
-                    준비중
-                  </Badge>
-                </a>
+                </Link>
               </Menu.Item>
             </Menu>
           </aside>
