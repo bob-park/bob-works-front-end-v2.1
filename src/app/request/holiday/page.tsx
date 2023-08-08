@@ -1,3 +1,5 @@
+import HolidayWorkReportClient from './HolidayWorkReportClient';
+
 export default function HolidayWorkReportPage() {
   return (
     <main className="w-full f-full">
@@ -5,6 +7,8 @@ export default function HolidayWorkReportPage() {
         <div className="my-4">
           <h2 className="text-2xl font-bold">휴일 근무 보고서 신청</h2>
         </div>
+
+        <HolidayWorkReportClient />
       </div>
     </main>
   );
