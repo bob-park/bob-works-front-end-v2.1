@@ -3,16 +3,21 @@
 import { useEffect, useState } from 'react';
 
 type TimePickerProps = {
-  time?: string;
+  time: string;
   onChange?: (time: string) => void;
 };
 
 export default function TimePicker({ time, onChange }: TimePickerProps) {
   // state
-  const [hour, setHour] = useState<string>(time?.substring(0, 2) || '00');
-  const [minutes, setMinutes] = useState<string>(time?.substring(3, 5) || '00');
+  const [hour, setHour] = useState<string>('00');
+  const [minutes, setMinutes] = useState<string>('00');
 
   // useEffect
+  useEffect(() => {
+    setHour(time.substring(0, 2));
+    setMinutes(time.substring(3, 5));
+  }, [time]);
+
   useEffect(() => {
     handleChange();
   }, [hour, minutes]);
