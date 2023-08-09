@@ -7,6 +7,7 @@ const initialState: UserState = {
   isLoading: false,
   isLoggedIn: false,
   alternativeVacations: [],
+  users: [],
 };
 
 export default createSlice({

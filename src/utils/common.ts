@@ -14,7 +14,7 @@ export const client = axios.create({
 
 export async function getCall<T>(
   url: string,
-  params: any,
+  params?: any,
 ): Promise<ApiResponse<T>> {
   return await client
     .get(url, { params })

@@ -80,6 +80,18 @@ const reducers = {
   failureUpdateSignature: (state: UserState) => {
     state.isLoading = false;
   },
+
+  // get users
+  requestGetAllUser: (state: UserState) => {
+    state.isLoading = true;
+  },
+  successGetAllUser: (state: UserState, action: PayloadAction<User[]>) => {
+    state.isLoading = false;
+    state.users = action.payload;
+  },
+  failureGetAllUser: (state: UserState) => {
+    state.isLoading = false;
+  },
 };
 
 export default reducers;
