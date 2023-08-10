@@ -16,6 +16,7 @@ import {
   Documents,
   DocumentsType,
   HolidayWorkReport,
+  HolidayWorkReportDetail,
   VacationDocumentDetail,
 } from './types';
 import { Pageable } from '../types';
@@ -59,6 +60,10 @@ const {
   requestAddHolidayWorkReport,
   successAddHolidayWorkReport,
   failureAddHolidayWorkReport,
+  // get holiday work report detail
+  requestGetHolidayWorkReportDetail,
+  successGetHolidayWorkReportDetail,
+  failureGetHolidayWorkReportDetail,
 } = documentActions;
 
 // get document type
@@ -338,6 +343,31 @@ function* watchRequestAddHolidayWorkReport() {
   yield takeLatest(requestAddHolidayWorkReport, callAddHolidayWorkReport);
 }
 
+// get holiday work report detail
+function* callGetHolidayWorkReportDetail(
+  action: ReturnType<typeof requestGetHolidayWorkReportDetail>,
+) {
+  const { documentId } = action.payload;
+
+  const apiResponse: ApiResponse<HolidayWorkReportDetail> = yield call(
+    getCall,
+    `/api/document/holiday/${documentId}`,
+  );
+
+  if (apiResponse.state === 'SUCCESS') {
+    yield put(successGetHolidayWorkReportDetail(apiResponse.data || {}));
+  } else {
+    yield put(failureGetHolidayWorkReportDetail());
+  }
+}
+
+function* watchRequestGetHolidayWorkReportDetail() {
+  yield takeLatest(
+    requestGetHolidayWorkReportDetail,
+    callGetHolidayWorkReportDetail,
+  );
+}
+
 export default function* documentSagas() {
   yield all([
     fork(watchRequestGetDocumentType),
@@ -349,5 +379,6 @@ export default function* documentSagas() {
     fork(watchGetApprovalDocument),
     fork(watchProceedApprovalDocument),
     fork(watchRequestAddHolidayWorkReport),
+    fork(watchRequestGetHolidayWorkReportDetail),
   ]);
 }

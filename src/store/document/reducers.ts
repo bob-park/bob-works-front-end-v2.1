@@ -8,6 +8,7 @@ import {
   DocumentsState,
   DocumentsStatus,
   DocumentsType,
+  HolidayWorkReportDetail,
   VacationDocumentDetail,
   VacationType,
 } from './types';
@@ -196,6 +197,24 @@ const reducers = {
     state.isLoading = false;
   },
   failureAddHolidayWorkReport: (state: DocumentsState) => {
+    state.isLoading = false;
+  },
+
+  // get holiday work report detail
+  requestGetHolidayWorkReportDetail: (
+    state: DocumentsState,
+    action: PayloadAction<{ documentId: number }>,
+  ) => {
+    state.isLoading = true;
+  },
+  successGetHolidayWorkReportDetail: (
+    state: DocumentsState,
+    action: PayloadAction<HolidayWorkReportDetail>,
+  ) => {
+    state.isLoading = false;
+    state.holidayWorkReportDetail = action.payload;
+  },
+  failureGetHolidayWorkReportDetail: (state: DocumentsState) => {
     state.isLoading = false;
   },
 };
