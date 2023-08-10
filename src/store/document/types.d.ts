@@ -20,6 +20,7 @@ export type DocumentsState = {
   };
   approvalList: Pageable<DocumentApproval>;
   approvalDetail?: DocumentApproval;
+  holidayWorkReportDetail: HolidayWorkReportDetail;
 };
 
 export type DocumentsType = {
@@ -120,3 +121,8 @@ export type HolidayWorkReport = {
   workPurpose: string;
   users: HolidayWorkUser[];
 } & Documents;
+
+export type HolidayWorkReportDetail = {
+  documents?: HolidayWorkReport;
+  lines?: DocumentApprovalLine[];
+};

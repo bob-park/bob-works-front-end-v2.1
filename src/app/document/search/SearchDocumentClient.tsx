@@ -23,7 +23,11 @@ import { PaginationParams } from '@/store/types';
 import DocumentTable from '@/components/DocumentTable';
 
 // utils
-import { parseDocumentType, parseDocumentStatus } from '@/utils/ParseUtils';
+import {
+  parseDocumentType,
+  parseDocumentStatus,
+  parsePageName,
+} from '@/utils/ParseUtils';
 import {
   DocumentType,
   DocumentsStatus,
@@ -148,7 +152,7 @@ export default function SearchDocumentClient() {
   };
 
   const handleMoveDetail = (id: number, type: DocumentType) => {
-    const moveUri = `/document/search/${type.toLowerCase()}/${id}`;
+    const moveUri = `/document/search/${parsePageName(type)}/${id}`;
 
     router.push(moveUri);
   };

@@ -31,6 +31,7 @@ const initialState: DocumentsState = {
       size: 0,
     },
   },
+  holidayWorkReportDetail: {},
 };
 
 export default createSlice({
