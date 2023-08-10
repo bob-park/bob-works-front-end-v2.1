@@ -27,7 +27,12 @@ import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
 import Datepicker from 'react-tailwindcss-datepicker';
 
 // store
+import { commonActions } from '@/store/common';
 import { documentActions } from '@/store/document';
+import {
+  AddHolidayWorkReportRequest,
+  HolidayWorkUser,
+} from '@/store/document/types';
 import { userActions } from '@/store/user';
 
 // utils
@@ -50,12 +55,14 @@ type WorkUser = {
   workUserId?: number;
   workUserName: string;
   isVacation: boolean;
+  isManualInput: boolean;
 };
 
 const HOLIDAY_TYPE_NAME = 'HOLIDAY_WORK';
 
 // actions
-const { requestGetDocumentType } = documentActions;
+const { addAlert } = commonActions;
+const { requestGetDocumentType, requestAddHolidayWorkReport } = documentActions;
 const { requestGetAllUser } = userActions;
 
 // headers
@@ -115,6 +122,44 @@ export default function HolidayWorkReportClient() {
   // handle
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (
+      !holidayDate?.endDate ||
+      !workPurpose ||
+      workUsers.length === 0 ||
+      workTimes.length === 0
+    ) {
+      dispatch(
+        addAlert({
+          level: 'warn',
+          message: '항목을 모두 입력해주세요.',
+          createAt: new Date(),
+        }),
+      );
+      return;
+    }
+
+    const createWorkUsers: HolidayWorkUser[] = workUsers.map((item) => ({
+      isManualInput: item.isManualInput,
+      isVacation: item.isVacation,
+      workUserId: item.workUserId,
+      workUserName: item.workUserName,
+      workDate: holidayDate.endDate,
+      times: [...workTimes],
+    }));
+
+    const requestBody: AddHolidayWorkReportRequest = {
+      typeId: getDocumentTypeId(types, HOLIDAY_TYPE_NAME),
+      workPurpose,
+      workUsers: createWorkUsers,
+    };
+
+    dispatch(
+      requestAddHolidayWorkReport({
+        request: requestBody,
+        handleAfter: () => router.push('/document/search'),
+      }),
+    );
   };
 
   const handleAddWorkTime = () => {
@@ -180,6 +225,7 @@ export default function HolidayWorkReportClient() {
           workUserId: checkUser.id,
           workUserName: checkUser.name,
           isVacation,
+          isManualInput: false,
         }));
 
       return newWorkUsers.concat(newUsers);
@@ -208,6 +254,7 @@ export default function HolidayWorkReportClient() {
       return newWorkUsers.concat({
         workUserName: manualWorkUserName,
         isVacation,
+        isManualInput: true,
       });
     });
 

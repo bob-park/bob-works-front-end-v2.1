@@ -103,7 +103,7 @@ export type HolidayWorkUser = {
   isManualInput: boolean;
   workUserId?: number;
   workUserName: string;
-  workDate: Date;
+  workDate: Date | null;
   isVacation: boolean;
   times: HolidayWorkTime[];
   totalWorkTime?: number;
