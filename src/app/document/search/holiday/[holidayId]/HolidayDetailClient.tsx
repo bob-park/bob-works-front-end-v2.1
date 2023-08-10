@@ -19,13 +19,15 @@ import { DocumentsStatus } from '@/store/document/types';
 // utils
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import HolidayWorkReportDocument from '@/components/document/HolidayWorkReportDocument';
 
 type HolidayDetailClientProps = {
   documentId: string;
 };
 
 // actions
-const { requestCancelDocument } = documentActions;
+const { requestCancelDocument, requestGetHolidayWorkReportDetail } =
+  documentActions;
 
 function checkDisabledBtn(status?: DocumentsStatus): boolean {
   if (!status) {
@@ -44,11 +46,18 @@ export default function HolidayDetailClient({
   // store
   const dispatch = useAppDispatch();
   const { holidayWorkReportDetail } = useAppSelector((state) => state.document);
-  const { documents, lines } = holidayWorkReportDetail;
+  const { document: documents, lines } = holidayWorkReportDetail;
 
   // state
   const [showConfirmCancel, setShowConfirmCancel] = useState<boolean>(false);
   const [loaddingPdf, setLoaddingPdf] = useState<boolean>(false);
+
+  // useEffect
+  useEffect(() => {
+    dispatch(
+      requestGetHolidayWorkReportDetail({ documentId: Number(documentId) }),
+    );
+  }, []);
 
   // handle
   const handlePrint = () => {};
@@ -58,7 +67,7 @@ export default function HolidayDetailClient({
       return;
     }
 
-    const docElement = document.getElementById('holidayWorkReport');
+    const docElement = document.getElementById('holidayWorkReportDocument');
     if (!docElement) {
       return;
     }
@@ -68,7 +77,7 @@ export default function HolidayDetailClient({
     html2canvas(docElement).then((canvas) => {
       const pdf = new jsPDF('p', 'mm', 'a4');
       pdf.addImage(canvas, 'JPEG', 0, 0, 210, 297);
-      pdf.save(`휴가계_${documents.writer.name}_${documents.id}.pdf`);
+      pdf.save(`휴일 근무 보고서_${documents.writer.name}_${documents.id}.pdf`);
 
       setLoaddingPdf(false);
     });
@@ -122,6 +131,12 @@ export default function HolidayDetailClient({
           </Button>
         </div>
       </div>
+
+      {/* contents */}
+      <div className="bg-base-100 shadow-lg overflow-auto border rounded-xl">
+        <HolidayWorkReportDocument document={documents} lines={lines} />
+      </div>
+
       {/* 취소 modal */}
       <Modal open={showConfirmCancel}>
         <Modal.Header className="font-bold">취소 할꺼야?</Modal.Header>

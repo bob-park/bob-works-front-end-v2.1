@@ -123,6 +123,6 @@ export type HolidayWorkReport = {
 } & Documents;
 
 export type HolidayWorkReportDetail = {
-  documents?: HolidayWorkReport;
+  document?: HolidayWorkReport;
   lines?: DocumentApprovalLine[];
 };
