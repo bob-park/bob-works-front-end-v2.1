@@ -1,6 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { ExceptionHandle, Pageable, PaginationParams } from '@/store/types';
 import {
+  AddHolidayWorkReportRequest,
   AddVacationRequest,
   DocumentApproval,
   Documents,
@@ -178,6 +179,23 @@ const reducers = {
     state.isLoading = false;
   },
   failureProceedApprovalDocument: (state: DocumentsState) => {
+    state.isLoading = false;
+  },
+
+  // add holiday work report
+  requestAddHolidayWorkReport: (
+    state: DocumentsState,
+    action: PayloadAction<{
+      request: AddHolidayWorkReportRequest;
+      handleAfter: () => void;
+    }>,
+  ) => {
+    state.isLoading = true;
+  },
+  successAddHolidayWorkReport: (state: DocumentsState) => {
+    state.isLoading = false;
+  },
+  failureAddHolidayWorkReport: (state: DocumentsState) => {
     state.isLoading = false;
   },
 };

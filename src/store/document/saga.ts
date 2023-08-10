@@ -15,6 +15,7 @@ import {
   DocumentApproval,
   Documents,
   DocumentsType,
+  HolidayWorkReport,
   VacationDocumentDetail,
 } from './types';
 import { Pageable } from '../types';
@@ -54,6 +55,10 @@ const {
   requestProceedApprovalDocument,
   successProceedApprovalDocument,
   failureProceedApprovalDocument,
+  // add holiday work report
+  requestAddHolidayWorkReport,
+  successAddHolidayWorkReport,
+  failureAddHolidayWorkReport,
 } = documentActions;
 
 // get document type
@@ -308,6 +313,31 @@ function* watchProceedApprovalDocument() {
   yield takeLatest(requestProceedApprovalDocument, callProceedApprovalDocument);
 }
 
+// add holiday work report
+function* callAddHolidayWorkReport(
+  action: ReturnType<typeof requestAddHolidayWorkReport>,
+) {
+  const { request, handleAfter } = action.payload;
+
+  const apiResponse: ApiResponse<HolidayWorkReport> = yield call(
+    postCall,
+    '/api/document/holiday',
+    request,
+  );
+
+  if (apiResponse.state === 'SUCCESS') {
+    yield put(successAddHolidayWorkReport());
+
+    handleAfter && handleAfter();
+  } else {
+    yield put(failureAddHolidayWorkReport());
+  }
+}
+
+function* watchRequestAddHolidayWorkReport() {
+  yield takeLatest(requestAddHolidayWorkReport, callAddHolidayWorkReport);
+}
+
 export default function* documentSagas() {
   yield all([
     fork(watchRequestGetDocumentType),
@@ -318,5 +348,6 @@ export default function* documentSagas() {
     fork(watchGetApprovalDocuments),
     fork(watchGetApprovalDocument),
     fork(watchProceedApprovalDocument),
+    fork(watchRequestAddHolidayWorkReport),
   ]);
 }
