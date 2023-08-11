@@ -100,7 +100,6 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
 
     dispatch(
       requestChangePassword({
-        userId: user.id,
         changePassword,
         handleAfter: () => {
           dispatch(

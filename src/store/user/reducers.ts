@@ -97,7 +97,6 @@ const reducers = {
   requestChangePassword: (
     state: UserState,
     action: PayloadAction<{
-      userId: number;
       changePassword: string;
       handleAfter?: () => void;
     }>,
