@@ -37,7 +37,7 @@ const headers = [
   // },
   {
     id: 'title',
-    value: '제목',
+    value: '공지',
     parse: (input: string, row: Notice) => (
       <span>
         <span className="pr-2">{input}</span>

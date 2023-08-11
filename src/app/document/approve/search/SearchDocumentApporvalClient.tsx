@@ -25,7 +25,11 @@ import { PaginationParams } from '@/store/types';
 // component
 import DocumentTable from '@/components/DocumentTable';
 
-import { parseDocumentType, parseDocumentStatus } from '@/utils/ParseUtils';
+import {
+  parseDocumentType,
+  parseDocumentStatus,
+  parsePageName,
+} from '@/utils/ParseUtils';
 import DocumentPagination from '@/components/DocumentPagination';
 import { getTotalPageCount } from '@/utils/paginationUtils';
 import { DocumentType, DocumentsStatus } from '@/store/document/types';
@@ -157,7 +161,7 @@ export default function SearchDocumentApprovalClient() {
   };
 
   const handleMoveDetail = (id: number, type: DocumentType) => {
-    const moveUri = `/document/approve/${type.toLowerCase()}/${id}`;
+    const moveUri = `/document/approve/${parsePageName(type)}/${id}`;
 
     router.push(moveUri);
   };

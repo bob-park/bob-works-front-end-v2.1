@@ -33,6 +33,14 @@ const {
   requestUpdateSignature,
   successUpdateSignature,
   failureUpdateSignature,
+  // get all user
+  requestGetAllUser,
+  successGetAllUser,
+  failureGetAllUser,
+  // change password
+  requestChangePassword,
+  successChangePassword,
+  failureChangePassword,
 } = userActions;
 
 function* callGetUser(action: ReturnType<typeof requestGetUser>) {
@@ -129,13 +137,13 @@ function* callUpdateSignature(
   );
 
   if (response.state === 'SUCCESS') {
-    yield put(successUpdateUserAvatar());
+    yield put(successUpdateSignature());
 
     handleAfter && handleAfter();
   } else {
     yield failureActionProceed(
       response,
-      failureUpdateUserAvatar,
+      failureUpdateSignature,
       handleAuthError,
     );
   }
@@ -145,11 +153,51 @@ function* watchRequestUpdateSignature() {
   yield takeLatest(requestUpdateSignature, callUpdateSignature);
 }
 
+// get all user
+function* callGetAllUser() {
+  const response: ApiResponse<User[]> = yield call(getCall, '/api/user/all');
+
+  if (response.state === 'SUCCESS') {
+    yield put(successGetAllUser(response.data || []));
+  } else {
+    yield put(failureGetAllUser());
+  }
+}
+
+function* watchReqeustGetAllUser() {
+  yield takeLatest(requestGetAllUser, callGetAllUser);
+}
+
+// change password
+function* callChangePassword(action: ReturnType<typeof requestChangePassword>) {
+  const { changePassword, handleAfter } = action.payload;
+
+  const apiResponse: ApiResponse<User> = yield call(
+    putCall,
+    `/api/user/password`,
+    { password: changePassword },
+  );
+
+  if (apiResponse.state === 'SUCCESS') {
+    yield put(successChangePassword());
+
+    handleAfter && handleAfter();
+  } else {
+    yield put(failureChangePassword());
+  }
+}
+
+function* watchRequestChangePassword() {
+  yield takeLatest(requestChangePassword, callChangePassword);
+}
+
 export default function* userSagas() {
   yield all([
     fork(watchLoggedIn),
     fork(watchGetUsableAlternativeVacation),
     fork(watchUpdateUserAvatar),
     fork(watchRequestUpdateSignature),
+    fork(watchReqeustGetAllUser),
+    fork(watchRequestChangePassword),
   ]);
 }

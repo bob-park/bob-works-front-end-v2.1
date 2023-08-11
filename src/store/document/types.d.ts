@@ -20,6 +20,7 @@ export type DocumentsState = {
   };
   approvalList: Pageable<DocumentApproval>;
   approvalDetail?: DocumentApproval;
+  holidayWorkReportDetail: HolidayWorkReportDetail;
 };
 
 export type DocumentsType = {
@@ -91,4 +92,37 @@ export type VacationDocumentDetail = {
   document?: VacationDocument;
   lines?: DocumentApprovalLine[];
   useAlternativeVacations?: AlternativeVacation[];
+};
+
+export type HolidayWorkTime = {
+  startTime: string;
+  endTime: string;
+};
+
+export type HolidayWorkUser = {
+  id?: number;
+  isManualInput: boolean;
+  workUserId?: number;
+  workUserName: string;
+  workDate: Date | null;
+  isVacation: boolean;
+  times: HolidayWorkTime[];
+  totalWorkTime?: number;
+  paymentTime?: number;
+};
+
+export type AddHolidayWorkReportRequest = {
+  typeId: number;
+  workPurpose: string;
+  workUsers: HolidayWorkUser[];
+};
+
+export type HolidayWorkReport = {
+  workPurpose: string;
+  users: HolidayWorkUser[];
+} & Documents;
+
+export type HolidayWorkReportDetail = {
+  document?: HolidayWorkReport;
+  lines?: DocumentApprovalLine[];
 };

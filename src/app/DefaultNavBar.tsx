@@ -23,10 +23,15 @@ import {
   GrNotification,
 } from 'react-icons/gr';
 import { MdOutlineHolidayVillage } from 'react-icons/md';
-import { AiOutlineUnorderedList, AiOutlineSetting } from 'react-icons/ai';
+import {
+  AiOutlineUnorderedList,
+  AiOutlineSetting,
+  AiFillNotification,
+} from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
 import { BsInfoCircle } from 'react-icons/bs';
 import { VscError } from 'react-icons/vsc';
+import { IoNotificationsOutline } from 'react-icons/io5';
 
 // daisyui
 import {
@@ -129,9 +134,12 @@ export default function DefaultNavBar({
         side={
           <aside className="w-80 h-full bg-base-100 lg:fixed">
             <div className="bg-base-100 sticky top-0  items-center gap-2 bg-opacity-90 px-4 py-2 backdrop-blur lg:flex ">
-              <a className="btn btn-ghost normal-case px-2 mx-2 text-2xl font-bold">
+              <Link
+                className="btn btn-ghost normal-case px-2 mx-2 text-2xl font-bold"
+                href="/"
+              >
                 Bob Works
-              </a>
+              </Link>
             </div>
 
             <Menu className="w-80 p-2" size="md">
@@ -177,13 +185,13 @@ export default function DefaultNavBar({
                 </Link>
               </Menu.Item>
               <Menu.Item>
-                <a>
+                <Link
+                  className={activeMenuItem('/request/holiday')}
+                  href="/request/holiday"
+                >
                   <MdOutlineHolidayVillage />
                   휴일 근무 보고서 신청
-                  <Badge size="sm" color="secondary">
-                    준비중
-                  </Badge>
-                </a>
+                </Link>
               </Menu.Item>
             </Menu>
           </aside>
@@ -216,9 +224,27 @@ export default function DefaultNavBar({
               </div>
             </Navbar.Start>
             <Navbar.End className="lg:w-full">
-              <div className="mr-10">
+              <div className="mr-5">
                 <b>{user?.team?.name}</b> - <span>{user?.position?.name}</span>
                 <b className="ml-4">{user?.name}</b>
+              </div>
+              <div className="relative mr-8">
+                <Button
+                  color="ghost"
+                  shape="circle"
+                  onClick={() => router.push('/notice')}
+                >
+                  <IoNotificationsOutline className="w-7 h-7" />
+                </Button>
+                {!!countOfUnread && (
+                  <Badge
+                    className="absolute right-1"
+                    color="secondary"
+                    size="md"
+                  >
+                    +{countOfUnread}
+                  </Badge>
+                )}
               </div>
               <Dropdown className="mr-10" hover end>
                 <Avatar
@@ -226,21 +252,8 @@ export default function DefaultNavBar({
                   size="sm"
                   shape="circle"
                   border
-                  online
                 />
                 <Dropdown.Menu className="w-48 bg-base-100 shadow-xl ">
-                  <li>
-                    <Link href="/notice">
-                      <GrNotification />
-                      공지{' '}
-                      {!!countOfUnread && (
-                        <Badge color="secondary">+{countOfUnread}</Badge>
-                      )}
-                    </Link>
-                  </li>
-
-                  <hr />
-
                   <li>
                     <Link href="/settings/profile">
                       <CgProfile />

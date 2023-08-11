@@ -15,6 +15,8 @@ import {
   DocumentApproval,
   Documents,
   DocumentsType,
+  HolidayWorkReport,
+  HolidayWorkReportDetail,
   VacationDocumentDetail,
 } from './types';
 import { Pageable } from '../types';
@@ -54,6 +56,14 @@ const {
   requestProceedApprovalDocument,
   successProceedApprovalDocument,
   failureProceedApprovalDocument,
+  // add holiday work report
+  requestAddHolidayWorkReport,
+  successAddHolidayWorkReport,
+  failureAddHolidayWorkReport,
+  // get holiday work report detail
+  requestGetHolidayWorkReportDetail,
+  successGetHolidayWorkReportDetail,
+  failureGetHolidayWorkReportDetail,
 } = documentActions;
 
 // get document type
@@ -308,6 +318,56 @@ function* watchProceedApprovalDocument() {
   yield takeLatest(requestProceedApprovalDocument, callProceedApprovalDocument);
 }
 
+// add holiday work report
+function* callAddHolidayWorkReport(
+  action: ReturnType<typeof requestAddHolidayWorkReport>,
+) {
+  const { request, handleAfter } = action.payload;
+
+  const apiResponse: ApiResponse<HolidayWorkReport> = yield call(
+    postCall,
+    '/api/document/holiday',
+    request,
+  );
+
+  if (apiResponse.state === 'SUCCESS') {
+    yield put(successAddHolidayWorkReport());
+
+    handleAfter && handleAfter();
+  } else {
+    yield put(failureAddHolidayWorkReport());
+  }
+}
+
+function* watchRequestAddHolidayWorkReport() {
+  yield takeLatest(requestAddHolidayWorkReport, callAddHolidayWorkReport);
+}
+
+// get holiday work report detail
+function* callGetHolidayWorkReportDetail(
+  action: ReturnType<typeof requestGetHolidayWorkReportDetail>,
+) {
+  const { documentId } = action.payload;
+
+  const apiResponse: ApiResponse<HolidayWorkReportDetail> = yield call(
+    getCall,
+    `/api/document/holiday/${documentId}`,
+  );
+
+  if (apiResponse.state === 'SUCCESS') {
+    yield put(successGetHolidayWorkReportDetail(apiResponse.data || {}));
+  } else {
+    yield put(failureGetHolidayWorkReportDetail());
+  }
+}
+
+function* watchRequestGetHolidayWorkReportDetail() {
+  yield takeLatest(
+    requestGetHolidayWorkReportDetail,
+    callGetHolidayWorkReportDetail,
+  );
+}
+
 export default function* documentSagas() {
   yield all([
     fork(watchRequestGetDocumentType),
@@ -318,5 +378,7 @@ export default function* documentSagas() {
     fork(watchGetApprovalDocuments),
     fork(watchGetApprovalDocument),
     fork(watchProceedApprovalDocument),
+    fork(watchRequestAddHolidayWorkReport),
+    fork(watchRequestGetHolidayWorkReportDetail),
   ]);
 }

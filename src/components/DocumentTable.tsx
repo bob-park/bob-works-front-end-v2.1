@@ -1,3 +1,5 @@
+'use client';
+
 // daisyui
 import { DocumentType, DocumentsType } from '@/store/document/types';
 import { ChangeEvent } from 'react';

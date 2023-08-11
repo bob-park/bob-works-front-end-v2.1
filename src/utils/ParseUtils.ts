@@ -97,3 +97,14 @@ export function parseType(id: VacationType, isHalf: boolean) {
 export function parseSubType(id: VacationSubType) {
   return vacationSubTypes.find((item) => item.id == id)?.name;
 }
+
+export function parsePageName(documentType: DocumentType): string {
+  switch (documentType) {
+    case 'VACATION':
+      return 'vacation';
+    case 'HOLIDAY_WORK':
+      return 'holiday';
+    default:
+      throw new Error('Not support documentType.');
+  }
+}
