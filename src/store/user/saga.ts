@@ -170,16 +170,18 @@ function* watchReqeustGetAllUser() {
 
 // change password
 function* callChangePassword(action: ReturnType<typeof requestChangePassword>) {
-  const { userId, changePassword } = action.payload;
+  const { changePassword, handleAfter } = action.payload;
 
   const apiResponse: ApiResponse<User> = yield call(
     putCall,
-    `/api/user/${userId}/password`,
+    `/api/user/password`,
     { password: changePassword },
   );
 
   if (apiResponse.state === 'SUCCESS') {
     yield put(successChangePassword());
+
+    handleAfter && handleAfter();
   } else {
     yield put(failureChangePassword());
   }

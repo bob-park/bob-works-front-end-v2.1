@@ -1,13 +1,14 @@
 'use client';
 
 // react
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 
 // daisyui
 import { Button, Modal, Input, Divider } from 'react-daisyui';
 
 // react-icons
 import { GrEdit } from 'react-icons/gr';
+import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
 
 // hooks
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
@@ -17,7 +18,7 @@ import { userActions } from '@/store/user';
 import { commonActions } from '@/store/common';
 
 // actions
-const { requestUpdateUserAvatar, requestGetUser } = userActions;
+const { requestUpdateUserAvatar, requestChangePassword } = userActions;
 const { addAlert } = commonActions;
 
 type ProfileDetailProps = {
@@ -33,6 +34,8 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
   const [userAvatarSrc, setUserAvatarSrc] = useState<string>(
     user.avatar || '/default_avatar.jpg',
   );
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [changePassword, setChangePassword] = useState<string>('');
 
   // ref
   const avatarInputRef = useRef<HTMLInputElement>(null);
@@ -77,6 +80,40 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
           );
         },
         exceptionHandle: {},
+      }),
+    );
+  };
+
+  const handleChangePassword = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!changePassword) {
+      dispatch(
+        addAlert({
+          level: 'warn',
+          message: '변경할 패스워드를 입력해주세요.',
+          createAt: new Date(),
+        }),
+      );
+      return;
+    }
+
+    dispatch(
+      requestChangePassword({
+        userId: user.id,
+        changePassword,
+        handleAfter: () => {
+          dispatch(
+            addAlert({
+              level: 'info',
+              message:
+                '사용자 패스워드가 변경되었습니다. 다음 로그인부터 적용됩니다.',
+              createAt: new Date(),
+            }),
+          );
+          setChangePassword('');
+          setShowPassword(false);
+        },
       }),
     );
   };
@@ -127,6 +164,38 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
             Edit
           </Button>
         </div>
+      </div>
+      <div className="col-span-2">
+        <form onSubmit={handleChangePassword}>
+          <div className="flex justify-start items-end gap-2">
+            <div className="relative form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">패스워드 변경</span>
+              </label>
+              <Input
+                type={showPassword ? 'text' : 'password'}
+                color="primary"
+                placeholder="변경할 패스워드"
+                value={changePassword}
+                onChange={(e) => setChangePassword(e.target.value)}
+              />
+              <Button
+                className="absolute right-0 bottom-0"
+                type="button"
+                shape="circle"
+                color="ghost"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <AiOutlineEyeInvisible className="w-5 h-5" />
+                ) : (
+                  <AiOutlineEye className="w-5 h-5" />
+                )}
+              </Button>
+            </div>
+            <Button type="submit">변경</Button>
+          </div>
+        </form>
       </div>
     </>
   );

@@ -96,7 +96,11 @@ const reducers = {
   // change password
   requestChangePassword: (
     state: UserState,
-    action: PayloadAction<{ userId: number; changePassword: string }>,
+    action: PayloadAction<{
+      userId: number;
+      changePassword: string;
+      handleAfter?: () => void;
+    }>,
   ) => {
     state.isLoading = true;
   },
