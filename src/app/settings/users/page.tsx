@@ -14,7 +14,7 @@ export default async function UserPage() {
       <div className="col-span-3">
         <h1 className="text-xl font-semibold">사용자 설정</h1>
       </div>
-      <div className="divider" />
+      <div className="col-span-3 divider" />
 
       <UserDetail user={userInfo} />
     </main>

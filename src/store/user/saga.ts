@@ -37,6 +37,10 @@ const {
   requestGetAllUser,
   successGetAllUser,
   failureGetAllUser,
+  // change password
+  requestChangePassword,
+  successChangePassword,
+  failureChangePassword,
 } = userActions;
 
 function* callGetUser(action: ReturnType<typeof requestGetUser>) {
@@ -164,6 +168,27 @@ function* watchReqeustGetAllUser() {
   yield takeLatest(requestGetAllUser, callGetAllUser);
 }
 
+// change password
+function* callChangePassword(action: ReturnType<typeof requestChangePassword>) {
+  const { userId, changePassword } = action.payload;
+
+  const apiResponse: ApiResponse<User> = yield call(
+    putCall,
+    `/api/user/${userId}/password`,
+    { password: changePassword },
+  );
+
+  if (apiResponse.state === 'SUCCESS') {
+    yield put(successChangePassword());
+  } else {
+    yield put(failureChangePassword());
+  }
+}
+
+function* watchRequestChangePassword() {
+  yield takeLatest(requestChangePassword, callChangePassword);
+}
+
 export default function* userSagas() {
   yield all([
     fork(watchLoggedIn),
@@ -171,5 +196,6 @@ export default function* userSagas() {
     fork(watchUpdateUserAvatar),
     fork(watchRequestUpdateSignature),
     fork(watchReqeustGetAllUser),
+    fork(watchRequestChangePassword),
   ]);
 }

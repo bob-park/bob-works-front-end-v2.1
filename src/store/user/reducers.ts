@@ -92,6 +92,20 @@ const reducers = {
   failureGetAllUser: (state: UserState) => {
     state.isLoading = false;
   },
+
+  // change password
+  requestChangePassword: (
+    state: UserState,
+    action: PayloadAction<{ userId: number; changePassword: string }>,
+  ) => {
+    state.isLoading = true;
+  },
+  successChangePassword: (state: UserState) => {
+    state.isLoading = false;
+  },
+  failureChangePassword: (state: UserState) => {
+    state.isLoading = false;
+  },
 };
 
 export default reducers;
