@@ -12,6 +12,8 @@ import {
   Badge,
   Card,
   Divider,
+  Toggle,
+  Tooltip,
 } from 'react-daisyui';
 
 import { BiSolidPlusCircle, BiSolidMinusCircle } from 'react-icons/bi';
@@ -31,6 +33,7 @@ import { commonActions } from '@/store/common';
 import { documentActions } from '@/store/document';
 import {
   AddHolidayWorkReportRequest,
+  HolidayWorkTime,
   HolidayWorkUser,
 } from '@/store/document/types';
 import { userActions } from '@/store/user';
@@ -44,11 +47,6 @@ import DocumentTable from '@/components/DocumentTable';
 type SelectDate = {
   startDate: Date | null;
   endDate: Date | null;
-};
-
-type SelectTime = {
-  startTime: string;
-  endTime: string;
 };
 
 type WorkUser = {
@@ -102,9 +100,10 @@ export default function HolidayWorkReportClient() {
     startDate: new Date(),
     endDate: new Date(),
   });
+  const [existBreakTime, setExistBreakTime] = useState<boolean>(false);
   const [selectStartTime, setSelectStartTime] = useState<string>('00:00');
   const [selectEndTime, setSelectEndTime] = useState<string>('00:00');
-  const [workTimes, setWorkTimes] = useState<SelectTime[]>([]);
+  const [workTimes, setWorkTimes] = useState<HolidayWorkTime[]>([]);
   const [workPurpose, setWorkPurpose] = useState<string>('');
   const [showSelectUser, setShowSelectUser] = useState<boolean>(false);
   const [isVacation, setIsVacation] = useState<boolean>(true);
@@ -167,6 +166,7 @@ export default function HolidayWorkReportClient() {
       const newWorkTimes = prev.slice();
 
       newWorkTimes.push({
+        existBreakTime,
         startTime: selectStartTime,
         endTime: selectEndTime,
       });
@@ -176,6 +176,7 @@ export default function HolidayWorkReportClient() {
 
     setSelectStartTime('00:00');
     setSelectEndTime('00:00');
+    setExistBreakTime(false);
   };
 
   const handleRemoveWorkTime = (index: number) => {
@@ -291,7 +292,7 @@ export default function HolidayWorkReportClient() {
                 <span className="">근무 시간</span>
               </div>
               <div className="col-span-3 text-center content-center pt-2">
-                <div className="grid grid-cols-6 gap-2">
+                <div className="grid grid-cols-9 gap-2">
                   <div className="col-span-2">
                     <TimePicker
                       time={selectStartTime}
@@ -304,6 +305,18 @@ export default function HolidayWorkReportClient() {
                       time={selectEndTime}
                       onChange={(time) => setSelectEndTime(time)}
                     />
+                  </div>
+                  <div className="col-span-3 ml-2">
+                    <Tooltip message="점심 시간 포함 여부 (12:00 ~ 13:00)">
+                      <Form.Label title="휴계 시간 포함">
+                        <Toggle
+                          className="ml-1"
+                          color="primary"
+                          checked={existBreakTime}
+                          onChange={(e) => setExistBreakTime(e.target.checked)}
+                        />
+                      </Form.Label>
+                    </Tooltip>
                   </div>
                   <div>
                     <Button
@@ -323,7 +336,7 @@ export default function HolidayWorkReportClient() {
                 {workTimes.map((workTime, i) => (
                   <div
                     key={`workTime_${i}`}
-                    className="grid grid-cols-6 gap-2 justify-items-center items-center mt-2"
+                    className="grid grid-cols-8 gap-2 justify-items-center items-center mt-2"
                   >
                     <div className="col-span-2 text-center">
                       {workTime.startTime}
@@ -331,6 +344,13 @@ export default function HolidayWorkReportClient() {
                     <div className="text-center">~</div>
                     <div className="col-span-2 text-center">
                       {workTime.endTime}
+                    </div>
+                    <div className="col-span-2">
+                      {workTime.existBreakTime && (
+                        <Badge color="neutral" size="md">
+                          휴계시간 포함
+                        </Badge>
+                      )}
                     </div>
                     <div>
                       <Button

@@ -95,6 +95,7 @@ export type VacationDocumentDetail = {
 };
 
 export type HolidayWorkTime = {
+  existBreakTime: boolean;
   startTime: string;
   endTime: string;
 };
