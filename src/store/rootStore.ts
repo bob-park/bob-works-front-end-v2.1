@@ -15,11 +15,15 @@ import { documentReducer } from './document';
 // notice
 import { noticeReducer } from './notice';
 
+// maintenance
+import { maintenanceReducer } from './maintenance';
+
 const rootReducer = combineReducers({
   user: userReducer,
   document: documentReducer,
   common: commonReducer,
   notice: noticeReducer,
+  maintenance: maintenanceReducer,
 });
 
 function rootStore() {

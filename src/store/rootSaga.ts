@@ -4,6 +4,7 @@ import commonSagas from './common/saga';
 import userSagas from './user/saga';
 import documentSagas from './document/saga';
 import noticeSagas from './notice/saga';
+import maintenanceSagas from './maintenance/saga';
 
 export default function* rootSaga() {
   yield all([
@@ -11,5 +12,6 @@ export default function* rootSaga() {
     call(userSagas),
     call(documentSagas),
     call(noticeSagas),
+    call(maintenanceSagas),
   ]);
 }
