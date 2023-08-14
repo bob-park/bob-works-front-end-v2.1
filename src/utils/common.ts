@@ -27,6 +27,7 @@ export async function getCall<T>(
     })
     .catch((err) => {
       console.error(err);
+      console.log(err.response.status);
 
       return {
         state: 'FAILURE' as ApiResponseState,

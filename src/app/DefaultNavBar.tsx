@@ -45,6 +45,7 @@ import {
   Tooltip,
   Toast,
 } from 'react-daisyui';
+import CustomerChat from './CustomerChat';
 
 // user actions
 const { readAlert } = commonActions;
@@ -72,6 +73,7 @@ export default function DefaultNavBar({
 }) {
   // state
   const [visible, setVisible] = useState<boolean>(false);
+  const [showChat, setShowChat] = useState<boolean>(false);
 
   // router
   const router = useRouter();
@@ -284,14 +286,24 @@ export default function DefaultNavBar({
         </div>
 
         <div className="fixed bottom-10 right-10">
-          <Tooltip message="무엇을 도와드릴까요?">
+          <div
+            className={`absolute bottom-[80px] right-0 transition-all duration-300 ${
+              showChat ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+            }`}
+          >
+            <CustomerChat />
+          </div>
+          <Tooltip
+            className="hover:animate-bounce"
+            message="무엇을 도와드릴까요?"
+          >
             <Avatar
-              className=""
               size="sm"
               shape="circle"
               src="/customer_service_center.png"
               border
               color="accent"
+              onClick={() => setShowChat(!showChat)}
             />
           </Tooltip>
         </div>
