@@ -14,12 +14,12 @@ type CustomerChatRoom = {
 
 type CustomerChat = {
   id: string;
-  room: CustomerChatRoom;
-  writerId: number;
+  room?: CustomerChatRoom;
+  writerId?: number;
   contents: string;
-  isRead: boolean;
-  createdDate: Date;
-  createdBy: string;
+  isRead?: boolean;
+  createdDate?: Date;
+  createdBy?: string;
   lastModifiedDate?: Date;
-  lastModifiedBy: string;
+  lastModifiedBy?: string;
 };
