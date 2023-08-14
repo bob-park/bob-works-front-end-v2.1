@@ -288,7 +288,7 @@ export default function DefaultNavBar({
         <div className="fixed bottom-10 right-10">
           <div
             className={`absolute bottom-[80px] right-0 transition-all duration-300 ${
-              showChat ? 'opacity-0 translate-y-6' : 'opacity-100 translate-y-0'
+              showChat ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
           >
             <CustomerChat />

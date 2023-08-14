@@ -1,15 +1,38 @@
 'use client';
 
 import Image from 'next/image';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import { Button, Form, Input } from 'react-daisyui';
 
 import { BsSendFill } from 'react-icons/bs';
 
+// hooks
+import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
+
+// store
+import { maintenanceActions } from '@/store/maintenance';
+
+// actions
+const { requestGetLatestCustomerChatRoom } = maintenanceActions;
+
 export default function CustomerChat() {
   // state
   const [chatContents, setChatContents] = useState<string>('');
+
+  // store
+  const dispatch = useAppDispatch();
+  const {
+    isLoading,
+    customerChatRoom,
+    customerChats,
+    searchCustomerChatParam,
+  } = useAppSelector((state) => state.maintenance);
+
+  // useEffect
+  useEffect(() => {
+    dispatch(requestGetLatestCustomerChatRoom());
+  }, []);
 
   // handle
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

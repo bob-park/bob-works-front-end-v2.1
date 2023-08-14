@@ -47,7 +47,12 @@ function* callGetLatestCustomerRoom(
   if (apiResponse.state === 'SUCCESS') {
     yield put(successGetLatestCustomerChatRoom(apiResponse.data));
   } else {
-    yield put(failureGetLatestCustomerChatRoom());
+    // * 404 인 경우 customer chat 을 생성한다.
+    if (apiResponse.status == 404) {
+      yield put(requestCreateCustomerChatRoom({ title: 'customer chat' }));
+    } else {
+      yield put(failureGetLatestCustomerChatRoom());
+    }
   }
 }
 
