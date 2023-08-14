@@ -82,14 +82,14 @@ const reducers = {
 
     const { id, contents, userUniqueId, userId } = action.payload;
 
-    state.customerChats.content.unshift({
-      id,
-      contents,
-      writerId: userUniqueId,
-      isRead: false,
-      createdDate: new Date(),
-      createdBy: userId,
-    });
+    // state.customerChats.content.unshift({
+    //   id,
+    //   contents,
+    //   writerId: userUniqueId,
+    //   isRead: false,
+    //   createdDate: new Date(),
+    //   createdBy: userId,
+    // });
   },
   failureSendCustomerChat: (state: MaintenanceState) => {
     state.isLoading = false;

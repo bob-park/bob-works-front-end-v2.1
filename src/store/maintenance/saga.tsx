@@ -132,6 +132,7 @@ function* callSendCustomerChat(
         contents,
         userId,
         userUniqueId,
+        createdDate: new Date(),
       }),
     );
   } else {

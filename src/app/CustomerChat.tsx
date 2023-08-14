@@ -1,9 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 
-import { Button, Form, Input } from 'react-daisyui';
+import { Button, ChatBubble, Form, Input } from 'react-daisyui';
 
 import { BsSendFill } from 'react-icons/bs';
 
@@ -14,20 +14,24 @@ import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
 import { maintenanceActions } from '@/store/maintenance';
 import { PaginationParams } from '@/store/types';
 
+import TimeAgo from 'timeago-react';
+import * as timeago from 'timeago.js';
+import ko from 'timeago.js/lib/lang/ko';
+import { CustomerChat } from '@/store/maintenance/types';
+
+timeago.register('ko', ko);
+
 // actions
-const { requestGetLatestCustomerChatRoom, requestGetCustomerChatList } =
-  maintenanceActions;
+const {
+  requestGetLatestCustomerChatRoom,
+  requestGetCustomerChatList,
+  requestSendCustomerChat,
+} = maintenanceActions;
 
 export default function CustomerChat() {
-  // state
-  const [chatContents, setChatContents] = useState<string>('');
-  const [pagination, setPagination] = useState<PaginationParams>({
-    page: 0,
-    size: 10,
-  });
-
   // store
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.user);
   const {
     isLoading,
     customerChatRoom,
@@ -35,30 +39,97 @@ export default function CustomerChat() {
     searchCustomerChatParam,
   } = useAppSelector((state) => state.maintenance);
 
+  // state
+  const [chatContents, setChatContents] = useState<string>('');
+  const [searchChatParams, setSearchChatParams] = useState<PaginationParams>({
+    ...searchCustomerChatParam,
+  });
+  const [chatList, setChatList] = useState<CustomerChat[]>([
+    ...customerChats.content,
+  ]);
+
+  // ref
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+
   // useEffect
   useEffect(() => {
     dispatch(requestGetLatestCustomerChatRoom());
   }, []);
 
   useEffect(() => {
-    customerChatRoom &&
-      dispatch(
-        requestGetCustomerChatList({
-          roomId: customerChatRoom.id,
-          ...pagination,
-        }),
-      );
-  }, [!!customerChatRoom]);
+    handleGetChatList();
+  }, [customerChatRoom]);
+
+  useEffect(() => {
+    setChatList((prev) => {
+      const newList = customerChats.content.slice();
+      const prevList = prev.slice();
+
+      return prevList.concat(newList);
+    });
+  }, [customerChats]);
+
+  useEffect(() => {
+    handleScrollEnd();
+  }, [chatList]);
 
   // handle
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(chatContents);
+    if (!customerChatRoom || !user) {
+      return;
+    }
 
-    // TODO send server
+    dispatch(
+      requestSendCustomerChat({
+        roomId: customerChatRoom.id,
+        userId: user.userId,
+        userUniqueId: user.id,
+        contents: chatContents,
+      }),
+    );
+
+    setChatList((prev) => {
+      const newChatList = prev.slice();
+
+      newChatList.unshift(
+        {
+          id: self.crypto.randomUUID(),
+          contents: '접수되었습니다.',
+          writerId: 11,
+          createdDate: new Date(),
+        },
+        {
+          id: self.crypto.randomUUID(),
+          contents: chatContents,
+          writerId: user.id,
+          createdDate: new Date(),
+        },
+      );
+
+      return newChatList;
+    });
 
     setChatContents('');
+  };
+
+  const handleGetChatList = () => {
+    customerChatRoom &&
+      dispatch(
+        requestGetCustomerChatList({
+          ...searchChatParams,
+          roomId: customerChatRoom.id,
+        }),
+      );
+  };
+
+  const handleScrollEnd = () => {
+    messageEndRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+      inline: 'nearest',
+    });
   };
 
   return (
@@ -83,7 +154,29 @@ export default function CustomerChat() {
 
         {/* chat list */}
         <div className="col-span-5 w-full h-[500px] overflow-auto">
-          contents
+          <div ref={messageEndRef}>
+            {chatList
+              .slice()
+              .reverse()
+              .map((chat) => (
+                <ChatBubble key={chat.id} end={chat.writerId == user?.id}>
+                  <ChatBubble.Header>
+                    {chat.writerId == user?.id ? '나' : '고객센터'}
+                  </ChatBubble.Header>
+                  <ChatBubble.Avatar
+                    src={
+                      chat.writerId == user?.id
+                        ? user?.avatar || '/default_avatar.jpg'
+                        : '/customer_service_center.png'
+                    }
+                  />
+                  <ChatBubble.Message>{chat.contents}</ChatBubble.Message>
+                  <ChatBubble.Footer>
+                    <TimeAgo datetime={chat.createdDate} locale="ko" />
+                  </ChatBubble.Footer>
+                </ChatBubble>
+              ))}
+          </div>
         </div>
 
         {/* chat input */}

@@ -18,7 +18,7 @@ type CustomerChat = {
   writerId?: number;
   contents: string;
   isRead?: boolean;
-  createdDate?: Date;
+  createdDate: Date;
   createdBy?: string;
   lastModifiedDate?: Date;
   lastModifiedBy?: string;
