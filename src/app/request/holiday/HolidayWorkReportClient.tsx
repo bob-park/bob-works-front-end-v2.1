@@ -234,7 +234,7 @@ export default function HolidayWorkReportClient() {
 
     setShowSelectUser(false);
     setIsManualInput(false);
-    setIsVacation(true);
+    // setIsVacation(true);
     setSelectWorkUsers([]);
   };
 
@@ -261,7 +261,7 @@ export default function HolidayWorkReportClient() {
 
     setShowSelectUser(false);
     // setIsManualInput(false);
-    setIsVacation(true);
+    // setIsVacation(true);
     setManualWorkUserName('');
   };
 
@@ -450,6 +450,7 @@ export default function HolidayWorkReportClient() {
       <Modal className="w-11/12 max-w-5xl" open={showSelectUser} backdrop>
         <Modal.Header className="font-bold">근무자 선택</Modal.Header>
         <Modal.Body className="h-[500px] overflow-auto">
+          {/* <Form onSubmit={(e) => e.preventDefault()}> */}
           <div className="grid grid-cols-4 gap-4 ml-4 p-2">
             {/* 근무자 형태 */}
             <div className="col-span-1">
@@ -480,6 +481,22 @@ export default function HolidayWorkReportClient() {
                   />
                 </label>
               </div>
+              {/* <Form.Label title="등록 근무자">
+                  <Radio
+                    className="radio checked:bg-blue-500"
+                    name="isManualInput"
+                    checked={!isManualInput}
+                    onChange={() => setIsManualInput(false)}
+                  />
+                </Form.Label>
+                <Form.Label title="수동 입력">
+                  <Radio
+                    className="radio checked:bg-blue-500"
+                    name="isManualInput"
+                    checked={isManualInput}
+                    onChange={() => setIsManualInput(true)}
+                  />
+                </Form.Label> */}
             </div>
             <div className="col-span-2"></div>
 
@@ -489,11 +506,15 @@ export default function HolidayWorkReportClient() {
             </div>
             <div className="col-span-1">
               <div className="form-control">
-                <label className="label cursor-pointer">
+                <label
+                  className="label cursor-pointer"
+                  htmlFor="check_alternative_vacation"
+                >
                   <span className="label-text">대체 휴가</span>
                   <input
                     type="radio"
-                    name="is-vacation"
+                    id="check_alternative_vacation"
+                    name="is_vacation"
                     className="radio checked:bg-blue-500"
                     checked={isVacation}
                     onChange={() => setIsVacation(true)}
@@ -501,11 +522,12 @@ export default function HolidayWorkReportClient() {
                 </label>
               </div>
               <div className="form-control">
-                <label className="label cursor-pointer">
+                <label className="label cursor-pointer" htmlFor="check_payment">
                   <span className="label-text">수당</span>
                   <input
                     type="radio"
-                    name="is-vacation"
+                    id="check_payment"
+                    name="is_vacation"
                     className="radio checked:bg-red-500"
                     checked={!isVacation}
                     onChange={() => setIsVacation(false)}
@@ -550,6 +572,7 @@ export default function HolidayWorkReportClient() {
               )}
             </div>
           </div>
+          {/* </Form> */}
         </Modal.Body>
         <Modal.Actions>
           <Button
