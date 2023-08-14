@@ -39,6 +39,7 @@
     "timeago-react": "^3.0.6",
     "timeago.js": "^4.0.2",
     "typesafe-actions": "^5.1.0",
-    "typescript": "5.1.6"
+    "typescript": "5.1.6",
+    "uuidv4": "^6.2.13"
   }
 }

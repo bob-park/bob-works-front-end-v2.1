@@ -18,6 +18,7 @@ import TimeAgo from 'timeago-react';
 import * as timeago from 'timeago.js';
 import ko from 'timeago.js/lib/lang/ko';
 import { CustomerChat } from '@/store/maintenance/types';
+import { uuid } from 'uuidv4';
 
 timeago.register('ko', ko);
 
@@ -95,13 +96,13 @@ export default function CustomerChat() {
 
       newChatList.unshift(
         {
-          id: self.crypto.randomUUID(),
+          id: uuid(),
           contents: '접수되었습니다.',
           writerId: 11,
           createdDate: new Date(),
         },
         {
-          id: self.crypto.randomUUID(),
+          id: uuid(),
           contents: chatContents,
           writerId: user.id,
           createdDate: new Date(),
