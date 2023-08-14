@@ -12,13 +12,19 @@ import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
 
 // store
 import { maintenanceActions } from '@/store/maintenance';
+import { PaginationParams } from '@/store/types';
 
 // actions
-const { requestGetLatestCustomerChatRoom } = maintenanceActions;
+const { requestGetLatestCustomerChatRoom, requestGetCustomerChatList } =
+  maintenanceActions;
 
 export default function CustomerChat() {
   // state
   const [chatContents, setChatContents] = useState<string>('');
+  const [pagination, setPagination] = useState<PaginationParams>({
+    page: 0,
+    size: 10,
+  });
 
   // store
   const dispatch = useAppDispatch();
@@ -33,6 +39,16 @@ export default function CustomerChat() {
   useEffect(() => {
     dispatch(requestGetLatestCustomerChatRoom());
   }, []);
+
+  useEffect(() => {
+    customerChatRoom &&
+      dispatch(
+        requestGetCustomerChatList({
+          roomId: customerChatRoom.id,
+          ...pagination,
+        }),
+      );
+  }, [!!customerChatRoom]);
 
   // handle
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
