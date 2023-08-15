@@ -18,7 +18,7 @@ import TimeAgo from 'timeago-react';
 import * as timeago from 'timeago.js';
 import ko from 'timeago.js/lib/lang/ko';
 import { CustomerChat } from '@/store/maintenance/types';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 
 timeago.register('ko', ko);
 
@@ -48,6 +48,7 @@ export default function CustomerChat() {
   const [chatList, setChatList] = useState<CustomerChat[]>([
     ...customerChats.content,
   ]);
+  const [isSending, setIsSending] = useState<boolean>(false);
 
   // ref
   const messageEndRef = useRef<HTMLDivElement | null>(null);
@@ -74,6 +75,37 @@ export default function CustomerChat() {
     handleScrollEnd();
   }, [chatList]);
 
+  useEffect(() => {
+    if (!isSending) {
+      return;
+    }
+
+    if (!customerChatRoom || !user) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      setChatList((prev) => {
+        const newChatList = prev.slice();
+
+        newChatList.unshift({
+          id: uuid(),
+          writerId: 11,
+          contents: '접수되었습니다.',
+          createdDate: new Date(),
+        });
+
+        return newChatList;
+      });
+
+      setIsSending(false);
+    }, 3_000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [isSending]);
+
   // handle
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -82,32 +114,35 @@ export default function CustomerChat() {
       return;
     }
 
+    handleSendChat(customerChatRoom.id, chatContents, user.id, user.userId);
+
+    setIsSending(true);
+  };
+
+  const handleSendChat = (
+    roomId: string,
+    contents: string,
+    writerUniqueId: number,
+    writerId: string,
+  ) => {
     dispatch(
       requestSendCustomerChat({
-        roomId: customerChatRoom.id,
-        userId: user.userId,
-        userUniqueId: user.id,
-        contents: chatContents,
+        roomId,
+        userId: writerId,
+        userUniqueId: writerUniqueId,
+        contents: contents,
       }),
     );
 
     setChatList((prev) => {
       const newChatList = prev.slice();
 
-      newChatList.unshift(
-        {
-          id: uuid(),
-          contents: '접수되었습니다.',
-          writerId: 11,
-          createdDate: new Date(),
-        },
-        {
-          id: uuid(),
-          contents: chatContents,
-          writerId: user.id,
-          createdDate: new Date(),
-        },
-      );
+      newChatList.unshift({
+        id: uuid(),
+        contents,
+        writerId: writerUniqueId,
+        createdDate: new Date(),
+      });
 
       return newChatList;
     });
