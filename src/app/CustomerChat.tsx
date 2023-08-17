@@ -48,7 +48,6 @@ export default function CustomerChat() {
   const [chatList, setChatList] = useState<CustomerChat[]>([
     ...customerChats.content,
   ]);
-  const [isSending, setIsSending] = useState<boolean>(false);
 
   // ref
   const messageEndRef = useRef<HTMLDivElement | null>(null);
@@ -76,10 +75,6 @@ export default function CustomerChat() {
   }, [chatList]);
 
   useEffect(() => {
-    if (!isSending) {
-      return;
-    }
-
     if (!customerChatRoom || !user) {
       return;
     }
@@ -97,14 +92,15 @@ export default function CustomerChat() {
 
         return newChatList;
       });
-
-      setIsSending(false);
     }, 3_000);
 
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [isSending]);
+  }, [
+    chatList.length > customerChats.content.length &&
+      chatList.filter((chat) => chat.writerId === user?.id).length,
+  ]);
 
   // handle
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -115,8 +111,6 @@ export default function CustomerChat() {
     }
 
     handleSendChat(customerChatRoom.id, chatContents, user.id, user.userId);
-
-    setIsSending(true);
   };
 
   const handleSendChat = (
@@ -125,14 +119,14 @@ export default function CustomerChat() {
     writerUniqueId: number,
     writerId: string,
   ) => {
-    dispatch(
-      requestSendCustomerChat({
-        roomId,
-        userId: writerId,
-        userUniqueId: writerUniqueId,
-        contents: contents,
-      }),
-    );
+    // dispatch(
+    //   requestSendCustomerChat({
+    //     roomId,
+    //     userId: writerId,
+    //     userUniqueId: writerUniqueId,
+    //     contents: contents,
+    //   }),
+    // );
 
     setChatList((prev) => {
       const newChatList = prev.slice();
@@ -206,7 +200,11 @@ export default function CustomerChat() {
                         : '/customer_service_center.png'
                     }
                   />
-                  <ChatBubble.Message>{chat.contents}</ChatBubble.Message>
+                  <ChatBubble.Message
+                    color={chat.writerId == user?.id ? 'primary' : 'neutral'}
+                  >
+                    {chat.contents}
+                  </ChatBubble.Message>
                   <ChatBubble.Footer>
                     <TimeAgo datetime={chat.createdDate} locale="ko" />
                   </ChatBubble.Footer>
