@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 
-import { Button, ChatBubble, Form, Input } from 'react-daisyui';
+import { Button, ChatBubble, Form, Input, Divider } from 'react-daisyui';
 
 import { BsSendFill } from 'react-icons/bs';
 
@@ -19,6 +19,7 @@ import * as timeago from 'timeago.js';
 import ko from 'timeago.js/lib/lang/ko';
 import { CustomerChat } from '@/store/maintenance/types';
 import { v4 as uuid } from 'uuid';
+import { formatDate } from '../utils/ParseUtils';
 
 timeago.register('ko', ko);
 
@@ -119,14 +120,14 @@ export default function CustomerChat() {
     writerUniqueId: number,
     writerId: string,
   ) => {
-    // dispatch(
-    //   requestSendCustomerChat({
-    //     roomId,
-    //     userId: writerId,
-    //     userUniqueId: writerUniqueId,
-    //     contents: contents,
-    //   }),
-    // );
+    dispatch(
+      requestSendCustomerChat({
+        roomId,
+        userId: writerId,
+        userUniqueId: writerUniqueId,
+        contents: contents,
+      }),
+    );
 
     setChatList((prev) => {
       const newChatList = prev.slice();
@@ -188,28 +189,50 @@ export default function CustomerChat() {
             {chatList
               .slice()
               .reverse()
-              .map((chat) => (
-                <ChatBubble key={chat.id} end={chat.writerId == user?.id}>
-                  <ChatBubble.Header>
-                    {chat.writerId == user?.id ? '나' : '고객센터'}
-                  </ChatBubble.Header>
-                  <ChatBubble.Avatar
-                    src={
-                      chat.writerId == user?.id
-                        ? user?.avatar || '/default_avatar.jpg'
-                        : '/customer_service_center.png'
-                    }
-                  />
-                  <ChatBubble.Message
-                    color={chat.writerId == user?.id ? 'primary' : 'neutral'}
-                  >
-                    {chat.contents}
-                  </ChatBubble.Message>
-                  <ChatBubble.Footer>
-                    <TimeAgo datetime={chat.createdDate} locale="ko" />
-                  </ChatBubble.Footer>
-                </ChatBubble>
-              ))}
+              .map((chat, index) => {
+                const prevChat =
+                  index - 1 >= 0 && chatList.slice().reverse()[index - 1];
+
+                let isDivide = true;
+
+                if (!!prevChat) {
+                  isDivide =
+                    new Date(prevChat.createdDate).getDate() !==
+                    new Date(chat.createdDate).getDate();
+                }
+
+                return (
+                  <div key={chat.id}>
+                    {isDivide && (
+                      <Divider>
+                        {formatDate(chat.createdDate, 'yyyy년 MM월 dd일 (iii)')}
+                      </Divider>
+                    )}
+                    <ChatBubble end={chat.writerId == user?.id}>
+                      <ChatBubble.Header>
+                        {chat.writerId == user?.id ? '나' : '고객센터'}
+                      </ChatBubble.Header>
+                      <ChatBubble.Avatar
+                        src={
+                          chat.writerId == user?.id
+                            ? user?.avatar || '/default_avatar.jpg'
+                            : '/customer_service_center.png'
+                        }
+                      />
+                      <ChatBubble.Message
+                        color={
+                          chat.writerId == user?.id ? 'primary' : 'neutral'
+                        }
+                      >
+                        {chat.contents}
+                      </ChatBubble.Message>
+                      <ChatBubble.Footer>
+                        <TimeAgo datetime={chat.createdDate} locale="ko" />
+                      </ChatBubble.Footer>
+                    </ChatBubble>
+                  </div>
+                );
+              })}
           </div>
         </div>
 

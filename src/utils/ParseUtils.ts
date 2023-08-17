@@ -6,6 +6,7 @@ import {
   VacationType,
 } from '@/store/document/types';
 import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 export function getDocumentTypeId(
   types: DocumentsType[],
@@ -83,7 +84,7 @@ const vacationSubTypes = [
 ];
 
 export function formatDate(date: Date, str: string = 'yyyy. MM. dd.') {
-  return format(new Date(date), str);
+  return format(new Date(date), str, { locale: ko });
 }
 
 export function parseType(id: VacationType, isHalf: boolean) {
