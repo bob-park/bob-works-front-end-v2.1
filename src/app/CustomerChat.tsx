@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 
-import { Button, ChatBubble, Form, Input, Divider } from 'react-daisyui';
+import { Button, ChatBubble, Form, Input, Divider, Badge } from 'react-daisyui';
 
 import { BsSendFill } from 'react-icons/bs';
 
@@ -205,7 +205,12 @@ export default function CustomerChat() {
                   <div key={chat.id}>
                     {isDivide && (
                       <Divider>
-                        {formatDate(chat.createdDate, 'yyyy년 MM월 dd일 (iii)')}
+                        <Badge color="ghost">
+                          {formatDate(
+                            chat.createdDate,
+                            'yyyy년 MM월 dd일 (iii)',
+                          )}
+                        </Badge>
                       </Divider>
                     )}
                     <ChatBubble end={chat.writerId == user?.id}>
