@@ -23,6 +23,10 @@ import { formatDate } from '../utils/ParseUtils';
 
 timeago.register('ko', ko);
 
+type CustomerChatProps = {
+  user: User;
+};
+
 // actions
 const {
   requestGetLatestCustomerChatRoom,
@@ -30,10 +34,9 @@ const {
   requestSendCustomerChat,
 } = maintenanceActions;
 
-export default function CustomerChat() {
+export default function CustomerChat({ user }: CustomerChatProps) {
   // store
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.user);
   const {
     isLoading,
     customerChatRoom,

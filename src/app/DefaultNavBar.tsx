@@ -293,7 +293,7 @@ export default function DefaultNavBar({
                 : 'opacity-0 translate-y-6 invisible'
             }`}
           >
-            <CustomerChat />
+            <CustomerChat user={user} />
           </div>
           <Tooltip
             className="hover:animate-bounce"
