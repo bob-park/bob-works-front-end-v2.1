@@ -8,6 +8,7 @@ import { Stats } from 'react-daisyui';
 import { useAppSelector, useAppDispatch } from '@/hooks/reduxHook';
 
 import { userActions } from '@/store/user';
+import EventCalendar from '@/components/calendar/EventCalendar';
 
 const Stat = Stats.Stat;
 
@@ -80,6 +81,10 @@ export default function DabashBoard() {
           </Stat.Item>
         </Stats.Stat>
       </Stats>
+
+      <div className="w-full">
+        <EventCalendar />
+      </div>
     </div>
   );
 }
