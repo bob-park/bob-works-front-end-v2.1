@@ -22,6 +22,10 @@ type SearchVacationParams = {
 };
 
 const now = new Date();
+const initializeDate = {
+  startDate: new Date(now.getFullYear(), now.getMonth(), 1),
+  endDate: new Date(now.getFullYear(), now.getMonth() + 1, 0),
+};
 
 const Stat = Stats.Stat;
 
@@ -69,17 +73,17 @@ export default function DabashBoard() {
 
   // state
   const [searchVactionParams, setSearchVacationParams] =
-    useState<SearchVacationParams>({
-      startDate: new Date(now.getFullYear(), now.getMonth(), 1),
-      endDate: new Date(now.getFullYear(), now.getMonth() + 1, 0),
-    });
+    useState<SearchVacationParams>(initializeDate);
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
 
   // useEffect
   useEffect(() => {
     dispatch(requestGetUser({}));
-    handleSearchVacation();
   }, []);
+
+  useEffect(() => {
+    handleSearchVacation();
+  }, [searchVactionParams]);
 
   useEffect(() => {
     setCalendarEvents(
@@ -148,6 +152,10 @@ export default function DabashBoard() {
     });
   };
 
+  const handleToday = () => {
+    setSearchVacationParams(initializeDate);
+  };
+
   return (
     <div className="grid grid-cols-1 gap-10">
       <Stats className="shadow font-sans" horizontal>
@@ -196,7 +204,12 @@ export default function DabashBoard() {
       </Stats>
 
       <div className="w-full">
-        <EventCalendar events={calendarEvents} />
+        <EventCalendar
+          events={calendarEvents}
+          onPrev={handlePrevMonth}
+          onNext={handleNextMonth}
+          onToday={handleToday}
+        />
       </div>
     </div>
   );

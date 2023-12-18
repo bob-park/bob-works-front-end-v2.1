@@ -20,6 +20,9 @@ export type CalendarEvent = {
 
 type EventCalendarProps = {
   events: CalendarEvent[];
+  onPrev?: () => void;
+  onNext?: () => void;
+  onToday?: () => void;
 };
 
 const now = new Date();
@@ -42,7 +45,12 @@ function getTotalWeekNumber(date: Date): number {
   return count;
 }
 
-function EventCalendar({ events }: EventCalendarProps) {
+function EventCalendar({
+  events,
+  onPrev,
+  onNext,
+  onToday,
+}: EventCalendarProps) {
   // state
   const [nowDate, setNowDate] = useState<Date>(new Date());
 
@@ -51,10 +59,20 @@ function EventCalendar({ events }: EventCalendarProps) {
   // handler
   const handleNextMonth = () => {
     setNowDate(new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 1));
+
+    onNext && onNext();
   };
 
   const handlePrevMonth = () => {
     setNowDate(new Date(nowDate.getFullYear(), nowDate.getMonth() - 1, 1));
+
+    onPrev && onPrev();
+  };
+
+  const handleToday = () => {
+    setNowDate(new Date());
+
+    onToday && onToday();
   };
 
   return (
@@ -62,18 +80,18 @@ function EventCalendar({ events }: EventCalendarProps) {
       {/* header */}
       <div></div>
       <div className="flex justify-center items-center">
-        <Button className="join-item" onClick={() => handlePrevMonth()}>
+        <Button className="join-item" onClick={handlePrevMonth}>
           <FaAngleLeft />
         </Button>
         <strong className="text-xl w-[120px] mx-5">
           {parseHeaderDate(nowDate)}
         </strong>
-        <Button className="join-item" onClick={() => handleNextMonth()}>
+        <Button className="join-item" onClick={handleNextMonth}>
           <FaAngleRight />
         </Button>
       </div>
       <div className="items-center text-center">
-        <Button className="" onClick={() => setNowDate(new Date())}>
+        <Button className="" onClick={handleToday}>
           오늘
         </Button>
         <Join className="ml-5">
@@ -144,7 +162,7 @@ function EventCalendar({ events }: EventCalendarProps) {
                       return (
                         <div
                           key={`event-calendar-day-of-week-${daysIndex}`}
-                          className="border-r border-gray-300"
+                          className="border-r border-gray-300 h-full"
                         >
                           <div
                             className={`text-right pt-1 pr-3 ${
@@ -170,7 +188,7 @@ function EventCalendar({ events }: EventCalendarProps) {
                               </span>
                             )}
                           </div>
-                          <div className="text-xs text-left">
+                          <div className="text-xs text-left h-24 overflow-auto">
                             {events
                               .filter(
                                 (event) =>
@@ -181,7 +199,7 @@ function EventCalendar({ events }: EventCalendarProps) {
                               .map((event) => (
                                 <div
                                   key={`calender-event_date_${tempDate}`}
-                                  className={`mx-1 pl-2 border border-blue-500 rounded-xl bg-blue-500 text-white`}
+                                  className={`mb-1 mx-1 pl-2 border border-blue-500 rounded-xl bg-blue-500 text-white`}
                                 >
                                   {event.name}
                                 </div>
