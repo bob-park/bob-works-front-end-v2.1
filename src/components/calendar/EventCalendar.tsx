@@ -12,6 +12,18 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 // day of week
 const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 
+export type CalendarEvent = {
+  startDate: Date;
+  endDate: Date;
+  name: string;
+};
+
+type EventCalendarProps = {
+  events: CalendarEvent[];
+};
+
+const now = new Date();
+
 function parseHeaderDate(date: Date): string {
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
 }
@@ -30,7 +42,7 @@ function getTotalWeekNumber(date: Date): number {
   return count;
 }
 
-function EventCalendar() {
+function EventCalendar({ events }: EventCalendarProps) {
   // state
   const [nowDate, setNowDate] = useState<Date>(new Date());
 
@@ -80,7 +92,9 @@ function EventCalendar() {
           {daysOfWeek.map((item, index) => (
             <div
               key={`event-calendar-days-of-week-${index}`}
-              className="border-r border-gray-300"
+              className={`border-r border-gray-300 ${
+                index === 0 && 'text-red-600'
+              } ${index === daysOfWeek.length - 1 && 'text-blue-600'}`}
             >
               {item}
             </div>
@@ -98,14 +112,14 @@ function EventCalendar() {
                   {Array(7)
                     .fill('')
                     .map((item, daysIndex) => {
+                      let tempDate = new Date(calendarDate.getTime());
+
                       let isPrevMonth = false;
                       let isNextMonth = false;
                       let outputDate =
                         calendarDate.getDay() === daysIndex &&
                         calendarDate.getMonth() === nowDate.getMonth() &&
                         calendarDate.getDate();
-
-                      const now = new Date();
 
                       const isNow =
                         calendarDate.getFullYear() == now.getFullYear() &&
@@ -123,6 +137,7 @@ function EventCalendar() {
                         );
 
                         outputDate = prevMonthDate.getDate();
+                        tempDate = prevMonthDate;
                         isPrevMonth = true;
                       }
 
@@ -154,6 +169,23 @@ function EventCalendar() {
                                 {outputDate}
                               </span>
                             )}
+                          </div>
+                          <div className="text-xs text-left">
+                            {events
+                              .filter(
+                                (event) =>
+                                  tempDate.getTime() >=
+                                    event.startDate.getTime() &&
+                                  tempDate.getTime() <= event.endDate.getTime(),
+                              )
+                              .map((event) => (
+                                <div
+                                  key={`calender-event_date_${tempDate}`}
+                                  className={`mx-1 pl-2 border border-blue-500 rounded-xl bg-blue-500 text-white`}
+                                >
+                                  {event.name}
+                                </div>
+                              ))}
                           </div>
                         </div>
                       );

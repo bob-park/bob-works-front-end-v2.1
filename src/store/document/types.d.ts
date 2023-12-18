@@ -82,8 +82,8 @@ export type AddVacationRequest = {
 export type VacationDocument = {
   vacationType: VacationType;
   vacationSubType?: VacationSubType;
-  vacationDateFrom: Date;
-  vacationDateTo: Date;
+  vacationDateFrom: Date | string;
+  vacationDateTo: Date | string;
   daysCount: number;
   reason: string;
   approvals: DocumentApproval[];

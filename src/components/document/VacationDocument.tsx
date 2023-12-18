@@ -126,10 +126,10 @@ export default function VacationDocument({
           <span className="ml-10 text-xl font-normal tracking-widest">
             <span>
               {document.daysCount > 1
-                ? `${formatDate(document.vacationDateFrom)} ~ ${formatDate(
-                    document.vacationDateTo,
-                  )}`
-                : formatDate(document.vacationDateFrom)}
+                ? `${formatDate(
+                    document.vacationDateFrom as Date,
+                  )} ~ ${formatDate(document.vacationDateTo as Date)}`
+                : formatDate(document.vacationDateFrom as Date)}
             </span>
             <span className="ml-4">
               (

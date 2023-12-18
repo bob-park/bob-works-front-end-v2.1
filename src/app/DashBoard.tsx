@@ -8,10 +8,13 @@ import { Stats } from 'react-daisyui';
 import { useAppSelector, useAppDispatch } from '@/hooks/reduxHook';
 
 import { userActions } from '@/store/user';
-import EventCalendar from '@/components/calendar/EventCalendar';
+import EventCalendar, {
+  CalendarEvent,
+} from '@/components/calendar/EventCalendar';
 import { documentActions } from '@/store/document';
 
-import { formatISO } from 'date-fns';
+import { formatISO, parse } from 'date-fns';
+import { VacationSubType, VacationType } from '@/store/document/types';
 
 type SearchVacationParams = {
   startDate: Date;
@@ -32,24 +35,68 @@ function formatDate(date: Date) {
   return formatISO(date, { representation: 'date' });
 }
 
+function parseDate(input: string): Date {
+  return parse(input, 'yyyy-MM-dd', new Date());
+}
+
+function parseVacationType(
+  type: VacationType,
+  subType: VacationSubType | undefined,
+): string {
+  if (subType) {
+    let type = '';
+
+    switch (subType) {
+      case 'AM':
+        type = '오전';
+        break;
+      case 'PM':
+        type = '오후';
+        break;
+    }
+
+    return `반차(${type})`;
+  }
+
+  return '연차';
+}
+
 export default function DabashBoard() {
   // store
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
-  const {} = useAppSelector((state) => state.document);
+  const { vacationDocuments } = useAppSelector((state) => state.document);
 
   // state
   const [searchVactionParams, setSearchVacationParams] =
     useState<SearchVacationParams>({
       startDate: new Date(now.getFullYear(), now.getMonth(), 1),
-      endDate: new Date(),
+      endDate: new Date(now.getFullYear(), now.getMonth() + 1, 0),
     });
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
 
   // useEffect
   useEffect(() => {
     dispatch(requestGetUser({}));
     handleSearchVacation();
   }, []);
+
+  useEffect(() => {
+    setCalendarEvents(
+      vacationDocuments.content
+        .filter((item) => item.writer.id === user?.id)
+        .map((item) => {
+          return {
+            name: `${user?.name}${user?.position?.name} ${parseVacationType(
+              item.vacationType,
+              item.vacationSubType,
+            )}`,
+            startDate: parseDate(item.vacationDateFrom as string),
+            endDate: parseDate(item.vacationDateTo as string),
+          };
+        }),
+    );
+  }, [vacationDocuments]);
 
   const generalVacation = {
     total: user?.nowVacation?.general.totalCount || 0,
@@ -69,6 +116,36 @@ export default function DabashBoard() {
         endDate: formatDate(searchVactionParams.endDate),
       }),
     );
+  };
+
+  const handlePrevMonth = () => {
+    setSearchVacationParams({
+      startDate: new Date(
+        searchVactionParams.startDate.getFullYear(),
+        searchVactionParams.startDate.getMonth() - 1,
+        1,
+      ),
+      endDate: new Date(
+        searchVactionParams.startDate.getFullYear(),
+        searchVactionParams.startDate.getMonth(),
+        0,
+      ),
+    });
+  };
+
+  const handleNextMonth = () => {
+    setSearchVacationParams({
+      startDate: new Date(
+        searchVactionParams.startDate.getFullYear(),
+        searchVactionParams.startDate.getMonth() + 1,
+        1,
+      ),
+      endDate: new Date(
+        searchVactionParams.startDate.getFullYear(),
+        searchVactionParams.startDate.getMonth() + 2,
+        0,
+      ),
+    });
   };
 
   return (
@@ -119,7 +196,7 @@ export default function DabashBoard() {
       </Stats>
 
       <div className="w-full">
-        <EventCalendar />
+        <EventCalendar events={calendarEvents} />
       </div>
     </div>
   );
