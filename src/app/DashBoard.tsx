@@ -47,22 +47,42 @@ function parseVacationType(
   type: VacationType,
   subType: VacationSubType | undefined,
 ): string {
-  if (subType) {
-    let type = '';
+  let vacationType: string = '';
 
-    switch (subType) {
-      case 'AM':
-        type = '오전';
-        break;
-      case 'PM':
-        type = '오후';
-        break;
-    }
+  switch (type) {
+    case 'GENERAL':
+      vacationType = '연차';
 
-    return `반차(${type})`;
+      if (subType) {
+        switch (subType) {
+          case 'AM':
+            vacationType = '반차(오전)';
+            break;
+          case 'PM':
+            vacationType = '반차(오후)';
+            break;
+        }
+      }
+      break;
+
+    case 'ALTERNATIVE':
+      vacationType = '대체휴가';
+
+      if (subType) {
+        switch (subType) {
+          case 'AM':
+            vacationType += '(오전)';
+            break;
+          case 'PM':
+            vacationType += '(오후)';
+            break;
+        }
+      }
+
+      break;
   }
 
-  return '연차';
+  return vacationType;
 }
 
 export default function DabashBoard() {

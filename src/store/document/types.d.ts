@@ -67,7 +67,7 @@ export type DocumentApprovalLine = {
 };
 
 // add vacation request
-export type VacationType = 'GENERAL' | 'HOLIDAY_WORK';
+export type VacationType = 'GENERAL' | 'ALTERNATIVE';
 export type VacationSubType = 'AM' | 'PM';
 export type AddVacationRequest = {
   typeId: number;
