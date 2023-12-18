@@ -21,6 +21,7 @@ export type DocumentsState = {
   approvalList: Pageable<DocumentApproval>;
   approvalDetail?: DocumentApproval;
   holidayWorkReportDetail: HolidayWorkReportDetail;
+  vacationDocuments: Pageable<VacationDocument>;
 };
 
 export type DocumentsType = {

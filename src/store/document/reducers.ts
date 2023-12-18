@@ -9,6 +9,7 @@ import {
   DocumentsStatus,
   DocumentsType,
   HolidayWorkReportDetail,
+  VacationDocument,
   VacationDocumentDetail,
   VacationType,
 } from './types';
@@ -215,6 +216,27 @@ const reducers = {
     state.holidayWorkReportDetail = action.payload;
   },
   failureGetHolidayWorkReportDetail: (state: DocumentsState) => {
+    state.isLoading = false;
+  },
+
+  // search vacation documents
+  requestSearchVacation: (
+    state: DocumentsState,
+    action: PayloadAction<{ startDate: string; endDate: string }>,
+  ) => {
+    state.isLoading = true;
+  },
+  successSearchVacation: (
+    state: DocumentsState,
+    action: PayloadAction<Pageable<VacationDocument> | undefined>,
+  ) => {
+    state.isLoading = false;
+
+    if (action.payload) {
+      state.vacationDocuments = action.payload;
+    }
+  },
+  failureSearchVacation: (state: DocumentsState) => {
     state.isLoading = false;
   },
 };

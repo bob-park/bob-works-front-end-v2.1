@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // daisyui
 import { Stats } from 'react-daisyui';
@@ -9,20 +9,46 @@ import { useAppSelector, useAppDispatch } from '@/hooks/reduxHook';
 
 import { userActions } from '@/store/user';
 import EventCalendar from '@/components/calendar/EventCalendar';
+import { documentActions } from '@/store/document';
+
+import { formatISO } from 'date-fns';
+
+type SearchVacationParams = {
+  startDate: Date;
+  endDate: Date;
+};
+
+const now = new Date();
 
 const Stat = Stats.Stat;
 
 // use action
 const { requestGetUser } = userActions;
 
+// document action
+const { requestSearchVacation } = documentActions;
+
+function formatDate(date: Date) {
+  return formatISO(date, { representation: 'date' });
+}
+
 export default function DabashBoard() {
   // store
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
+  const {} = useAppSelector((state) => state.document);
+
+  // state
+  const [searchVactionParams, setSearchVacationParams] =
+    useState<SearchVacationParams>({
+      startDate: new Date(now.getFullYear(), now.getMonth(), 1),
+      endDate: new Date(),
+    });
 
   // useEffect
   useEffect(() => {
     dispatch(requestGetUser({}));
+    handleSearchVacation();
   }, []);
 
   const generalVacation = {
@@ -33,6 +59,16 @@ export default function DabashBoard() {
   const alternativeVacation = {
     total: user?.nowVacation?.alternative.totalCount || 0,
     used: user?.nowVacation?.alternative.usedCount || 0,
+  };
+
+  // handler
+  const handleSearchVacation = () => {
+    dispatch(
+      requestSearchVacation({
+        startDate: formatDate(searchVactionParams.startDate),
+        endDate: formatDate(searchVactionParams.endDate),
+      }),
+    );
   };
 
   return (
