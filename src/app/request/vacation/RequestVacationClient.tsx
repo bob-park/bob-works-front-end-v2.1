@@ -260,7 +260,7 @@ export default function RequestVacationClient() {
                 <Datepicker
                   placeholder="날짜 선택"
                   inputClassName="input w-full input-primary input-bordered focus:outline-offset-0 z-100"
-                  minDate={new Date(new Date().getFullYear(), 1, 1)}
+                  minDate={new Date(new Date().getFullYear(), 0, 1)}
                   maxDate={new Date(new Date().getFullYear(), 11, 31)}
                   value={dateValue}
                   showFooter
