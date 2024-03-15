@@ -1,4 +1,8 @@
-import { DocumentApprovalLine, VacationDocument } from '@/store/document/types';
+import {
+  DocumentApprovalLine,
+  VacationDocument,
+  VacationSubType,
+} from '@/store/document/types';
 import ApprovalLines, { ApprovalLine } from './ApprovalLines';
 
 import { formatDate, parseSubType, parseType } from '@/utils/ParseUtils';
@@ -27,6 +31,14 @@ const UseAlternativeVacationList = ({
     </div>
   );
 };
+
+function parseDays(days: number, subType?: VacationSubType) {
+  if (days === 0.5) {
+    return ` ${subType === 'AM' ? '오전' : '오후'} 반차 `;
+  }
+
+  return `${days} 일`;
+}
 
 export default function VacationDocument({
   document,
@@ -134,7 +146,7 @@ export default function VacationDocument({
             <span className="ml-4">
               (
               <span className="font-semibold">
-                {` ${document.daysCount} 일 `}
+                {parseDays(document.daysCount, document.vacationSubType)}
               </span>
               )
             </span>
@@ -148,18 +160,18 @@ export default function VacationDocument({
             <div className="flex-initial w-full ml-10">
               <div className="flex justify-start gap-2 w-full">
                 <div className="flex-none w-[135px] text-xl font-semibold">
-                  <span>
+                  <span className="tracking-widest">
                     {parseType(
                       document.vacationType,
                       document.vacationSubType != null,
                     )}
                   </span>
 
-                  {document.vacationSubType && (
+                  {/* {document.vacationSubType && (
                     <span className="ml-2 text-sm">
                       ( {parseSubType(document.vacationSubType)} )
                     </span>
-                  )}
+                  )} */}
                 </div>
                 <div className="flex-initial w-full">
                   {useAlternativeVacations && (

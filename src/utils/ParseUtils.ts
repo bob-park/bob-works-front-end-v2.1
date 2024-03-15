@@ -88,9 +88,9 @@ export function formatDate(date: Date, str: string = 'yyyy. MM. dd.') {
 }
 
 export function parseType(id: VacationType, isHalf: boolean) {
-  if (id === 'GENERAL' && isHalf) {
-    return '반 차';
-  }
+  // if (id === 'GENERAL' && isHalf) {
+  //   return '반 차';
+  // }
 
   return vacationTypes.find((item) => item.id == id)?.name;
 }
