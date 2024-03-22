@@ -250,7 +250,7 @@ export default function DefaultNavBar({
               </div>
               <Dropdown className="mr-10" hover end>
                 <Avatar
-                  src="/api/user/avartar"
+                  src="/api/user/avatar"
                   size="sm"
                   shape="circle"
                   border
