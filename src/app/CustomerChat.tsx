@@ -223,7 +223,7 @@ export default function CustomerChat({ user }: CustomerChatProps) {
                       <ChatBubble.Avatar
                         src={
                           chat.writerId == user?.id
-                            ? user?.avatar || '/default_avatar.jpg'
+                            ? '/api/user/avatar'
                             : '/customer_service_center.png'
                         }
                       />
