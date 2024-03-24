@@ -68,10 +68,13 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
       requestUpdateUserAvatar({
         formData,
         handleAfter: () => {
-          const newAvatarSrc = URL.createObjectURL(avatarFile);
-          setUserAvatarSrc(newAvatarSrc);
+          setUserAvatarSrc((prev) => {
+            const newAvatarSrc = URL.createObjectURL(avatarFile);
 
-          URL.revokeObjectURL(newAvatarSrc);
+            URL.revokeObjectURL(prev);
+
+            return newAvatarSrc;
+          });
 
           dispatch(
             addAlert({
