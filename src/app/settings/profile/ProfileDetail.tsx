@@ -32,7 +32,7 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
 
   // state
   const [userAvatarSrc, setUserAvatarSrc] = useState<string>(
-    user.avatar || '/default_avatar.jpg',
+    '/api/user/avatar' || '/default_avatar.jpg',
   );
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [changePassword, setChangePassword] = useState<string>('');
@@ -42,7 +42,7 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
 
   // useEffect
   useEffect(() => {
-    user.avatar && setUserAvatarSrc(user.avatar);
+    user.avatar && setUserAvatarSrc('/api/user/avatar');
   }, [user]);
 
   const handleEditAvatar = () => {
@@ -70,6 +70,8 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
         handleAfter: () => {
           const newAvatarSrc = URL.createObjectURL(avatarFile);
           setUserAvatarSrc(newAvatarSrc);
+
+          URL.revokeObjectURL(newAvatarSrc);
 
           dispatch(
             addAlert({
