@@ -3,10 +3,19 @@
 import useGetAllLoan from '@/hooks/loan/useGetAllLoan';
 
 import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
 
 export default function LoanContents() {
+  // router
+  const router = useRouter();
+
   // query
   const { loans, isLoading } = useGetAllLoan();
+
+  // handle
+  const handleMoveDetail = (loanId: number) => {
+    router.push(`/loan/${loanId}`);
+  };
 
   return (
     <div className="rounded-xl shadow-2xl p-8">
@@ -26,7 +35,11 @@ export default function LoanContents() {
         {/* contents */}
         <tbody>
           {loans.map((loan, index) => (
-            <tr key={`loan-row-${loan.id}`} className="hover">
+            <tr
+              key={`loan-row-${loan.id}`}
+              className="hover cursor-pointer"
+              onClick={() => handleMoveDetail(loan.id)}
+            >
               <td className="text-right">{index + 1}</td>
               <td width={150}>{loan.name}</td>
               <td className="text-center" width={120}>

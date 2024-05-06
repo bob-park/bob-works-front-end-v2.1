@@ -10,7 +10,7 @@ export default function LoanListPage() {
         <div>
           <div className="inline-block">
             <BackDrop />
-            <span className="text-xl font-semibold ml-2">상세</span>
+            <span className="text-xl font-semibold ml-2">대출 목록</span>
           </div>
         </div>
 
