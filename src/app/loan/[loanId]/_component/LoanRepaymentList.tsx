@@ -18,15 +18,7 @@ export default function LoanRepaymentList({ loanId }: LoanRepaymentListProps) {
   const [repayId, setRepayId] = useState<number>();
 
   // query
-  const { loan, isLoading } = useGetLoanDetail(loanId);
-  const { onRepayLoan } = useRepayLoan(loanId, () => {
-    setRepayId(undefined);
-  });
-
-  // handle
-  const handleRepayLoan = () => {
-    repayId && onRepayLoan(repayId);
-  };
+  const { loan } = useGetLoanDetail(loanId);
 
   return (
     <>
@@ -97,10 +89,9 @@ export default function LoanRepaymentList({ loanId }: LoanRepaymentListProps) {
       {/* repay modal */}
       <RepayLoanModal
         open={showRepay}
+        loanId={loanId}
         repayId={repayId}
-        isLoading={isLoading}
         onBackdrop={() => setShowRepay(false)}
-        onAction={handleRepayLoan}
       />
     </>
   );

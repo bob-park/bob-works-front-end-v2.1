@@ -22,11 +22,11 @@ export async function addLoan(body: {
     body: JSON.stringify(body),
   });
 
+  await delay(1_000);
+
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  await delay(1_000);
 
   return response.json().then((res: LoanRepaymentHistory) => res);
 }

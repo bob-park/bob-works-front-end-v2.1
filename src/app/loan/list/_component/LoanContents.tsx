@@ -50,7 +50,7 @@ export default function LoanContents() {
               </td>
               <td>{loan.totalBalance.toLocaleString()} 원</td>
               <td>{loan.endingBalance.toLocaleString()} 원</td>
-              <td>{loan.repaymentCount} 회</td>
+              <td className="text-right">{loan.repaymentCount} 회</td>
             </tr>
           ))}
         </tbody>
