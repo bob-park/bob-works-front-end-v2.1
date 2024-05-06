@@ -4,7 +4,7 @@ type LoanRepaymentType =
   | 'BALLOON_PAYMENT'
   | 'CUSTOM';
 
-interface LonRepaymentHistory {
+interface LoanRepaymentHistory {
   id: number;
   principal: number;
   interest: number;
@@ -28,7 +28,7 @@ interface Loan {
   repaymentCount: number;
   endingBalance: number;
   defaultRepaymentBalance?: number;
-  repaymentHistories: LonRepaymentHistory[];
+  repaymentHistories: LoanRepaymentHistory[];
   createdDate: Date;
   createdBy: string;
   lastModifiedDate?: Date;

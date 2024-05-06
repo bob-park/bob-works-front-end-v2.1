@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 
 import BackDrop from '@/components/BackDrop';
 import LoanDetailContents from './_component/LoanDetailContents';
+import LoanRepaymentList from './_component/LoanRepaymentList';
 
 const API_URL = process.env.CLIENT_SERVICE_PATH;
 
@@ -18,7 +19,7 @@ export default async function LoanDetailPage({
       Cookie: cookies().toString(),
     },
   });
-  const loan = await response.json();
+  const loan: Loan = await response.json();
 
   return (
     <div className="size-full">
@@ -33,6 +34,13 @@ export default async function LoanDetailPage({
 
         {/* content */}
         <LoanDetailContents loan={loan} />
+
+        {/* repayment list */}
+        <LoanRepaymentList
+          list={loan.repaymentHistories.sort((o1, o2) =>
+            o1.round > o2.round ? -1 : 1,
+          )}
+        />
       </div>
     </div>
   );
