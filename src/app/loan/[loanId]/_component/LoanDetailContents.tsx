@@ -1,12 +1,22 @@
 'use client';
 
+import useGetLoanDetail from '@/hooks/loan/useGetDetailLoan';
 import dayjs from 'dayjs';
 
 type LoanDetailContentsProps = {
-  loan: Loan;
+  loanId: number;
 };
 
-export default function LoanDetailContents({ loan }: LoanDetailContentsProps) {
+export default function LoanDetailContents({
+  loanId,
+}: LoanDetailContentsProps) {
+  // query
+  const { loan } = useGetLoanDetail(loanId);
+
+  if (!loan) {
+    return;
+  }
+
   return (
     <div className="w-full grid grid-cols-5 gap-6 rounded-2xl shadow-xl p-10">
       {/* 대출 아이디 */}

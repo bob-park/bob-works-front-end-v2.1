@@ -4,22 +4,12 @@ import BackDrop from '@/components/BackDrop';
 import LoanDetailContents from './_component/LoanDetailContents';
 import LoanRepaymentList from './_component/LoanRepaymentList';
 
-const API_URL = process.env.CLIENT_SERVICE_PATH;
-
 export default async function LoanDetailPage({
   params,
 }: {
   params: { loanId: number };
 }) {
   const { loanId } = params;
-
-  const response = await fetch(`${API_URL}/loan/${loanId}`, {
-    method: 'get',
-    headers: {
-      Cookie: cookies().toString(),
-    },
-  });
-  const loan: Loan = await response.json();
 
   return (
     <div className="size-full">
@@ -33,14 +23,10 @@ export default async function LoanDetailPage({
         </div>
 
         {/* content */}
-        <LoanDetailContents loan={loan} />
+        <LoanDetailContents loanId={loanId} />
 
         {/* repayment list */}
-        <LoanRepaymentList
-          list={loan.repaymentHistories.sort((o1, o2) =>
-            o1.round > o2.round ? -1 : 1,
-          )}
-        />
+        <LoanRepaymentList loanId={loanId} />
       </div>
     </div>
   );

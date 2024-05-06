@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react';
 type RepayLoanModalProps = {
   open: boolean;
   repayId?: number;
+  isLoading?: boolean;
   onBackdrop?: () => void;
+  onAction?: () => void;
 };
 
 const MODAL_ID = 'repay_modal';
@@ -11,7 +13,9 @@ const MODAL_ID = 'repay_modal';
 export default function RepayLoanModal({
   open,
   repayId,
+  isLoading,
   onBackdrop,
+  onAction,
 }: RepayLoanModalProps) {
   // useEffect
   useEffect(() => {
@@ -29,6 +33,10 @@ export default function RepayLoanModal({
     if (e.key === 'Escape') {
       handleBackdrop();
     }
+  };
+
+  const handleAction = () => {
+    onAction && onAction();
   };
 
   return (
@@ -49,7 +57,16 @@ export default function RepayLoanModal({
               취소
             </button>
 
-            <button className="btn btn-primary w-24 ml-3">납부 하기</button>
+            <button
+              className="btn btn-primary w-24 ml-3"
+              onClick={handleAction}
+            >
+              {isLoading ? (
+                <span className="loading loading-spinner" />
+              ) : (
+                '납부 하기'
+              )}
+            </button>
           </form>
         </div>
       </div>
