@@ -21,6 +21,7 @@ export type DocumentsState = {
   approvalList: Pageable<DocumentApproval>;
   approvalDetail?: DocumentApproval;
   holidayWorkReportDetail: HolidayWorkReportDetail;
+  vacationDocuments: Pageable<VacationDocument>;
 };
 
 export type DocumentsType = {
@@ -66,7 +67,7 @@ export type DocumentApprovalLine = {
 };
 
 // add vacation request
-export type VacationType = 'GENERAL' | 'HOLIDAY_WORK';
+export type VacationType = 'GENERAL' | 'ALTERNATIVE';
 export type VacationSubType = 'AM' | 'PM';
 export type AddVacationRequest = {
   typeId: number;
@@ -81,8 +82,8 @@ export type AddVacationRequest = {
 export type VacationDocument = {
   vacationType: VacationType;
   vacationSubType?: VacationSubType;
-  vacationDateFrom: Date;
-  vacationDateTo: Date;
+  vacationDateFrom: Date | string;
+  vacationDateTo: Date | string;
   daysCount: number;
   reason: string;
   approvals: DocumentApproval[];

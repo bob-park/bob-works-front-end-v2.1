@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 
-import { Button, ChatBubble, Form, Input } from 'react-daisyui';
+import { Button, ChatBubble, Form, Input, Divider, Badge } from 'react-daisyui';
 
 import { BsSendFill } from 'react-icons/bs';
 
@@ -19,8 +19,13 @@ import * as timeago from 'timeago.js';
 import ko from 'timeago.js/lib/lang/ko';
 import { CustomerChat } from '@/store/maintenance/types';
 import { v4 as uuid } from 'uuid';
+import { formatDate } from '../utils/ParseUtils';
 
 timeago.register('ko', ko);
+
+type CustomerChatProps = {
+  user: User;
+};
 
 // actions
 const {
@@ -29,10 +34,9 @@ const {
   requestSendCustomerChat,
 } = maintenanceActions;
 
-export default function CustomerChat() {
+export default function CustomerChat({ user }: CustomerChatProps) {
   // store
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.user);
   const {
     isLoading,
     customerChatRoom,
@@ -48,7 +52,6 @@ export default function CustomerChat() {
   const [chatList, setChatList] = useState<CustomerChat[]>([
     ...customerChats.content,
   ]);
-  const [isSending, setIsSending] = useState<boolean>(false);
 
   // ref
   const messageEndRef = useRef<HTMLDivElement | null>(null);
@@ -76,10 +79,6 @@ export default function CustomerChat() {
   }, [chatList]);
 
   useEffect(() => {
-    if (!isSending) {
-      return;
-    }
-
     if (!customerChatRoom || !user) {
       return;
     }
@@ -97,14 +96,15 @@ export default function CustomerChat() {
 
         return newChatList;
       });
-
-      setIsSending(false);
     }, 3_000);
 
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [isSending]);
+  }, [
+    chatList.length > customerChats.content.length &&
+      chatList.filter((chat) => chat.writerId === user?.id).length,
+  ]);
 
   // handle
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -115,8 +115,6 @@ export default function CustomerChat() {
     }
 
     handleSendChat(customerChatRoom.id, chatContents, user.id, user.userId);
-
-    setIsSending(true);
   };
 
   const handleSendChat = (
@@ -194,24 +192,55 @@ export default function CustomerChat() {
             {chatList
               .slice()
               .reverse()
-              .map((chat) => (
-                <ChatBubble key={chat.id} end={chat.writerId == user?.id}>
-                  <ChatBubble.Header>
-                    {chat.writerId == user?.id ? '나' : '고객센터'}
-                  </ChatBubble.Header>
-                  <ChatBubble.Avatar
-                    src={
-                      chat.writerId == user?.id
-                        ? user?.avatar || '/default_avatar.jpg'
-                        : '/customer_service_center.png'
-                    }
-                  />
-                  <ChatBubble.Message>{chat.contents}</ChatBubble.Message>
-                  <ChatBubble.Footer>
-                    <TimeAgo datetime={chat.createdDate} locale="ko" />
-                  </ChatBubble.Footer>
-                </ChatBubble>
-              ))}
+              .map((chat, index) => {
+                const prevChat =
+                  index - 1 >= 0 && chatList.slice().reverse()[index - 1];
+
+                let isDivide = true;
+
+                if (!!prevChat) {
+                  isDivide =
+                    new Date(prevChat.createdDate).getDate() !==
+                    new Date(chat.createdDate).getDate();
+                }
+
+                return (
+                  <div key={chat.id}>
+                    {isDivide && (
+                      <Divider>
+                        <Badge color="ghost">
+                          {formatDate(
+                            chat.createdDate,
+                            'yyyy년 MM월 dd일 (iii)',
+                          )}
+                        </Badge>
+                      </Divider>
+                    )}
+                    <ChatBubble end={chat.writerId == user?.id}>
+                      <ChatBubble.Header>
+                        {chat.writerId == user?.id ? '나' : '고객센터'}
+                      </ChatBubble.Header>
+                      <ChatBubble.Avatar
+                        src={
+                          chat.writerId == user?.id
+                            ? '/api/user/avatar'
+                            : '/customer_service_center.png'
+                        }
+                      />
+                      <ChatBubble.Message
+                        color={
+                          chat.writerId == user?.id ? 'primary' : 'neutral'
+                        }
+                      >
+                        {chat.contents}
+                      </ChatBubble.Message>
+                      <ChatBubble.Footer>
+                        <TimeAgo datetime={chat.createdDate} locale="ko" />
+                      </ChatBubble.Footer>
+                    </ChatBubble>
+                  </div>
+                );
+              })}
           </div>
         </div>
 

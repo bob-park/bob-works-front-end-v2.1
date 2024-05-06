@@ -32,6 +32,14 @@ const initialState: DocumentsState = {
     },
   },
   holidayWorkReportDetail: {},
+  vacationDocuments: {
+    content: [],
+    total: 0,
+    pageable: {
+      page: 0,
+      size: 0,
+    },
+  },
 };
 
 export default createSlice({
