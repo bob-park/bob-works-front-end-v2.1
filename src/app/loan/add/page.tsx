@@ -1,3 +1,3 @@
 export default function AddLoanPage() {
-  return <div>add loan</div>;
+  return <div>나중에 추가해야지 헤헤</div>;
 }
