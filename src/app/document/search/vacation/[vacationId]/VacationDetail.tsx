@@ -19,7 +19,7 @@ import { DocumentsStatus } from '@/store/document/types';
 import VacationDocument from '@/components/document/VacationDocument';
 
 // utils
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
 
 type VacationDetailProps = {

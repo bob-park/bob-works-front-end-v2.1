@@ -17,7 +17,7 @@ import { documentActions } from '@/store/document';
 import { DocumentsStatus } from '@/store/document/types';
 
 // utils
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
 import HolidayWorkReportDocument from '@/components/document/HolidayWorkReportDocument';
 
