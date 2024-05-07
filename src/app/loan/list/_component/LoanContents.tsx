@@ -40,17 +40,25 @@ export default function LoanContents() {
               className="hover cursor-pointer"
               onClick={() => handleMoveDetail(loan.id)}
             >
-              <td className="text-right">{index + 1}</td>
-              <td width={150}>{loan.name}</td>
-              <td className="text-center" width={120}>
+              <td className="text-right" width={50}>
+                {index + 1}
+              </td>
+              <td width={200}>{loan.name}</td>
+              <td className="text-center text-xs" width={170}>
                 {dayjs(loan.endDate).format('YYYY-MM-DD')}
               </td>
-              <td className="text-right" width={100}>
+              <td className="text-right" width={50}>
                 {Math.round(loan.interestRate * 10_000) / 100} %
               </td>
-              <td>{loan.totalBalance.toLocaleString()} 원</td>
-              <td>{loan.endingBalance.toLocaleString()} 원</td>
-              <td className="text-right">{loan.repaymentCount} 회</td>
+              <td className="text-right" width={170}>
+                {loan.totalBalance.toLocaleString()} 원
+              </td>
+              <td className="text-right" width={170}>
+                {loan.endingBalance.toLocaleString()} 원
+              </td>
+              <td className="text-right" width={50}>
+                {loan.repaymentCount} 회
+              </td>
             </tr>
           ))}
         </tbody>
