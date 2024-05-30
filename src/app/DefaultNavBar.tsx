@@ -169,6 +169,15 @@ export default function DefaultNavBar({
                   대시보드
                 </Link>
               </Menu.Item>
+              <Menu.Item>
+                <Link
+                  className={activeMenuItem('/vacation/usage')}
+                  href="/vacation/usage"
+                >
+                  <LuLayoutDashboard />
+                  연차 사용 내역
+                </Link>
+              </Menu.Item>
               <Menu.Item></Menu.Item>
               <Menu.Title>
                 <h2>문서 결재</h2>

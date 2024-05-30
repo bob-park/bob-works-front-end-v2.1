@@ -5,9 +5,9 @@ export default function useGetVacationUsage() {
   const { data, isLoading } = useQuery<UsageVacation[]>({
     queryKey: ['document', 'vacation', 'usage'],
     queryFn: () => getUsage(),
-    staleTime: 60 * 1_000,
-    gcTime: 120 * 1_000,
+    staleTime: 300 * 1_000,
+    gcTime: 360 * 1_000,
   });
 
-  return { usageVacations: data, isLoading };
+  return { usageVacations: data || [], isLoading };
 }

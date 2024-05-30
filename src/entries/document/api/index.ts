@@ -13,5 +13,11 @@ export async function getUsage() {
     throw new Error(response.statusText);
   }
 
-  return response.json().then((res: UsageVacation[]) => res);
+  return response
+    .json()
+    .then((res: UsageVacation[]) =>
+      res.sort((o1, o2) =>
+        o1.vacationDateFrom > o2.vacationDateFrom ? 1 : -1,
+      ),
+    );
 }
