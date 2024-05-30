@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import DefaultNavBar from './DefaultNavBar';
+import RQProvider from './_component/RQProvider';
 
 const CLIENT_SERVICE_PATH = process.env.CLIENT_SERVICE_PATH;
 
@@ -38,9 +39,11 @@ export default async function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <Providers>
-          <DefaultNavBar user={user}>{children}</DefaultNavBar>
-        </Providers>
+        <RQProvider>
+          <Providers>
+            <DefaultNavBar user={user}>{children}</DefaultNavBar>
+          </Providers>
+        </RQProvider>
       </body>
     </html>
   );

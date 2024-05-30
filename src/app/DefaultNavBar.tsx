@@ -4,7 +4,11 @@ import { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 
 // next
-import { useRouter, usePathname } from 'next/navigation';
+import {
+  useRouter,
+  usePathname,
+  useSelectedLayoutSegments,
+} from 'next/navigation';
 import Link from 'next/link';
 
 // hooks
@@ -31,7 +35,8 @@ import {
 import { CgProfile } from 'react-icons/cg';
 import { BsInfoCircle } from 'react-icons/bs';
 import { VscError } from 'react-icons/vsc';
-import { IoNotificationsOutline } from 'react-icons/io5';
+import { IoNotificationsOutline, IoAddCircleOutline } from 'react-icons/io5';
+import { FaListUl } from 'react-icons/fa6';
 
 // daisyui
 import {
@@ -64,6 +69,18 @@ function getSystemAlertIcon(level: SystemAlertLevel) {
   }
 }
 
+function activeMenu(segments: string[], menuPaths: string[]) {
+  if (
+    menuPaths.every((menuPath) =>
+      segments.some((segment) => segment === menuPath),
+    )
+  ) {
+    return 'active';
+  }
+
+  return '';
+}
+
 export default function DefaultNavBar({
   user,
   children,
@@ -78,6 +95,7 @@ export default function DefaultNavBar({
   // router
   const router = useRouter();
   const pathname = usePathname();
+  const segments = useSelectedLayoutSegments();
 
   // store
   const dispatch = useAppDispatch();
@@ -151,6 +169,15 @@ export default function DefaultNavBar({
                   대시보드
                 </Link>
               </Menu.Item>
+              <Menu.Item>
+                <Link
+                  className={activeMenuItem('/vacation/usage')}
+                  href="/vacation/usage"
+                >
+                  <LuLayoutDashboard />
+                  연차 사용 내역
+                </Link>
+              </Menu.Item>
               <Menu.Item></Menu.Item>
               <Menu.Title>
                 <h2>문서 결재</h2>
@@ -193,6 +220,28 @@ export default function DefaultNavBar({
                 >
                   <MdOutlineHolidayVillage />
                   휴일 근무 보고서 신청
+                </Link>
+              </Menu.Item>
+              <Menu.Item></Menu.Item>
+              <Menu.Title>
+                <h2>가계 대출</h2>
+              </Menu.Title>
+              <Menu.Item>
+                <Link
+                  className={activeMenu(segments, ['loan', 'add'])}
+                  href="/loan/add"
+                >
+                  <IoAddCircleOutline />
+                  대출 추가
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link
+                  className={activeMenu(segments, ['loan', 'list'])}
+                  href="/loan/list"
+                >
+                  <FaListUl />
+                  대출 목록
                 </Link>
               </Menu.Item>
             </Menu>
