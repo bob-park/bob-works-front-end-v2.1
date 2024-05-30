@@ -93,10 +93,10 @@ export default function UsageVacationList() {
                     </div>
                   )}
                 </td>
-                <td className="text-center" width={150}>
+                <td className="text-left" width={150}>
                   {item.reason}
                 </td>
-                <td className="text-center" width={300}>
+                <td className="text-left" width={300}>
                   {item.alternativeVacations?.map((alter) => (
                     <p key={`usage-vacation-alter-${alter.id}`}>
                       <span>
