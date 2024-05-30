@@ -65,7 +65,7 @@ export default function UsageVacationList() {
             {usageVacations.map((item, index) => (
               <tr key={`usage-vacation-${item.id}`} className="hover">
                 <td className="text-right" width={50}>
-                  {index}
+                  {index + 1}
                 </td>
                 <td className="text-center" width={200}>
                   {parseVacationType(item.vacationType)}{' '}
@@ -76,7 +76,7 @@ export default function UsageVacationList() {
                 <td className="text-center" width={150}>
                   {item.daysCount}
                 </td>
-                <td className="text-center" width={240}>
+                <td className="text-center" width={250}>
                   {item.daysCount > 0.5 ? (
                     <div>
                       <span>
