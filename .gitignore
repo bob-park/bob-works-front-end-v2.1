@@ -39,3 +39,6 @@ next-env.d.ts
 .history/
 
 .env.development
+
+## intellij
+*.idea/
