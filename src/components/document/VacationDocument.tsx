@@ -24,8 +24,8 @@ const UseAlternativeVacationList = ({
     <div className="grid grid-cols-1 gap-2">
       {useAlternativeVacations.map((item) => (
         <div key={`alternative_vacation_list_${item.id}`} className="text-xl">
-          (<span>{formatDate(item.effectiveDate)}</span> -{' '}
-          <span>{item.effectiveReason}</span>)
+          <span>{formatDate(item.effectiveDate)}</span> -{' '}
+          <span>{item.effectiveReason}</span>
         </div>
       ))}
     </div>
@@ -33,9 +33,9 @@ const UseAlternativeVacationList = ({
 };
 
 function parseDays(days: number, subType?: VacationSubType) {
-  if (days === 0.5) {
-    return ` ${subType === 'AM' ? '오전' : '오후'} 반차 `;
-  }
+  // if (days === 0.5) {
+  //   return ` ${subType === 'AM' ? '오전' : '오후'} 반차 `;
+  // }
 
   return `${days} 일`;
 }
@@ -143,13 +143,16 @@ export default function VacationDocument({
                   )} ~ ${formatDate(document.vacationDateTo as Date)}`
                 : formatDate(document.vacationDateFrom as Date)}
             </span>
-            <span className="ml-4">
+            {document.daysCount > 0.5 && (
+                <span className="ml-4">
               (
               <span className="font-semibold">
                 {parseDays(document.daysCount, document.vacationSubType)}
               </span>
               )
             </span>
+            )}
+
           </span>
         </div>
         <div className="">
@@ -163,80 +166,80 @@ export default function VacationDocument({
                   <span className="tracking-widest">
                     {parseType(
                       document.vacationType,
-                      document.vacationSubType != null,
+                      document.vacationSubType
                     )}
                   </span>
+                </div>
 
-                  {/* {document.vacationSubType && (
-                    <span className="ml-2 text-sm">
-                      ( {parseSubType(document.vacationSubType)} )
-                    </span>
-                  )} */}
-                </div>
-                <div className="flex-initial w-full">
-                  {useAlternativeVacations && (
-                    <UseAlternativeVacationList
-                      useAlternativeVacations={useAlternativeVacations}
-                    />
-                  )}
-                </div>
               </div>
             </div>
           </div>
         </div>
         <div>
-          <div className="inline-block w-32 text-right mr-10 text-xl">
-            사 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;유 :
+          <div className="flex justify-start">
+            <div className="inline-block w-32 text-right mr-10 text-xl">
+              사 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;유 :
+            </div>
+            <div className="ml-10 text-xl">
+              {document.vacationType === "GENERAL" ? (<span className="">{document.reason}</span>) : (
+                  <div className="w-full">
+                    {useAlternativeVacations && (
+                        <UseAlternativeVacationList
+                            useAlternativeVacations={useAlternativeVacations}
+                        />
+                    )}
+                  </div>)}
+            </div>
           </div>
-          <span className="ml-10 text-xl">{document.reason}</span>
-        </div>
-        <div
-          className="flex w-full justify-center items-center"
-          style={{ margin: '60px 0px' }}
-        >
-          <h3 className="font-bold text-xl">
-            위와 같이 신청하오니 재가 바랍니다.
-          </h3>
-        </div>
 
-        <div className="text-right text-xl tracking-widest mt-10">
-          <div className="inline-block w-32 mr-3">신 청 일 :</div>
-          <div className="inline-block w-64">
-            {formatDate(document.createdDate, 'yyyy 년  MM 월  dd 일 ')}
           </div>
-        </div>
-        <div className="text-right text-xl tracking-widest relative">
-          <div className="inline-block w-32 mr-1">신 청 인 :</div>
           <div
-            className="tracking-wide w-48 inline-block"
-            style={{ letterSpacing: '10px' }}
+              className="flex w-full justify-center items-center"
+              style={{margin: '60px 0px'}}
           >
+            <h3 className="font-bold text-xl">
+              위와 같이 신청하오니 재가 바랍니다.
+            </h3>
+          </div>
+
+          <div className="text-right text-xl tracking-widest mt-10">
+            <div className="inline-block w-32 mr-3">신 청 일 :</div>
+            <div className="inline-block w-64">
+              {formatDate(document.createdDate, 'yyyy 년  MM 월  dd 일 ')}
+            </div>
+          </div>
+          <div className="text-right text-xl tracking-widest relative">
+            <div className="inline-block w-32 mr-1">신 청 인 :</div>
+            <div
+                className="tracking-wide w-48 inline-block"
+                style={{letterSpacing: '10px'}}
+            >
             <span className="font-bold">
               {document.writer.name}
 
               <span
-                className="font-normal"
-                style={{ letterSpacing: '1px', marginLeft: '20px' }}
+                  className="font-normal"
+                  style={{letterSpacing: '1px', marginLeft: '20px'}}
               >
                 (인)
               </span>
             </span>
-            <div
-              className="absolute w-24"
-              style={{
-                right: '-20px',
-                bottom: '-15px',
-              }}
-            >
-              <img
-                alt="signature"
-                src={`/api/user/${document.writer.id}/document/signature`}
-              />
+              <div
+                  className="absolute w-24"
+                  style={{
+                    right: '-20px',
+                    bottom: '-15px',
+                  }}
+              >
+                <img
+                    alt="signature"
+                    src={`/api/user/${document.writer.id}/document/signature`}
+                />
+              </div>
             </div>
           </div>
+          <div className="mb-10"></div>
         </div>
-        <div className="mb-10"></div>
       </div>
-    </div>
-  );
-}
+      );
+      }

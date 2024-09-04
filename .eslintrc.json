@@ -1,6 +1,14 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": [
+    "@bob-park/bobpark"
+  ],
   "rules": {
-    "react-hooks/exhaustive-deps": "no"
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ]
   }
 }
