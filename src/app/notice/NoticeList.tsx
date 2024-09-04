@@ -74,7 +74,8 @@ export default function NoticeList() {
   }, [searchNoticeParams]);
 
   useEffect(() => {
-    setSearchNoticeParams(searchParams);
+      // ! 왜추가한거지?
+    // setSearchNoticeParams(searchParams);
   }, [searchParams]);
 
   // handle

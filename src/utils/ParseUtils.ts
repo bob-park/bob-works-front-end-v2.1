@@ -83,14 +83,23 @@ const vacationSubTypes = [
   },
 ];
 
-export function formatDate(date: Date, str: string = 'yyyy. MM. dd.') {
+export function formatDate(date: Date, str: string = 'yyyy. MM. dd(EEE)') {
   return format(new Date(date), str, { locale: ko });
 }
 
-export function parseType(id: VacationType, isHalf: boolean) {
-  // if (id === 'GENERAL' && isHalf) {
-  //   return '반 차';
-  // }
+export function parseType(id: VacationType, subType?: VacationSubType) {
+  if (id === 'GENERAL' && subType) {
+    // return '반 차';
+
+    switch (subType) {
+      case 'AM':
+        return '오 전 반 차';
+      case 'PM':
+        return '오 후 반 차';
+      default:
+        return '';
+    }
+  }
 
   return vacationTypes.find((item) => item.id == id)?.name;
 }

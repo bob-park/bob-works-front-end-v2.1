@@ -38,4 +38,10 @@ next-env.d.ts
 # history
 .history/
 
+## project
+*.idea/
 .env.development
+*-dev.yml
+*.npmrc
+*.yarnrc
+

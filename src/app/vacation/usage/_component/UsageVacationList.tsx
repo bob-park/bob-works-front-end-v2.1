@@ -30,10 +30,10 @@ export default function UsageVacationList() {
   const { usageVacations, isLoading } = useGetVacationUsage();
 
   return (
-    <div className="w-full grid grid-cols-1 gap-6 rounded-2xl shadow-xl p-8">
+    <div className="grid w-full grid-cols-1 gap-6 rounded-2xl p-8 shadow-xl">
       {/* 사용 걔수 */}
       <div className="w-full">
-        <div className="flex flex-row gap-4 items-center">
+        <div className="flex flex-row items-center gap-4">
           <div className="">총 사용 개수</div>:
           <div className="text-lg font-bold">
             <span>
@@ -77,7 +77,7 @@ export default function UsageVacationList() {
                   {item.daysCount}
                 </td>
                 <td className="text-center" width={250}>
-                  {item.daysCount > 0.5 ? (
+                  {item.daysCount > 1 ? (
                     <div>
                       <span>
                         {dayjs(item.vacationDateFrom).format('YYYY-MM-DD')}

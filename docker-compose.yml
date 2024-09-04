@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   bob-works-front-end:
     container_name: bob-works-front-end
