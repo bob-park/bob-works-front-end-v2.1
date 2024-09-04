@@ -87,7 +87,7 @@ export function formatDate(date: Date, str: string = 'yyyy. MM. dd(EEE)') {
   return format(new Date(date), str, { locale: ko });
 }
 
-export function parseType(id: VacationType, subType: VacationSubType) {
+export function parseType(id: VacationType, subType?: VacationSubType) {
   if (id === 'GENERAL' && subType) {
     // return '반 차';
 

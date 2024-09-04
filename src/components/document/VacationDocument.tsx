@@ -2,10 +2,10 @@ import {
   DocumentApprovalLine,
   VacationDocument,
   VacationSubType,
-} from '@/store/document/types';
-import ApprovalLines, { ApprovalLine } from './ApprovalLines';
+} from "@/store/document/types";
+import ApprovalLines, { ApprovalLine } from "./ApprovalLines";
 
-import { formatDate, parseSubType, parseType } from '@/utils/ParseUtils';
+import { formatDate, parseSubType, parseType } from "@/utils/ParseUtils";
 
 type VacationDocumentProps = {
   document?: VacationDocument;
@@ -24,7 +24,7 @@ const UseAlternativeVacationList = ({
     <div className="grid grid-cols-1 gap-2">
       {useAlternativeVacations.map((item) => (
         <div key={`alternative_vacation_list_${item.id}`} className="text-xl">
-          <span>{formatDate(item.effectiveDate)}</span> -{' '}
+          <span>{formatDate(item.effectiveDate)}</span> -{" "}
           <span>{item.effectiveReason}</span>
         </div>
       ))}
@@ -55,7 +55,7 @@ export default function VacationDocument({
   const dummyLines: ApprovalLine[] = lines.map((line) => ({
     id: line.id,
     uniqueUserId: line.uniqueUserId,
-    positionName: '부 서 장',
+    positionName: "부 서 장",
     status: line.status,
     approveDate: line.approvedDateTime,
     reason: line.reason,
@@ -64,8 +64,8 @@ export default function VacationDocument({
   dummyLines.unshift({
     id: 101,
     uniqueUserId: writer.id,
-    positionName: '담 당',
-    status: 'APPROVE',
+    positionName: "담 당",
+    status: "APPROVE",
     approveDate: document.createdDate,
   });
 
@@ -74,8 +74,8 @@ export default function VacationDocument({
       id="vacationDocument"
       className="relative w-[996px] m-[20px] px-10 py-5 text-black bg-white"
     >
-      {document.status === 'CANCEL' && (
-        <div className="absolute" style={{ top: '500px', left: '300px' }}>
+      {document.status === "CANCEL" && (
+        <div className="absolute" style={{ top: "500px", left: "300px" }}>
           <div className="grid place-content-center w-full h-full opacity-50">
             <div className="text-red-700 font-black text-9xl tracking-widest -rotate-45 border-8 border-solid border-red-700 rounded p-10">
               취 소
@@ -92,22 +92,22 @@ export default function VacationDocument({
           <h1
             className="font-bold"
             style={{
-              margin: '50px 0px',
-              fontSize: '2.8rem',
-              letterSpacing: '20px',
-              lineHeight: '2.5rem',
+              margin: "50px 0px",
+              fontSize: "2.8rem",
+              letterSpacing: "20px",
+              lineHeight: "2.5rem",
             }}
           >
             휴 가 계
           </h1>
         </div>
-        <div className="" style={{ marginTop: '20px' }}>
+        <div className="" style={{ marginTop: "20px" }}>
           <div className="inline-block w-32 text-right mr-10 text-xl">
             성 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;명 :
           </div>
           <span
             className="ml-10 text-xl font-semibold"
-            style={{ letterSpacing: '10px' }}
+            style={{ letterSpacing: "10px" }}
           >
             {writer.name}
           </span>
@@ -126,7 +126,7 @@ export default function VacationDocument({
           </div>
           <span
             className="ml-10 text-xl font-semibold"
-            style={{ letterSpacing: '10px' }}
+            style={{ letterSpacing: "10px" }}
           >
             {writer.position?.name}
           </span>
@@ -144,15 +144,14 @@ export default function VacationDocument({
                 : formatDate(document.vacationDateFrom as Date)}
             </span>
             {document.daysCount > 0.5 && (
-                <span className="ml-4">
-              (
-              <span className="font-semibold">
-                {parseDays(document.daysCount, document.vacationSubType)}
+              <span className="ml-4">
+                (
+                <span className="font-semibold">
+                  {parseDays(document.daysCount, document.vacationSubType)}
+                </span>
+                )
               </span>
-              )
-            </span>
             )}
-
           </span>
         </div>
         <div className="">
@@ -164,13 +163,9 @@ export default function VacationDocument({
               <div className="flex justify-start gap-2 w-full">
                 <div className="flex-none w-[135px] text-xl font-semibold">
                   <span className="tracking-widest">
-                    {parseType(
-                      document.vacationType,
-                      document.vacationSubType
-                    )}
+                    {parseType(document.vacationType, document.vacationSubType)}
                   </span>
                 </div>
-
               </div>
             </div>
           </div>
@@ -181,65 +176,67 @@ export default function VacationDocument({
               사 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;유 :
             </div>
             <div className="ml-10 text-xl">
-              {document.vacationType === "GENERAL" ? (<span className="">{document.reason}</span>) : (
-                  <div className="w-full">
-                    {useAlternativeVacations && (
-                        <UseAlternativeVacationList
-                            useAlternativeVacations={useAlternativeVacations}
-                        />
-                    )}
-                  </div>)}
+              {document.vacationType === "GENERAL" ? (
+                <span className="">{document.reason}</span>
+              ) : (
+                <div className="w-full">
+                  {useAlternativeVacations && (
+                    <UseAlternativeVacationList
+                      useAlternativeVacations={useAlternativeVacations}
+                    />
+                  )}
+                </div>
+              )}
             </div>
           </div>
+        </div>
+        <div
+          className="flex w-full justify-center items-center"
+          style={{ margin: "60px 0px" }}
+        >
+          <h3 className="font-bold text-xl">
+            위와 같이 신청하오니 재가 바랍니다.
+          </h3>
+        </div>
 
+        <div className="text-right text-xl tracking-widest mt-10">
+          <div className="inline-block w-32 mr-3">신 청 일 :</div>
+          <div className="inline-block w-64">
+            {formatDate(document.createdDate, "yyyy 년  MM 월  dd 일 ")}
           </div>
+        </div>
+        <div className="text-right text-xl tracking-widest relative">
+          <div className="inline-block w-32 mr-1">신 청 인 :</div>
           <div
-              className="flex w-full justify-center items-center"
-              style={{margin: '60px 0px'}}
+            className="tracking-wide w-48 inline-block"
+            style={{ letterSpacing: "10px" }}
           >
-            <h3 className="font-bold text-xl">
-              위와 같이 신청하오니 재가 바랍니다.
-            </h3>
-          </div>
-
-          <div className="text-right text-xl tracking-widest mt-10">
-            <div className="inline-block w-32 mr-3">신 청 일 :</div>
-            <div className="inline-block w-64">
-              {formatDate(document.createdDate, 'yyyy 년  MM 월  dd 일 ')}
-            </div>
-          </div>
-          <div className="text-right text-xl tracking-widest relative">
-            <div className="inline-block w-32 mr-1">신 청 인 :</div>
-            <div
-                className="tracking-wide w-48 inline-block"
-                style={{letterSpacing: '10px'}}
-            >
             <span className="font-bold">
               {document.writer.name}
 
               <span
-                  className="font-normal"
-                  style={{letterSpacing: '1px', marginLeft: '20px'}}
+                className="font-normal"
+                style={{ letterSpacing: "1px", marginLeft: "20px" }}
               >
                 (인)
               </span>
             </span>
-              <div
-                  className="absolute w-24"
-                  style={{
-                    right: '-20px',
-                    bottom: '-15px',
-                  }}
-              >
-                <img
-                    alt="signature"
-                    src={`/api/user/${document.writer.id}/document/signature`}
-                />
-              </div>
+            <div
+              className="absolute w-24"
+              style={{
+                right: "-20px",
+                bottom: "-15px",
+              }}
+            >
+              <img
+                alt="signature"
+                src={`/api/user/${document.writer.id}/document/signature`}
+              />
             </div>
           </div>
-          <div className="mb-10"></div>
         </div>
+        <div className="mb-10"></div>
       </div>
-      );
-      }
+    </div>
+  );
+}
