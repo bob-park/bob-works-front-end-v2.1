@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.35.1",
-    "@bob-park/eslint-config-bobpark": "0.0.7",
+    "@bob-park/eslint-config-bobpark": "0.0.8",
     "@bob-park/prettier-config-bobpark": "0.0.3"
   },
   "prettier": "@bob-park/prettier-config-bobpark"

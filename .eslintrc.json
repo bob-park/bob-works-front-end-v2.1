@@ -3,12 +3,6 @@
     "@bob-park/bobpark"
   ],
   "rules": {
-    "indent": [
-      "error",
-      2,
-      {
-        "SwitchCase": 1
-      }
-    ]
+
   }
 }

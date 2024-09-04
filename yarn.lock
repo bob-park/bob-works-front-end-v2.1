@@ -144,10 +144,10 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
-"@bob-park/eslint-config-bobpark@0.0.7":
-  version "0.0.7"
-  resolved "https://npm.pkg.github.com/download/@bob-park/eslint-config-bobpark/0.0.7/3594455a92f7c0eb855709ae8d98f66171453c53#3594455a92f7c0eb855709ae8d98f66171453c53"
-  integrity sha512-NGtWI0C89H0GET6RVUliKOfodwPxW4jqeh3mFqq3dNXGJdiQsbTSJQM/nkXWSEBuVyCV2AoOiZQCnwmPbwIGeA==
+"@bob-park/eslint-config-bobpark@0.0.8":
+  version "0.0.8"
+  resolved "https://npm.pkg.github.com/download/@bob-park/eslint-config-bobpark/0.0.8/2b3d6ca2c843f0b460a30cf6dbd44a52eb5b01b5#2b3d6ca2c843f0b460a30cf6dbd44a52eb5b01b5"
+  integrity sha512-iLZ23dVmX2qvrpjer6lhlsqBxVNO2M4O9ot3KOa6SxnHJGD/vc4Ez012Kf/1uK9/aJ9BPfqVZiyaZkfKdd58LQ==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^8.0.1"
     "@typescript-eslint/parser" "^8.0.1"
