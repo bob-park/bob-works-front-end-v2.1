@@ -1,16 +1,8 @@
-# FROM node:16.13.2-alpine
-# WORKDIR /usr/src/app
-# COPY package.json ./
-# COPY yarn.lock ./
-# RUN yarn
-# COPY . .
-# RUN yarn build
-# EXPOSE 3000
-# CMD [ "yarn", "start" ]
 # Install dependencies only when needed
 FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
+COPY .npmrc ./
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 

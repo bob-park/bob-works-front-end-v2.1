@@ -1,8 +1,6 @@
 {
-  "extends": [
-    "@bob-park/bobpark"
-  ],
+  "extends": "next/core-web-vitals",
   "rules": {
-
+    "react-hooks/exhaustive-deps": "no"
   }
 }
