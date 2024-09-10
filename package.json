@@ -21,7 +21,7 @@
     "classnames": "^2.5.1",
     "daisyui": "^4.7.2",
     "date-fns": "^2.30.0",
-    "dayjs": "^1.11.9",
+    "dayjs": "^1.11.13",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "html2canvas-pro": "^1.4.3",
@@ -36,7 +36,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.12.0",
     "react-redux": "^8.1.2",
-    "react-tailwindcss-datepicker": "^1.6.6",
+    "react-tailwindcss-datepicker": "^1.7.2",
     "redux-saga": "^1.2.3",
     "sharp": "0.32.6",
     "tailwindcss": "3.4.3",
@@ -48,6 +48,8 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@tanstack/react-query-devtools": "^5.35.1"
-  }
+    "@tanstack/react-query-devtools": "^5.35.1",
+    "@bob-park/prettier-config-bobpark": "0.0.3"
+  },
+  "prettier": "@bob-park/prettier-config-bobpark"
 }

@@ -17,6 +17,7 @@ RUN yarn build
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV production
+ENV TZ=Asia/Seoul
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 
