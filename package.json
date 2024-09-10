@@ -48,6 +48,8 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@tanstack/react-query-devtools": "^5.35.1"
-  }
+    "@tanstack/react-query-devtools": "^5.35.1",
+    "@bob-park/prettier-config-bobpark": "0.0.3"
+  },
+  "prettier": "@bob-park/prettier-config-bobpark"
 }

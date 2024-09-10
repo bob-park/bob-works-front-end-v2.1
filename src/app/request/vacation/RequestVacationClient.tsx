@@ -1,43 +1,39 @@
 'use client';
 
-// daisyui
+import { FormEvent, useEffect, useState } from 'react';
 import {
+  Badge,
+  Button,
+  Card,
   Form,
+  Input,
+  Modal,
   Radio,
   Select,
-  Input,
-  Button,
-  Modal,
-  Badge,
-  Card,
 } from 'react-daisyui';
-
-// react icons
-import { ImCancelCircle } from 'react-icons/im';
 import { BsFileArrowUp } from 'react-icons/bs';
-
-// datepicker
+import { ImCancelCircle } from 'react-icons/im';
 import Datepicker from 'react-tailwindcss-datepicker';
-import DocumentTable from '@/components/DocumentTable';
+
+import { useRouter } from 'next/navigation';
 
 // hooks
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
 
+import { getDocumentTypeId } from '@/utils/ParseUtils';
+
+import DocumentTable from '@/components/DocumentTable';
 // store
 import { commonActions } from '@/store/common';
-import { userActions } from '@/store/user';
 import { documentActions } from '@/store/document';
 import {
   AddVacationRequest,
   VacationSubType,
   VacationType,
 } from '@/store/document/types';
-import { getDocumentTypeId } from '@/utils/ParseUtils';
-import { FormEvent, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-
-
+import { userActions } from '@/store/user';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 
 type VacationSelect = {
   id: string;
@@ -48,6 +44,8 @@ type VacationDate = {
   startDate: Date;
   endDate: Date;
 };
+
+dayjs.extend(utc);
 
 const { addAlert } = commonActions;
 const { requestGetUsableAlternativeVacation } = userActions;
@@ -97,6 +95,10 @@ const alternativeHeaderList = [
     value: '사용',
   },
 ];
+
+function parseUTCDate(date: Date): Date {
+  return dayjs(date).utc(true).startOf('d').toDate();
+}
 
 export default function RequestVacationClient() {
   //router
@@ -152,8 +154,8 @@ export default function RequestVacationClient() {
         selectVacationSubType.id !== 'ALL'
           ? (selectVacationSubType.id as VacationSubType)
           : undefined,
-      vacationDateFrom: dayjs(dateValue.startDate).format('YYYY-MM-DDT00:00:00'),
-      vacationDateTo: dayjs(dateValue.endDate).format("YYYY-MM-DDT00:00:00"),
+      vacationDateFrom: parseUTCDate(dateValue.startDate),
+      vacationDateTo: parseUTCDate(dateValue.endDate),
       reason,
       useAlternativeVacationIds:
         selectVacationType.id === 'ALTERNATIVE'
@@ -213,7 +215,7 @@ export default function RequestVacationClient() {
         <Card.Body>
           <Form onSubmit={handleSubmit}>
             <div className="grid grid-cols-5 gap-10">
-              <div className="col-span-1 text-center pt-2">
+              <div className="col-span-1 pt-2 text-center">
                 <span className="">휴가 종류</span>
               </div>
               <div className="col-span-1">
@@ -235,7 +237,7 @@ export default function RequestVacationClient() {
                   </Form.Label>
                 ))}
               </div>
-              <div className="col-span-1 text-center pt-2">
+              <div className="col-span-1 pt-2 text-center">
                 <span className="">휴가 종류</span>
               </div>
               <div className="col-span-1">
@@ -256,13 +258,13 @@ export default function RequestVacationClient() {
                 </Select>
               </div>
               <div className="col-span-1"></div>
-              <div className="col-span-1 text-center pt-2">
+              <div className="col-span-1 pt-2 text-center">
                 <span className="">휴가일</span>
               </div>
               <div className="col-span-3">
                 <Datepicker
                   placeholder="날짜 선택"
-                  inputClassName="input w-full input-primary input-bordered focus:outline-offset-0 z-100"
+                  inputClassName="w-full input input-primary input-bordered focus:outline-offset-0 z-100"
                   minDate={new Date(new Date().getFullYear(), 0, 1)}
                   maxDate={new Date(new Date().getFullYear(), 11, 31)}
                   value={dateValue}
@@ -281,7 +283,7 @@ export default function RequestVacationClient() {
               <div className="col-span-5">
                 {selectVacationType.id === 'ALTERNATIVE' && (
                   <div className="grid grid-cols-5 gap-10">
-                    <div className="col-span-1 text-center pt-2">
+                    <div className="col-span-1 pt-2 text-center">
                       <span className="">대체 휴가 선택</span>
                     </div>
                     <div className="col-span-1">
@@ -339,7 +341,7 @@ export default function RequestVacationClient() {
                   </div>
                 )}
               </div>
-              <div className="col-span-1 text-center pt-2">
+              <div className="col-span-1 pt-2 text-center">
                 <span className="">사유</span>
               </div>
               <div className="col-span-3">
@@ -357,7 +359,7 @@ export default function RequestVacationClient() {
               <div className="col-span-5">
                 <div className="flex justify-end gap-5">
                   <Button className="w-52" type="button" onClick={handleCancel}>
-                    <ImCancelCircle className="w-5 h-5" />
+                    <ImCancelCircle className="h-5 w-5" />
                     취소
                   </Button>
                   <Button
@@ -369,7 +371,7 @@ export default function RequestVacationClient() {
                     {isLoading ? (
                       <span className="loading loading-spinner loading-md" />
                     ) : (
-                      <BsFileArrowUp className="w-5 h-5" />
+                      <BsFileArrowUp className="h-5 w-5" />
                     )}
                     신청
                   </Button>
