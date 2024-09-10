@@ -73,8 +73,8 @@ export type AddVacationRequest = {
   typeId: number;
   vacationType: VacationType;
   vacationSubType?: VacationSubType | null;
-  vacationDateFrom: Date;
-  vacationDateTo: Date;
+  vacationDateFrom: Date | string;
+  vacationDateTo: Date | string;
   reason: string;
   useAlternativeVacationIds?: number[];
 };

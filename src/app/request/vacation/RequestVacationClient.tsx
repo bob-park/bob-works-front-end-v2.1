@@ -36,6 +36,9 @@ import { getDocumentTypeId } from '@/utils/ParseUtils';
 import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+
+import dayjs from 'dayjs';
+
 type VacationSelect = {
   id: string;
   name: string;
@@ -149,8 +152,8 @@ export default function RequestVacationClient() {
         selectVacationSubType.id !== 'ALL'
           ? (selectVacationSubType.id as VacationSubType)
           : undefined,
-      vacationDateFrom: dateValue.startDate,
-      vacationDateTo: dateValue.endDate,
+      vacationDateFrom: dayjs(dateValue.startDate).format('YYYY-MM-DDT00:00:00'),
+      vacationDateTo: dayjs(dateValue.endDate).format("YYYY-MM-DDT00:00:00"),
       reason,
       useAlternativeVacationIds:
         selectVacationType.id === 'ALTERNATIVE'
