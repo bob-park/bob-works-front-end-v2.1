@@ -7,7 +7,7 @@ import {
   useInfiniteQuery,
 } from '@tanstack/react-query';
 
-const DEFAULT_SIZE = 10;
+const DEFAULT_SIZE = 25;
 
 export default function useGetChatAll(roomId: string) {
   const { data, fetchNextPage, isLoading, refetch } = useInfiniteQuery<
