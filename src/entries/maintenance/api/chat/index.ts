@@ -1,3 +1,5 @@
+import delay from '@/utils/common';
+
 import api from '@/entries';
 
 export async function getChatRooms(page: PageParams) {
@@ -9,13 +11,17 @@ export async function getChatRooms(page: PageParams) {
 }
 
 export async function sendMassage(roomId: string, message: string) {
-  return await api
+  const result = await api
     .post(`/api/maintenance/customer/chat/${roomId}`, {
       json: {
         contents: message,
       },
     })
     .json<MaintenanceCustomerChat>();
+
+  await delay(500);
+
+  return result;
 }
 
 export async function getChatAll(roomId: string, page: PageParams) {
