@@ -2,18 +2,25 @@
 
 import { useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import useGetChatRoomsAll from '@/hooks/maintenance/useGetChatRoomsAll';
 
 import dayjs from 'dayjs';
 
 export default function ChatRoomContents() {
+  // router
+  const router = useRouter();
+
   // state
   const [currentPage, setCurrentPage] = useState<number>(0);
 
   const { page, fetchNextPage, isLoading } = useGetChatRoomsAll();
 
   // handle
-  const handleClick = () => {};
+  const handleClick = (roomId: string) => {
+    router.push(`/chats/${roomId}`);
+  };
 
   return (
     <div className="rounded-xl p-8 shadow-2xl">
@@ -32,6 +39,7 @@ export default function ChatRoomContents() {
             <tr
               key={`chat-room-id-${item.id}`}
               className="hover cursor-pointer"
+              onClick={() => handleClick(item.id)}
             >
               <td className="text-left" width={400}>
                 {item.title}

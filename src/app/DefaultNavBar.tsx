@@ -35,6 +35,8 @@ import {
 // hooks
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
 
+import { useStore } from '@/shared/rootStore';
+
 // store
 import { commonActions } from '@/store/common';
 import { noticeActions } from '@/store/notice';
@@ -94,6 +96,8 @@ export default function DefaultNavBar({
   const { alerts } = useAppSelector((state) => state.common);
   const { countOfUnread } = useAppSelector((state) => state.notice);
 
+  const setUser = useStore((state) => state.setUser);
+
   // useeffect
   useEffect(() => {
     if (!user) {
@@ -102,6 +106,10 @@ export default function DefaultNavBar({
 
     dispatch(requestCountOfUnread({ exceptionHandle: {} }));
   }, []);
+
+  useEffect(() => {
+    setUser(user);
+  }, [user]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {

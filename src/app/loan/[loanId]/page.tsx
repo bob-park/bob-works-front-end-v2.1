@@ -1,6 +1,5 @@
-import { cookies } from 'next/headers';
-
 import BackDrop from '@/components/BackDrop';
+
 import LoanDetailContents from './_component/LoanDetailContents';
 import LoanRepaymentList from './_component/LoanRepaymentList';
 
@@ -18,7 +17,7 @@ export default async function LoanDetailPage({
         <div>
           <div className="inline-block">
             <BackDrop />
-            <span className="text-xl font-semibold ml-2">대출 상세정보</span>
+            <span className="ml-2 text-xl font-semibold">대출 상세정보</span>
           </div>
         </div>
 

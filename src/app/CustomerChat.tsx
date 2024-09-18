@@ -43,8 +43,6 @@ export default function CustomerChat({ user }: CustomerChatProps) {
 
       return newChatList;
     });
-
-    console.log('send message');
   });
 
   // useEffect
@@ -64,7 +62,7 @@ export default function CustomerChat({ user }: CustomerChatProps) {
     });
 
     setChatList(newChatList);
-  }, [pages.flat().length]);
+  }, [pages.length != 0 && pages[0].total]);
 
   useEffect(() => {
     handleScrollEnd();
