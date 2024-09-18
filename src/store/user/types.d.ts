@@ -19,6 +19,7 @@ type User = {
   userId: string;
   email: string;
   name: string;
+  role?: string;
   position?: Position;
   team: Team;
   avatar?: string;
@@ -27,6 +28,9 @@ type User = {
     year: number;
     general: Vacation;
     alternative: Vacation;
+  };
+  chatRoom: {
+    id: string;
   };
 };
 

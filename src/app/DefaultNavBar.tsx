@@ -47,6 +47,8 @@ const { readAlert } = commonActions;
 const { requestGetUser } = userActions;
 const { requestCountOfUnread } = noticeActions;
 
+const MANAGER_ROLES = ['ROLE_ADMIN', 'ROLE_MANAGER'];
+
 function getSystemAlertIcon(level: SystemAlertLevel) {
   switch (level) {
     case 'error':
@@ -234,6 +236,24 @@ export default function DefaultNavBar({
                   대출 목록
                 </Link>
               </Menu.Item>
+
+              {MANAGER_ROLES.some((item) => item === user.role) && (
+                <>
+                  <Menu.Item></Menu.Item>
+                  <Menu.Title>
+                    <h2>고객의 소리</h2>
+                  </Menu.Title>
+                  <Menu.Item>
+                    <Link
+                      className={activeMenu(segments, ['chat', 'list'])}
+                      href="/chat/list"
+                    >
+                      <FaListUl />
+                      잼나는 소리들
+                    </Link>
+                  </Menu.Item>
+                </>
+              )}
             </Menu>
           </aside>
         }

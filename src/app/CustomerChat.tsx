@@ -30,27 +30,22 @@ export default function CustomerChat({ user }: CustomerChatProps) {
   // ref
   const messageEndRef = useRef<HTMLDivElement | null>(null);
 
-  const { pages, reload } = useGetChatAll(
-    '2023-5f090b16-a40a-4c4d-a24d-c30598c438c0',
-  );
-  const { send, isLoading } = useSendChat(
-    '2023-5f090b16-a40a-4c4d-a24d-c30598c438c0',
-    (data) => {
-      setChatList((prev) => {
-        const newChatList = chatList.slice();
+  const { pages, reload } = useGetChatAll(user.chatRoom.id);
+  const { send, isLoading } = useSendChat(user.chatRoom.id, (data) => {
+    setChatList((prev) => {
+      const newChatList = chatList.slice();
 
-        chatList.push({
-          ...data,
-          writerId: user.id,
-          createdDate: new Date(),
-        });
-
-        return newChatList;
+      chatList.push({
+        ...data,
+        writerId: user.id,
+        createdDate: new Date(),
       });
 
-      console.log('send message');
-    },
-  );
+      return newChatList;
+    });
+
+    console.log('send message');
+  });
 
   // useEffect
   useEffect(() => {
