@@ -36,7 +36,7 @@ export default function ChatRoom({ room }: ChatRoomProps) {
     setChatList((prev) => {
       const newChatList = prev.slice();
 
-      chatList.push({
+      newChatList.push({
         ...data,
         writerId: user.id,
         createdDate: new Date(),
@@ -89,21 +89,6 @@ export default function ChatRoom({ room }: ChatRoomProps) {
     e.preventDefault();
 
     send(message);
-
-    // setChatList((prev) => {
-    //   const newChatList = prev.slice();
-    //
-    //   chatList.push({
-    //     id: uuid(),
-    //     contents: message,
-    //     writerId: user.id,
-    //     createdDate: new Date(),
-    //     room,
-    //     isRead: false,
-    //   });
-    //
-    //   return newChatList;
-    // });
 
     // end
     setMessage('');

@@ -36,7 +36,7 @@ export default function CustomerChat({ user }: CustomerChatProps) {
     setChatList((prev) => {
       const newChatList = prev.slice();
 
-      chatList.push({
+      newChatList.push({
         ...data,
         writerId: user.id,
         createdDate: new Date(),
