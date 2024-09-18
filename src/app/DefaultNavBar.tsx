@@ -1,55 +1,45 @@
 'use client';
 
-import { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
+// daisyui
+import {
+  Avatar,
+  Badge,
+  Button,
+  Drawer,
+  Dropdown,
+  Menu,
+  Navbar,
+  Toast,
+  Tooltip,
+} from 'react-daisyui';
+import { AiOutlineSetting, AiOutlineUnorderedList } from 'react-icons/ai';
+import { BsInfoCircle } from 'react-icons/bs';
+import { CgProfile } from 'react-icons/cg';
+import { FaListUl } from 'react-icons/fa6';
+import { GrDocumentTime, GrDocumentUpdate } from 'react-icons/gr';
+import { IoAddCircleOutline, IoNotificationsOutline } from 'react-icons/io5';
+// react-icon
+import { LuLayoutDashboard, LuLogOut } from 'react-icons/lu';
+import { MdOutlineHolidayVillage } from 'react-icons/md';
+import { VscError } from 'react-icons/vsc';
 
+import Link from 'next/link';
 // next
 import {
-  useRouter,
   usePathname,
+  useRouter,
   useSelectedLayoutSegments,
 } from 'next/navigation';
-import Link from 'next/link';
 
 // hooks
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
 
 // store
 import { commonActions } from '@/store/common';
-import { userActions } from '@/store/user';
 import { noticeActions } from '@/store/notice';
+import { userActions } from '@/store/user';
 
-// react-icon
-import { LuLayoutDashboard, LuLogOut } from 'react-icons/lu';
-import {
-  GrDocumentTime,
-  GrDocumentUpdate,
-  GrNotification,
-} from 'react-icons/gr';
-import { MdOutlineHolidayVillage } from 'react-icons/md';
-import {
-  AiOutlineUnorderedList,
-  AiOutlineSetting,
-  AiFillNotification,
-} from 'react-icons/ai';
-import { CgProfile } from 'react-icons/cg';
-import { BsInfoCircle } from 'react-icons/bs';
-import { VscError } from 'react-icons/vsc';
-import { IoNotificationsOutline, IoAddCircleOutline } from 'react-icons/io5';
-import { FaListUl } from 'react-icons/fa6';
-
-// daisyui
-import {
-  Navbar,
-  Dropdown,
-  Button,
-  Badge,
-  Menu,
-  Avatar,
-  Drawer,
-  Tooltip,
-  Toast,
-} from 'react-daisyui';
 import CustomerChat from './CustomerChat';
 
 // user actions
@@ -60,11 +50,11 @@ const { requestCountOfUnread } = noticeActions;
 function getSystemAlertIcon(level: SystemAlertLevel) {
   switch (level) {
     case 'error':
-      return <VscError className="text-red-600 stroke-info shrink-0 w-6 h-6" />;
+      return <VscError className="h-6 w-6 shrink-0 stroke-info text-red-600" />;
 
     default:
       return (
-        <BsInfoCircle className="text-sky-600 stroke-info shrink-0 w-6 h-6" />
+        <BsInfoCircle className="h-6 w-6 shrink-0 stroke-info text-sky-600" />
       );
   }
 }
@@ -149,13 +139,13 @@ export default function DefaultNavBar({
   return (
     <>
       <Drawer
-        className="lg:drawer-open h-screen"
+        className="h-screen lg:drawer-open"
         sideClassName="drawer-side z-40"
         side={
-          <aside className="w-80 h-full bg-base-100 lg:fixed">
-            <div className="bg-base-100 sticky top-0  items-center gap-2 bg-opacity-90 px-4 py-2 backdrop-blur lg:flex ">
+          <aside className="h-full w-80 bg-base-100 lg:fixed">
+            <div className="sticky top-0 items-center gap-2 bg-base-100 bg-opacity-90 px-4 py-2 backdrop-blur lg:flex">
               <Link
-                className="btn btn-ghost normal-case px-2 mx-2 text-2xl font-bold"
+                className="btn btn-ghost mx-2 px-2 text-2xl font-bold normal-case"
                 href="/"
               >
                 Bob Works
@@ -250,7 +240,7 @@ export default function DefaultNavBar({
         open={visible}
         onClickOverlay={toggleVisible}
       >
-        <div className="sticky top-0 z-30 flex h-20 w-full justify-center bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-sm">
+        <div className="sticky top-0 z-30 flex h-20 w-full justify-center bg-base-100 bg-opacity-90 text-base-content shadow-sm backdrop-blur transition-all duration-100">
           <Navbar className="">
             <Navbar.Start className="flex-none lg:hidden">
               <div className="flex-none lg:hidden">
@@ -259,7 +249,7 @@ export default function DefaultNavBar({
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    className="inline-block w-6 h-6 stroke-current"
+                    className="inline-block h-6 w-6 stroke-current"
                   >
                     <path
                       strokeLinecap="round"
@@ -270,7 +260,7 @@ export default function DefaultNavBar({
                   </svg>
                 </Button>
               </div>
-              <div className="flex-1 px-2 mx-2 lg:hidden text-2xl font-bold">
+              <div className="mx-2 flex-1 px-2 text-2xl font-bold lg:hidden">
                 Bob Works
               </div>
             </Navbar.Start>
@@ -285,7 +275,7 @@ export default function DefaultNavBar({
                   shape="circle"
                   onClick={() => router.push('/notice')}
                 >
-                  <IoNotificationsOutline className="w-7 h-7" />
+                  <IoNotificationsOutline className="h-7 w-7" />
                 </Button>
                 {!!countOfUnread && (
                   <Badge
@@ -304,7 +294,7 @@ export default function DefaultNavBar({
                   shape="circle"
                   border
                 />
-                <Dropdown.Menu className="w-48 bg-base-100 shadow-xl ">
+                <Dropdown.Menu className="w-48 bg-base-100 shadow-xl">
                   <li>
                     <Link href="/settings/profile">
                       <CgProfile />
@@ -330,7 +320,7 @@ export default function DefaultNavBar({
           </Navbar>
         </div>
 
-        <div className="flex items-center justify-center m-10 min-w-[746px] max-w-[1036px] lg:ml-[350px]">
+        <div className="m-10 flex min-w-[746px] max-w-[1036px] items-center justify-center lg:ml-[350px]">
           {children}
         </div>
 
@@ -338,8 +328,8 @@ export default function DefaultNavBar({
           <div
             className={`absolute bottom-[80px] right-0 transition-all duration-300 ${
               showChat
-                ? 'opacity-100 translate-y-0 visible'
-                : 'opacity-0 translate-y-6 invisible'
+                ? 'visible translate-y-0 opacity-100'
+                : 'invisible translate-y-6 opacity-0'
             }`}
           >
             <CustomerChat user={user} />
@@ -359,11 +349,11 @@ export default function DefaultNavBar({
           </Tooltip>
         </div>
       </Drawer>
-      <Toast className="mt-20 mr-5" horizontal="end" vertical="top">
+      <Toast className="mr-5 mt-20" horizontal="end" vertical="top">
         {alerts.map((item, index) => (
           <div
             key={`system_alert_id_${index}`}
-            className="alert shadow-2xl bg-base-200"
+            className="alert bg-base-200 shadow-2xl"
           >
             {getSystemAlertIcon(item.level)}
             <div>

@@ -1,15 +1,20 @@
-import { getChatAll, getChatRooms } from '@/entries/maintenance/api/chat';
+import { getChatAll } from '@/entries/maintenance/api/chat';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import '@tanstack/query-core';
+import {
+  InfiniteData,
+  QueryKey,
+  useInfiniteQuery,
+} from '@tanstack/react-query';
 
 const DEFAULT_SIZE = 10;
 
 export default function useGetChatAll(roomId: string) {
-  const {} = useInfiniteQuery<
+  const { data, fetchNextPage, isLoading, refetch } = useInfiniteQuery<
     Page<MaintenanceCustomerChat>,
     unknown,
-    MaintenanceCustomerChat,
-    string[],
+    InfiniteData<Page<MaintenanceCustomerChat>>,
+    QueryKey,
     PageParams
   >({
     queryKey: ['maintenance', 'chat', 'room', roomId],
@@ -34,4 +39,11 @@ export default function useGetChatAll(roomId: string) {
       };
     },
   });
+
+  return {
+    pages: data?.pages || [],
+    isLoading,
+    fetchNextPage,
+    reload: refetch,
+  };
 }

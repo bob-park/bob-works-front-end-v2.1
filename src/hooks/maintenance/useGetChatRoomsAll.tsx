@@ -1,6 +1,10 @@
 import { getChatRooms } from '@/entries/maintenance/api/chat';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  QueryKey,
+  useInfiniteQuery,
+} from '@tanstack/react-query';
 
 const DEFAULT_SIZE = 25;
 
@@ -8,8 +12,8 @@ export default function useGetChatRoomsAll() {
   const { data, fetchNextPage, isLoading } = useInfiniteQuery<
     Page<MaintenanceCustomerChatRoom>,
     unknown,
-    MaintenanceCustomerChatRoom,
-    string[],
+    InfiniteData<Page<MaintenanceCustomerChatRoom>>,
+    QueryKey,
     PageParams
   >({
     queryKey: ['maintenance', 'chat', 'rooms'],

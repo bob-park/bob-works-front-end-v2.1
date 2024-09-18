@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function RQProvider({
@@ -17,6 +18,8 @@ export default function RQProvider({
           retryOnMount: true,
           refetchOnReconnect: true,
           retry: false,
+          staleTime: 60 * 1_000,
+          gcTime: 120 * 1_000,
         },
       },
     }),
