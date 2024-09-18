@@ -245,8 +245,8 @@ export default function DefaultNavBar({
                   </Menu.Title>
                   <Menu.Item>
                     <Link
-                      className={activeMenu(segments, ['chat', 'list'])}
-                      href="/chat/list"
+                      className={activeMenu(segments, ['chats'])}
+                      href="/chats"
                     >
                       <FaListUl />
                       잼나는 소리들

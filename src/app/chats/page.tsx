@@ -1,8 +1,7 @@
+import ChatRoomContents from '@/app/chats/_component/ChatRoomContents';
 import BackDrop from '@/components/BackDrop';
 
-import LoanContents from './_component/LoanContents';
-
-export default function LoanListPage() {
+export default function ChatPage() {
   return (
     <div className="size-full">
       <div className="grid grid-cols-1 gap-10">
@@ -10,12 +9,12 @@ export default function LoanListPage() {
         <div>
           <div className="inline-block">
             <BackDrop />
-            <span className="ml-2 text-xl font-semibold">대출 목록</span>
+            <span className="ml-2 text-xl font-semibold">고객의 소리 목록</span>
           </div>
         </div>
 
         {/* content */}
-        <LoanContents />
+        <ChatRoomContents />
       </div>
     </div>
   );

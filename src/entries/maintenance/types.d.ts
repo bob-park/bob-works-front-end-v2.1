@@ -1,6 +1,11 @@
 interface MaintenanceCustomerChatRoom {
   id: string;
   customerId: string;
+  customer?: {
+    id: number;
+    userId: string;
+    name: string;
+  };
   title: string;
   createdDate: Date;
   lastModifiedDate?: Date;

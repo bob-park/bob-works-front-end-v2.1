@@ -39,5 +39,5 @@ export default function useGetChatRoomsAll() {
     },
   });
 
-  return { pages: data, isLoading, fetchNextPage };
+  return { page: data, isLoading, fetchNextPage };
 }
