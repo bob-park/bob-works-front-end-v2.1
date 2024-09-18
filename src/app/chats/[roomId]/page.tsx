@@ -36,7 +36,7 @@ export default async function ChatRoomPage({
 
       {/* content */}
       <div className="justify-centergap-10 mt-6 flex w-full flex-col items-center lg:w-[600px]">
-        <ChatRoom roomId={roomId} />
+        <ChatRoom room={room} />
       </div>
     </div>
   );

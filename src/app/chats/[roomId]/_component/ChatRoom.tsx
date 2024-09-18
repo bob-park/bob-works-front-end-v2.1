@@ -16,10 +16,10 @@ import dayjs from 'dayjs';
 import TimeAgo from 'timeago-react';
 
 type ChatRoomProps = {
-  roomId: string;
+  room: MaintenanceCustomerChatRoom;
 };
 
-export default function ChatRoom({ roomId }: ChatRoomProps) {
+export default function ChatRoom({ room }: ChatRoomProps) {
   // store
   const user = useStore((state) => state.user);
 
@@ -30,8 +30,8 @@ export default function ChatRoom({ roomId }: ChatRoomProps) {
   const [message, setMessage] = useState<string>('');
   const [chatList, setChatList] = useState<MaintenanceCustomerChat[]>([]);
 
-  const { pages, reload } = useGetChatAll(roomId);
-  const { send, isLoading } = useSendChat(roomId, (data) => {
+  const { pages, reload } = useGetChatAll(room.id);
+  const { send, isLoading } = useSendChat(room.id, (data) => {
     setChatList((prev) => {
       const newChatList = chatList.slice();
 
@@ -113,7 +113,9 @@ export default function ChatRoom({ roomId }: ChatRoomProps) {
                 )}
                 <ChatBubble end={chat.writerId == user?.id}>
                   <ChatBubble.Header>
-                    {chat.writerId == user?.id ? '나' : '고객센터'}
+                    {chat.writerId == user?.id
+                      ? '나'
+                      : `${room.customer?.name} (${room.customer?.userId})`}
                   </ChatBubble.Header>
                   <ChatBubble.Avatar
                     src={`/api/user/${chat.writerId}/avatar`}
