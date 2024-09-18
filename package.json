@@ -27,6 +27,7 @@
     "html2canvas-pro": "^1.4.3",
     "immer": "^10.1.1",
     "jspdf": "^2.5.1",
+    "ky": "^1.7.2",
     "next": "^14.1.4",
     "next-redux-saga": "^4.1.2",
     "next-redux-wrapper": "^8.1.0",
@@ -48,8 +49,8 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@tanstack/react-query-devtools": "^5.35.1",
-    "@bob-park/prettier-config-bobpark": "0.0.3"
+    "@bob-park/prettier-config-bobpark": "0.0.3",
+    "@tanstack/react-query-devtools": "^5.35.1"
   },
   "prettier": "@bob-park/prettier-config-bobpark"
 }
