@@ -15,6 +15,7 @@ import dayjs from 'dayjs';
 import TimeAgo from 'timeago-react';
 import * as timeago from 'timeago.js';
 import ko from 'timeago.js/lib/lang/ko';
+import { v4 as uuid } from 'uuid';
 
 timeago.register('ko', ko);
 
@@ -33,7 +34,7 @@ export default function CustomerChat({ user }: CustomerChatProps) {
   const { pages, reload } = useGetChatAll(user.chatRoom.id);
   const { send, isLoading } = useSendChat(user.chatRoom.id, (data) => {
     setChatList((prev) => {
-      const newChatList = chatList.slice();
+      const newChatList = prev.slice();
 
       chatList.push({
         ...data,
@@ -50,18 +51,33 @@ export default function CustomerChat({ user }: CustomerChatProps) {
     const newChatList = new Array<MaintenanceCustomerChat>();
 
     pages.forEach((page) => {
-      const chats = page.content;
+      let chats = page.content;
+
+      if (chatList.length > 0) {
+        chats = chats.filter((chat) => chat.writerId !== user.id).slice();
+      }
+
       newChatList.push(...chats);
     });
 
-    newChatList.sort((o1, o2) => {
-      const o1Num = dayjs(o1.createdDate).unix();
-      const o2Num = dayjs(o2.createdDate).unix();
+    setChatList((prev) => {
+      const prevChats = prev.slice();
 
-      return o1Num > o2Num ? 1 : -1;
+      const filterChats = newChatList.filter((item) =>
+        prevChats.every((prevChat) => prevChat.id !== item.id),
+      );
+
+      prevChats.push(...filterChats);
+
+      prevChats.sort((o1, o2) => {
+        const o1Num = dayjs(o1.createdDate).unix();
+        const o2Num = dayjs(o2.createdDate).unix();
+
+        return o1Num > o2Num ? 1 : -1;
+      });
+
+      return prevChats;
     });
-
-    setChatList(newChatList);
   }, [pages.length != 0 && pages[0].total]);
 
   useEffect(() => {

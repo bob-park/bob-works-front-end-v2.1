@@ -1,13 +1,13 @@
 interface MaintenanceCustomerChatRoom {
   id: string;
-  customerId: string;
+  customerId?: string;
   customer?: {
     id: number;
     userId: string;
     name: string;
   };
-  title: string;
-  createdDate: Date;
+  title?: string;
+  createdDate?: Date;
   lastModifiedDate?: Date;
 }
 
@@ -16,7 +16,7 @@ interface MaintenanceCustomerChat {
   room: MaintenanceCustomerChatRoom;
   writerId: number;
   contents: string;
-  isRead: string;
+  isRead?: boolean;
   createdDate: Date;
   lastModifiedDate?: Date;
 }

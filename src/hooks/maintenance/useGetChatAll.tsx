@@ -38,6 +38,8 @@ export default function useGetChatAll(roomId: string) {
         page: page.page + 1 > totalPage ? totalPage : nextPage,
       };
     },
+    staleTime: 500,
+    gcTime: 1_000,
     refetchInterval: 1_000,
   });
 

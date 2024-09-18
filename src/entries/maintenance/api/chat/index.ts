@@ -19,7 +19,7 @@ export async function sendMassage(roomId: string, message: string) {
     })
     .json<MaintenanceCustomerChat>();
 
-  await delay(500);
+  // await delay(300);
 
   return result;
 }
