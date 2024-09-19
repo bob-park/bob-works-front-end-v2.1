@@ -52,11 +52,6 @@ export default function ChatRoom({ room }: ChatRoomProps) {
 
     pages.forEach((page) => {
       let chats = page.content;
-
-      if (chatList.length > 0) {
-        chats = chats.filter((chat) => chat.writerId !== user.id).slice();
-      }
-
       newChatList.push(...chats);
     });
 
@@ -105,7 +100,7 @@ export default function ChatRoom({ room }: ChatRoomProps) {
   return (
     <div className="flex size-full flex-col items-center gap-2 rounded-2xl p-6 shadow-2xl">
       {/* chat list */}
-      <div className="col-span-5 h-[500px] w-full overflow-auto">
+      <div className="h-max-without-appbar col-span-5 w-full overflow-auto">
         <div ref={messageEndRef}>
           {chatList.slice().map((chat, index) => {
             const prevChat = index - 1 >= 0 && chatList.slice()[index - 1];

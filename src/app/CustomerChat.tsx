@@ -53,10 +53,6 @@ export default function CustomerChat({ user }: CustomerChatProps) {
     pages.forEach((page) => {
       let chats = page.content;
 
-      if (chatList.length > 0) {
-        chats = chats.filter((chat) => chat.writerId !== user.id).slice();
-      }
-
       newChatList.push(...chats);
     });
 
