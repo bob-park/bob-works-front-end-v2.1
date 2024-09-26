@@ -14,6 +14,7 @@ import {
   useGetApprovalDocumentDetail,
   useGetVacationDocument,
 } from '@/hooks/document/document';
+import useToast from '@/hooks/useToast';
 
 import VacationDocument from '@/components/document/VacationDocument';
 
@@ -34,6 +35,9 @@ export default function ApprovalVacationDetail({
 }: ApprovalVacationDetailProps) {
   // router
   const router = useRouter();
+
+  // toast
+  const { push } = useToast();
 
   // useState
   const [openRejectModal, setOpenRejectModal] = useState<boolean>(false);

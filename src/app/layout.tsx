@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import ToastProvider from '@/components/toast/ToastProvider';
 import type { Metadata } from 'next';
 
 import DefaultNavBar from './DefaultNavBar';
@@ -39,9 +40,11 @@ export default async function RootLayout({
         <title>Bob Works</title>
       </head>
       <body>
-        <RQProvider>
-          <DefaultNavBar user={user}>{children}</DefaultNavBar>
-        </RQProvider>
+        <ToastProvider limit={5} timeout={5}>
+          <RQProvider>
+            <DefaultNavBar user={user}>{children}</DefaultNavBar>
+          </RQProvider>
+        </ToastProvider>
       </body>
     </html>
   );

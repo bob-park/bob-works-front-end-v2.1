@@ -26,6 +26,7 @@ import {
   useAddHolidayWorkReport,
   useGetDocumentType,
 } from '@/hooks/document/document';
+import useToast from '@/hooks/useToast';
 import { useGetUserAll } from '@/hooks/user';
 
 // utils
@@ -73,6 +74,9 @@ export default function HolidayWorkReportClient() {
   // router
   const router = useRouter();
 
+  // toast
+  const { push } = useToast();
+
   // state
   const [holidayDate, setHolidayDate] = useState<SelectDate>({
     startDate: new Date(),
@@ -94,6 +98,7 @@ export default function HolidayWorkReportClient() {
   const { documentsTypes } = useGetDocumentType();
   const { users } = useGetUserAll();
   const { onAddReport, isLoading } = useAddHolidayWorkReport(() => {
+    push('휴일근무보고서가 신청되었습니다.', 'info');
     router.push('/document/search');
   });
 

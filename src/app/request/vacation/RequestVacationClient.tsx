@@ -18,6 +18,7 @@ import Datepicker from 'react-tailwindcss-datepicker';
 import { useRouter } from 'next/navigation';
 
 import { useAddVacation, useGetDocumentType } from '@/hooks/document/document';
+import useToast from '@/hooks/useToast';
 // hooks
 import { useGetUsableAlternativeVacation } from '@/hooks/user';
 
@@ -92,6 +93,9 @@ export default function RequestVacationClient() {
   //router
   const router = useRouter();
 
+  // toast
+  const { push } = useToast();
+
   //state
   const [selectVacationType, setSelectVacationType] = useState<VacationSelect>(
     vacationTypes[0],
@@ -113,6 +117,7 @@ export default function RequestVacationClient() {
   const { documentsTypes } = useGetDocumentType();
   const { usableAlternativeVacation } = useGetUsableAlternativeVacation();
   const { onAddVacation, isLoading } = useAddVacation(() => {
+    push('휴가계가 신청되었습니다.', 'info');
     router.push('/document/search');
   });
 

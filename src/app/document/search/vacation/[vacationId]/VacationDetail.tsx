@@ -12,6 +12,7 @@ import {
   useCancelDocument,
   useGetVacationDocument,
 } from '@/hooks/document/document';
+import useToast from '@/hooks/useToast';
 
 // hooks
 // store
@@ -36,6 +37,9 @@ export default function VacationDetail({ documentId }: VacationDetailProps) {
   // router
   const router = useRouter();
 
+  // toast
+  const { push } = useToast();
+
   // state
   const [showConfirmCancel, setShowConfirmCancel] = useState<boolean>(false);
   const [loaddingPdf, setLoaddingPdf] = useState<boolean>(false);
@@ -50,11 +54,9 @@ export default function VacationDetail({ documentId }: VacationDetailProps) {
 
   const { onCancel, isLoading } = useCancelDocument(() => {
     setShowConfirmCancel(false);
+    push('휴가계가 취소되었습니다.', 'success');
     router.refresh();
   });
-
-  // useEffect
-  useEffect(() => {}, []);
 
   // handle
   const handlePrint = () => {};

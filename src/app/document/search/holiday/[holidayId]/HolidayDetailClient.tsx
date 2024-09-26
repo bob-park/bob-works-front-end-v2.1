@@ -12,6 +12,7 @@ import {
   useCancelDocument,
   useGetHolidayWorkReports,
 } from '@/hooks/document/document';
+import useToast from '@/hooks/useToast';
 
 // hooks
 import HolidayWorkReportDocument from '@/components/document/HolidayWorkReportDocument';
@@ -37,6 +38,9 @@ export default function HolidayDetailClient({
   // router
   const router = useRouter();
 
+  // toast
+  const { push } = useToast();
+
   // state
   const [showConfirmCancel, setShowConfirmCancel] = useState<boolean>(false);
   const [loaddingPdf, setLoaddingPdf] = useState<boolean>(false);
@@ -47,6 +51,7 @@ export default function HolidayDetailClient({
 
   const { onCancel, isLoading } = useCancelDocument(() => {
     setShowConfirmCancel(false);
+    push('휴일 근무 보고서가 취소되었습니다.', 'success');
     router.refresh();
   });
 
