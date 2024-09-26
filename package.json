@@ -28,13 +28,13 @@
     "immer": "^10.1.1",
     "jspdf": "^2.5.1",
     "ky": "^1.7.2",
-    "next": "^14.1.4",
+    "next": "^14.2.13",
     "next-redux-saga": "^4.1.2",
     "next-redux-wrapper": "^8.1.0",
     "postcss": "8.4.27",
-    "react": "18.2.0",
+    "react": "^18",
     "react-daisyui": "^5.0.0",
-    "react-dom": "18.2.0",
+    "react-dom": "^18",
     "react-icons": "^4.12.0",
     "react-redux": "^8.1.2",
     "react-tailwindcss-datepicker": "^1.7.2",
@@ -46,11 +46,15 @@
     "typesafe-actions": "^5.1.0",
     "typescript": "5.1.6",
     "uuid": "^9.0.0",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "rsocket-core": "^0.0.29-alpha.0",
+    "rsocket-websocket-client": "^0.0.29-alpha.0"
   },
   "devDependencies": {
     "@bob-park/prettier-config-bobpark": "0.0.3",
-    "@tanstack/react-query-devtools": "^5.35.1"
+    "@tanstack/react-query-devtools": "^5.35.1",
+    "@types/rsocket-core": "^0.0.11",
+    "@types/rsocket-websocket-client": "^0.0.7"
   },
   "prettier": "@bob-park/prettier-config-bobpark"
 }
