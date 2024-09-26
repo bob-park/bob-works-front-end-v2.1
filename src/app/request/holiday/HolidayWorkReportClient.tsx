@@ -93,7 +93,9 @@ export default function HolidayWorkReportClient() {
   // query
   const { documentsTypes } = useGetDocumentType();
   const { users } = useGetUserAll();
-  const { onAddReport, isLoading } = useAddHolidayWorkReport();
+  const { onAddReport, isLoading } = useAddHolidayWorkReport(() => {
+    router.push('/document/search');
+  });
 
   // handle
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -402,8 +404,17 @@ export default function HolidayWorkReportClient() {
                     <ImCancelCircle className="h-5 w-5" />
                     취소
                   </Button>
-                  <Button className="w-52" type="submit" color="primary">
-                    <BsFileArrowUp className="h-5 w-5" />
+                  <Button
+                    className="w-52"
+                    type="submit"
+                    color="primary"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <span className="loading loading-spinner loading-md" />
+                    ) : (
+                      <BsFileArrowUp className="h-5 w-5" />
+                    )}
                     신청
                   </Button>
                 </div>

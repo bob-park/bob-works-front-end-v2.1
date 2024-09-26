@@ -94,5 +94,7 @@ export async function getVacation(params: {
 }
 
 export async function cancelDocument(documentId: number) {
-  return await api.put(`/api/document/${documentId}/cancel`).json<Documents>();
+  return await api
+    .delete(`/api/document/${documentId}/cancel`)
+    .json<Documents>();
 }

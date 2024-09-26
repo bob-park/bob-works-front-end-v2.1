@@ -42,8 +42,13 @@ export default function ApprovalVacationDetail({
   const [rejectReason, setRejectReason] = useState<string>('');
 
   const { approveDocument } = useGetApprovalDocumentDetail(Number(approvalId));
-  const { vacationDocuments } = useGetVacationDocument(approveDocument?.id);
-  const { onApprove, isLoading } = useApproveDocument();
+
+  const { vacationDocuments } = useGetVacationDocument(
+    approveDocument?.document?.id || -1,
+  );
+  const { onApprove, isLoading } = useApproveDocument(() => {
+    router.push('/document/approve/search');
+  });
 
   const handleReject = () => {
     if (!approveDocument) {

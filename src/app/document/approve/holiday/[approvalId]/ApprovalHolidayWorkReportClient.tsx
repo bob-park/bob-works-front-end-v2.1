@@ -42,10 +42,12 @@ export default function ApprovalHolidayWorkReportClient({
 
   // query
   const { approveDocument } = useGetApprovalDocumentDetail(Number(approvalId));
-  const { workReport } = useGetHolidayWorkReports(approveDocument?.id);
-  const { onApprove, isLoading } = useApproveDocument();
-
-  // useEffect
+  const { workReport } = useGetHolidayWorkReports(
+    approveDocument?.document?.id || -1,
+  );
+  const { onApprove, isLoading } = useApproveDocument(() => {
+    router.push('/document/approve/search');
+  });
 
   // handle
   const handleReject = () => {

@@ -112,7 +112,9 @@ export default function RequestVacationClient() {
   // query
   const { documentsTypes } = useGetDocumentType();
   const { usableAlternativeVacation } = useGetUsableAlternativeVacation();
-  const { onAddVacation, isLoading } = useAddVacation();
+  const { onAddVacation, isLoading } = useAddVacation(() => {
+    router.push('/document/search');
+  });
 
   // useEffect
   useEffect(() => {}, []);

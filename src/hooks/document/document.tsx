@@ -25,7 +25,7 @@ export function useGetDocumentType() {
 
 export function useSearchDocument(params: PageParams) {
   const { data, isPending } = useQuery<Page<Documents>>({
-    queryKey: ['documents', 'types', params],
+    queryKey: ['documents', params],
     queryFn: () => searchDocument(params),
   });
 
@@ -53,7 +53,9 @@ export function useGetApprovalDocument(params: PageParams) {
   };
 }
 
-export function useApproveDocument() {
+export function useApproveDocument(onSuccess?: () => void) {
+  const queryClient = useQueryClient();
+
   const { mutate, isPending } = useMutation({
     mutationKey: ['documents', 'approve'],
     mutationFn: ({
@@ -63,16 +65,28 @@ export function useApproveDocument() {
       id: number;
       body: { status: DocumentsStatus; reason?: string };
     }) => approveDocument(id, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents'] });
+
+      onSuccess && onSuccess();
+    },
   });
 
   return { onApprove: mutate, isLoading: isPending };
 }
 
-export function useAddHolidayWorkReport() {
+export function useAddHolidayWorkReport(onSuccess?: () => void) {
+  const queryClient = useQueryClient();
+
   const { mutate, isPending } = useMutation({
     mutationKey: ['documents', 'holiday'],
     mutationFn: (body: AddHolidayWorkReportRequest) =>
       addHolidayWorkReport(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents'] });
+
+      onSuccess && onSuccess();
+    },
   });
 
   return { onAddReport: mutate, isLoading: isPending };
@@ -103,6 +117,8 @@ export function useCancelDocument(onSuccess?: () => void) {
     mutationKey: ['documents', 'cancel'],
     mutationFn: (id: number) => cancelDocument(id),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents'] });
+
       onSuccess && onSuccess();
     },
   });
@@ -119,10 +135,17 @@ export function useGetApprovalDocumentDetail(approvalId: number) {
   return { approveDocument: data, isLoading: isPending };
 }
 
-export function useAddVacation() {
+export function useAddVacation(onSuccess?: () => void) {
+  const queryClient = useQueryClient();
+
   const { mutate, isPending } = useMutation({
     mutationKey: ['documents', 'add', 'vacation'],
     mutationFn: (body: AddVacationRequest) => addVacationDocument(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents'] });
+
+      onSuccess && onSuccess();
+    },
   });
 
   return { onAddVacation: mutate, isLoading: isPending };
