@@ -1,11 +1,8 @@
+import { commonActions } from '@/store/common';
 import axios from 'axios';
 import { put } from 'redux-saga/effects';
 
-import { commonActions } from '@/store/common';
-import { userActions } from '@/store/user';
-
 const { addAlert } = commonActions;
-const { removeAuthentication } = userActions;
 
 export const client = axios.create({
   baseURL: process.env.CLIENT_SERVICE_PATH,
@@ -131,8 +128,6 @@ export function* failureActionProceed(
   );
 
   if (response.status === 401) {
-    yield put(removeAuthentication());
-
     handleAuthError && handleAuthError();
   }
 }

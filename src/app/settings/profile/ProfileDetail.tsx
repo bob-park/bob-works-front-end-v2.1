@@ -2,34 +2,19 @@
 
 // react
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
-
 // daisyui
-import { Button, Modal, Input, Divider } from 'react-daisyui';
-
+import { Button, Input } from 'react-daisyui';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 // react-icons
 import { GrEdit } from 'react-icons/gr';
-import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
 
-// hooks
-import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
-
-// store
-import { userActions } from '@/store/user';
-import { commonActions } from '@/store/common';
-
-// actions
-const { requestUpdateUserAvatar, requestChangePassword } = userActions;
-const { addAlert } = commonActions;
+import { useUpdateAvatar, useUpdatePassword } from '@/hooks/user';
 
 type ProfileDetailProps = {
   user: User;
 };
 
 export default function ProfileDetail({ user }: ProfileDetailProps) {
-  // store
-  const dispatch = useAppDispatch();
-  // const { user } = useAppSelector((state) => state.user);
-
   // state
   const [userAvatarSrc, setUserAvatarSrc] = useState<string>(
     '/api/user/avatar' || '/default_avatar.jpg',
@@ -39,6 +24,10 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
 
   // ref
   const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  // query
+  const { onUpdateAvatar } = useUpdateAvatar();
+  const { onUpdatePassword } = useUpdatePassword();
 
   // useEffect
   useEffect(() => {
@@ -64,62 +53,17 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
 
     formData.append('avatar', avatarFile);
 
-    dispatch(
-      requestUpdateUserAvatar({
-        formData,
-        handleAfter: () => {
-          setUserAvatarSrc((prev) => {
-            const newAvatarSrc = URL.createObjectURL(avatarFile);
-
-            URL.revokeObjectURL(prev);
-
-            return newAvatarSrc;
-          });
-
-          dispatch(
-            addAlert({
-              level: 'info',
-              message: '사용자 아바타가 변경되었습니다. 추후 적용됩니다.',
-              createAt: new Date(),
-            }),
-          );
-        },
-        exceptionHandle: {},
-      }),
-    );
+    onUpdateAvatar(formData);
   };
 
   const handleChangePassword = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!changePassword) {
-      dispatch(
-        addAlert({
-          level: 'warn',
-          message: '변경할 패스워드를 입력해주세요.',
-          createAt: new Date(),
-        }),
-      );
       return;
     }
 
-    dispatch(
-      requestChangePassword({
-        changePassword,
-        handleAfter: () => {
-          dispatch(
-            addAlert({
-              level: 'info',
-              message:
-                '사용자 패스워드가 변경되었습니다. 다음 로그인부터 적용됩니다.',
-              createAt: new Date(),
-            }),
-          );
-          setChangePassword('');
-          setShowPassword(false);
-        },
-      }),
-    );
+    onUpdatePassword(changePassword);
   };
 
   return (
@@ -147,9 +91,9 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
         </div>
       </div>
       <div className="col-span-1">
-        <div className="w-[256px] relative">
+        <div className="relative w-[256px]">
           <img
-            className="w-[256px] h-[256px] border rounded-full"
+            className="h-[256px] w-[256px] rounded-full border"
             src={userAvatarSrc}
           />
           <input
@@ -164,15 +108,15 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
             animation
             onClick={handleEditAvatar}
           >
-            <GrEdit className="w-5 h-5" />
+            <GrEdit className="h-5 w-5" />
             Edit
           </Button>
         </div>
       </div>
       <div className="col-span-2">
         <form onSubmit={handleChangePassword}>
-          <div className="flex justify-start items-end gap-2">
-            <div className="relative form-control w-full max-w-xs">
+          <div className="flex items-end justify-start gap-2">
+            <div className="form-control relative w-full max-w-xs">
               <label className="label">
                 <span className="label-text">패스워드 변경</span>
               </label>
@@ -184,16 +128,16 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
                 onChange={(e) => setChangePassword(e.target.value)}
               />
               <Button
-                className="absolute right-0 bottom-0"
+                className="absolute bottom-0 right-0"
                 type="button"
                 shape="circle"
                 color="ghost"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
-                  <AiOutlineEyeInvisible className="w-5 h-5" />
+                  <AiOutlineEyeInvisible className="h-5 w-5" />
                 ) : (
-                  <AiOutlineEye className="w-5 h-5" />
+                  <AiOutlineEye className="h-5 w-5" />
                 )}
               </Button>
             </div>

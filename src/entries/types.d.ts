@@ -5,8 +5,8 @@ type PageParams = {
 
 type Page<T> = {
   content: T[];
-  total: number;
-  pageable: PageInfo;
+  total?: number;
+  pageable?: PageInfo;
 };
 
 type PageInfo = {

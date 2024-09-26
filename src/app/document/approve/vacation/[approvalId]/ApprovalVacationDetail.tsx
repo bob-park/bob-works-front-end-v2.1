@@ -2,30 +2,20 @@
 
 // react
 import { useEffect, useState } from 'react';
+// daisyui
+import { Button, Input, Modal } from 'react-daisyui';
+import { IoChevronBackSharp } from 'react-icons/io5';
 
 // next
 import { useRouter } from 'next/navigation';
 
-import { IoChevronBackSharp } from 'react-icons/io5';
-
-// daisyui
-import { Button, Modal, Input } from 'react-daisyui';
-
-// hooks
-import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
-
-// store
-import { documentActions } from '@/store/document';
-import { DocumentsStatus } from '@/store/document/types';
+import {
+  useApproveDocument,
+  useGetApprovalDocumentDetail,
+  useGetVacationDocument,
+} from '@/hooks/document/document';
 
 import VacationDocument from '@/components/document/VacationDocument';
-
-// actions
-const {
-  requestApprovalDocument,
-  requestGetVacationDocument,
-  requestProceedApprovalDocument,
-} = documentActions;
 
 type ApprovalVacationDetailProps = {
   approvalId: string;
@@ -45,57 +35,32 @@ export default function ApprovalVacationDetail({
   // router
   const router = useRouter();
 
-  // store
-  const dispatch = useAppDispatch();
-  const { vacationDetail, approvalDetail } = useAppSelector(
-    (state) => state.document,
-  );
-
   // useState
   const [openRejectModal, setOpenRejectModal] = useState<boolean>(false);
   const [openApproveModal, setOpenApproveModal] = useState<boolean>(false);
 
   const [rejectReason, setRejectReason] = useState<string>('');
 
-  // useEffect
-  useEffect(() => {
-    dispatch(
-      requestApprovalDocument({
-        approvalId: Number(approvalId),
-        exceptionHandle: {},
-      }),
-    );
-  }, []);
-
-  useEffect(() => {
-    if (!approvalDetail) {
-      return;
-    }
-
-    dispatch(
-      requestGetVacationDocument({
-        id: approvalDetail.document.id,
-        exceptionHandle: {},
-      }),
-    );
-  }, [approvalDetail]);
+  const { approveDocument } = useGetApprovalDocumentDetail(Number(approvalId));
+  const { vacationDocuments } = useGetVacationDocument(approveDocument?.id);
+  const { onApprove, isLoading } = useApproveDocument();
 
   const handleReject = () => {
-    if (!approvalDetail) {
+    if (!approveDocument) {
       return;
     }
 
-    handleProceedApprove(approvalDetail.id, 'REJECT', rejectReason);
+    handleProceedApprove(approveDocument.id, 'REJECT', rejectReason);
 
     setOpenRejectModal(false);
   };
 
   const handleApprove = () => {
-    if (!approvalDetail) {
+    if (!approveDocument) {
       return;
     }
 
-    handleProceedApprove(approvalDetail.id, 'APPROVE');
+    handleProceedApprove(approveDocument.id, 'APPROVE');
 
     setOpenApproveModal(false);
   };
@@ -105,35 +70,23 @@ export default function ApprovalVacationDetail({
     status: DocumentsStatus,
     reason?: string,
   ) => {
-    dispatch(
-      requestProceedApprovalDocument({
-        approvalId,
-        body: {
-          status,
-          reason,
-        },
-        afterHandle: () => {
-          router.push('/document/approve/search');
-        },
-        exceptionHandle: {},
-      }),
-    );
+    onApprove({ id: approvalId, body: { status, reason } });
   };
 
   return (
     <>
       <div>
-        <div className="grid grid-cols-2 gap-10 mt-3 justify-end">
+        <div className="mt-3 grid grid-cols-2 justify-end gap-10">
           <Button
             color="error"
-            disabled={checkDisabledBtn(approvalDetail?.status)}
+            disabled={checkDisabledBtn(approveDocument?.status)}
             onClick={() => setOpenRejectModal(true)}
           >
             반려
           </Button>
           <Button
             color="primary"
-            disabled={checkDisabledBtn(approvalDetail?.status)}
+            disabled={checkDisabledBtn(approveDocument?.status)}
             onClick={() => setOpenApproveModal(true)}
           >
             승인
@@ -142,12 +95,12 @@ export default function ApprovalVacationDetail({
       </div>
 
       {/* contents */}
-      {vacationDetail && (
-        <div className="bg-base-100 shadow-lg overflow-auto border rounded-xl">
+      {vacationDocuments && (
+        <div className="overflow-auto rounded-xl border bg-base-100 shadow-lg">
           <VacationDocument
-            document={vacationDetail.document}
-            lines={vacationDetail.lines}
-            useAlternativeVacations={vacationDetail.useAlternativeVacations}
+            document={vacationDocuments.document}
+            lines={vacationDocuments.lines}
+            useAlternativeVacations={vacationDocuments.useAlternativeVacations}
           />
         </div>
       )}

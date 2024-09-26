@@ -1,12 +1,11 @@
-import Providers from '@/redux/Providers';
-import './globals.css';
-
-import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import type { Metadata } from 'next';
+
 import DefaultNavBar from './DefaultNavBar';
 import RQProvider from './_component/RQProvider';
+import './globals.css';
 
 const CLIENT_SERVICE_PATH = process.env.CLIENT_SERVICE_PATH;
 
@@ -37,12 +36,11 @@ export default async function RootLayout({
     <html lang="ko">
       <head>
         <link rel="icon" href="/favicon.ico" />
+        <title>Bob Works</title>
       </head>
       <body>
         <RQProvider>
-          <Providers>
-            <DefaultNavBar user={user}>{children}</DefaultNavBar>
-          </Providers>
+          <DefaultNavBar user={user}>{children}</DefaultNavBar>
         </RQProvider>
       </body>
     </html>

@@ -1,42 +1,33 @@
 'use client';
 
 // react
-import { FormEvent, useEffect, useState } from 'react';
-
+import { FormEvent, useState } from 'react';
+// daisyui
+import { Button, Form, Select } from 'react-daisyui';
 // react-icons
 import { BiSearch } from 'react-icons/bi';
 import { GrPowerCycle } from 'react-icons/gr';
 
-// daisyui
-import { Form, Select, Button } from 'react-daisyui';
-
-import { format } from 'date-fns';
-
-// hooks
-import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
-
-// store
-import { documentActions } from '@/store/document';
-import { PaginationParams } from '@/store/types';
-
-// component
-import DocumentTable from '@/components/DocumentTable';
-
-// utils
-import {
-  parseDocumentType,
-  parseDocumentStatus,
-  parsePageName,
-} from '@/utils/ParseUtils';
-import {
-  DocumentType,
-  DocumentsStatus,
-  DocumentsType,
-} from '@/store/document/types';
-import DocumentPagination from '@/components/DocumentPagination';
-import { getTotalPageCount } from '@/utils/paginationUtils';
 import { useRouter } from 'next/navigation';
 
+import {
+  useGetDocumentType,
+  useSearchDocument,
+} from '@/hooks/document/document';
+
+// hooks
+// utils
+import {
+  parseDocumentStatus,
+  parseDocumentType,
+  parsePageName,
+} from '@/utils/ParseUtils';
+import { getTotalPageCount } from '@/utils/paginationUtils';
+
+import DocumentPagination from '@/components/DocumentPagination';
+// component
+import DocumentTable from '@/components/DocumentTable';
+// store
 import TimeAgo from 'timeago-react';
 import * as timeago from 'timeago.js';
 import ko from 'timeago.js/lib/lang/ko';
@@ -47,9 +38,6 @@ type SelectValue = {
   id: string;
   name: string;
 };
-
-// actions
-const { requestGetDocumentType, requestSearchDocument } = documentActions;
 
 const documentStatus: SelectValue[] = [
   {
@@ -108,16 +96,14 @@ export default function SearchDocumentClient() {
   // router
   const router = useRouter();
 
-  // store
-  const dispatch = useAppDispatch();
-  const { types, isLoading, searchParams, pageable } = useAppSelector(
-    (state) => state.document,
-  );
-
   // state
-  const [page, setPage] = useState<PaginationParams>({ ...searchParams });
+  const [page, setPage] = useState<PageParams>({ page: 0, size: 25 });
 
-  const dataList = pageable.content.map((item) => {
+  // query
+  const { documents } = useSearchDocument(page);
+  const { documentsTypes } = useGetDocumentType();
+
+  const dataList = documents.content.map((item) => {
     return {
       id: item.id,
       type: item.documentType.type,
@@ -127,31 +113,12 @@ export default function SearchDocumentClient() {
     };
   });
 
-  // useEffect
-  useEffect(() => {
-    dispatch(requestGetDocumentType({}));
-  }, []);
-
-  useEffect(() => {}, []);
-
-  useEffect(() => {
-    handleSearch(page);
-  }, [page]);
-
+  // handle
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
-  const handleSearch = (params: PaginationParams) => {
-    dispatch(
-      requestSearchDocument({
-        params,
-        exceptionHandle: {},
-      }),
-    );
-  };
-
-  const handleMoveDetail = (id: number, type: DocumentType) => {
+  const handleMoveDetail = (id: number, type: DocumentsType) => {
     const moveUri = `/document/search/${parsePageName(type)}/${id}`;
 
     router.push(moveUri);
@@ -159,17 +126,17 @@ export default function SearchDocumentClient() {
 
   return (
     <div className="grid grid-cols-1 gap-8">
-      <div className="bg-base-100 shadow-xl m-2 border p-10 rounded-lg">
+      <div className="m-2 rounded-lg border bg-base-100 p-10 shadow-xl">
         <div>
           <Form onSubmit={handleSubmit}>
             <div className="grid grid-cols-5 gap-10">
-              <div className="col-span-1 text-center pt-2">
+              <div className="col-span-1 pt-2 text-center">
                 <span className="">문서 종류</span>
               </div>
               <div className="col-span-1">
                 <Select color="primary">
                   {new Array({ id: -1, name: '전체' })
-                    .concat(types)
+                    .concat(documentsTypes)
                     .map((type) => (
                       <Select.Option
                         key={`documentType_${type.id}`}
@@ -180,7 +147,7 @@ export default function SearchDocumentClient() {
                     ))}
                 </Select>
               </div>
-              <div className="col-span-1 text-center pt-2">
+              <div className="col-span-1 pt-2 text-center">
                 <span className="">결재 상태</span>
               </div>
               <div className="col-span-1">
@@ -200,11 +167,11 @@ export default function SearchDocumentClient() {
               <div className="col-span-5">
                 <div className="flex justify-end gap-5">
                   <Button className="w-52" type="button">
-                    <GrPowerCycle className="w-5 h-5" />
+                    <GrPowerCycle className="h-5 w-5" />
                     초기화
                   </Button>
                   <Button className="w-52" type="submit" color="primary">
-                    <BiSearch className="w-5 h-5" />
+                    <BiSearch className="h-5 w-5" />
                     조회
                   </Button>
                 </div>
@@ -216,11 +183,11 @@ export default function SearchDocumentClient() {
 
       <div>
         <div>
-          총 <span className="font-bold">{pageable.total}</span> 개
+          총 <span className="font-bold">{documents.total}</span> 개
         </div>
       </div>
 
-      <div className="bg-base-100 shadow-xl overflow-auto border rounded-xl">
+      <div className="overflow-auto rounded-xl border bg-base-100 shadow-xl">
         <DocumentTable
           firstCheckbox
           headers={headers}
@@ -231,8 +198,11 @@ export default function SearchDocumentClient() {
 
       <div className="flex justify-center">
         <DocumentPagination
-          total={getTotalPageCount(pageable.total, pageable.pageable.size)}
-          current={pageable.pageable.page + 1}
+          total={getTotalPageCount(
+            documents.total || 0,
+            documents.pageable?.size || 0,
+          )}
+          current={(documents.pageable?.page || 0) + 1}
           onPrev={() => setPage({ ...page, page: page.page - 1 })}
           onNext={() => setPage({ ...page, page: page.page + 1 })}
         />

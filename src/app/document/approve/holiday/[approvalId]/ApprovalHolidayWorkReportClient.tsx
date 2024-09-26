@@ -2,31 +2,23 @@
 
 // react
 import { useEffect, useState } from 'react';
+// daisyui
+import { Button, Input, Modal } from 'react-daisyui';
 
 // next
 import { useRouter } from 'next/navigation';
 
-// daisyui
-import { Button, Modal, Input } from 'react-daisyui';
+import {
+  useApproveDocument,
+  useGetApprovalDocumentDetail,
+  useGetHolidayWorkReports,
+} from '@/hooks/document/document';
 
-// hooks
-import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
-
-// store
-import { documentActions } from '@/store/document';
-import { DocumentsStatus } from '@/store/document/types';
 import HolidayWorkReportDocument from '@/components/document/HolidayWorkReportDocument';
 
 type ApprovalHolidayWorkReportClientProps = {
   approvalId: string;
 };
-
-// actions
-const {
-  requestApprovalDocument,
-  requestProceedApprovalDocument,
-  requestGetHolidayWorkReportDetail,
-} = documentActions;
 
 function checkDisabledBtn(status?: DocumentsStatus): boolean {
   if (!status) {
@@ -42,57 +34,36 @@ export default function ApprovalHolidayWorkReportClient({
   // router
   const router = useRouter();
 
-  // store
-  const dispatch = useAppDispatch();
-  const { holidayWorkReportDetail, approvalDetail } = useAppSelector(
-    (state) => state.document,
-  );
-
   // state
   const [openRejectModal, setOpenRejectModal] = useState<boolean>(false);
   const [openApproveModal, setOpenApproveModal] = useState<boolean>(false);
 
   const [rejectReason, setRejectReason] = useState<string>('');
 
+  // query
+  const { approveDocument } = useGetApprovalDocumentDetail(Number(approvalId));
+  const { workReport } = useGetHolidayWorkReports(approveDocument?.id);
+  const { onApprove, isLoading } = useApproveDocument();
+
   // useEffect
-  useEffect(() => {
-    dispatch(
-      requestApprovalDocument({
-        approvalId: Number(approvalId),
-        exceptionHandle: {},
-      }),
-    );
-  }, []);
-
-  useEffect(() => {
-    if (!approvalDetail) {
-      return;
-    }
-
-    dispatch(
-      requestGetHolidayWorkReportDetail({
-        documentId: approvalDetail.document.id,
-      }),
-    );
-  }, [approvalDetail]);
 
   // handle
   const handleReject = () => {
-    if (!approvalDetail) {
+    if (!approveDocument) {
       return;
     }
 
-    handleProceedApprove(approvalDetail.id, 'REJECT', rejectReason);
+    handleProceedApprove(approveDocument.id, 'REJECT', rejectReason);
 
     setOpenRejectModal(false);
   };
 
   const handleApprove = () => {
-    if (!approvalDetail) {
+    if (!approveDocument) {
       return;
     }
 
-    handleProceedApprove(approvalDetail.id, 'APPROVE');
+    handleProceedApprove(approveDocument.id, 'APPROVE');
 
     setOpenApproveModal(false);
   };
@@ -102,35 +73,23 @@ export default function ApprovalHolidayWorkReportClient({
     status: DocumentsStatus,
     reason?: string,
   ) => {
-    dispatch(
-      requestProceedApprovalDocument({
-        approvalId,
-        body: {
-          status,
-          reason,
-        },
-        afterHandle: () => {
-          router.push('/document/approve/search');
-        },
-        exceptionHandle: {},
-      }),
-    );
+    onApprove({ id: approvalId, body: { status, reason } });
   };
 
   return (
     <>
       <div>
-        <div className="grid grid-cols-2 gap-10 mt-3 justify-end">
+        <div className="mt-3 grid grid-cols-2 justify-end gap-10">
           <Button
             color="error"
-            disabled={checkDisabledBtn(approvalDetail?.status)}
+            disabled={checkDisabledBtn(approveDocument?.status)}
             onClick={() => setOpenRejectModal(true)}
           >
             반려
           </Button>
           <Button
             color="primary"
-            disabled={checkDisabledBtn(approvalDetail?.status)}
+            disabled={checkDisabledBtn(approveDocument?.status)}
             onClick={() => setOpenApproveModal(true)}
           >
             승인
@@ -139,11 +98,11 @@ export default function ApprovalHolidayWorkReportClient({
       </div>
 
       {/* contents */}
-      {holidayWorkReportDetail && (
-        <div className="bg-base-100 shadow-lg overflow-auto border rounded-xl">
+      {workReport && (
+        <div className="overflow-auto rounded-xl border bg-base-100 shadow-lg">
           <HolidayWorkReportDocument
-            document={holidayWorkReportDetail.document}
-            lines={holidayWorkReportDetail.lines}
+            document={workReport.document}
+            lines={workReport.lines}
           />
         </div>
       )}

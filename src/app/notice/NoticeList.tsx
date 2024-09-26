@@ -1,40 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-
+import { useEffect, useState } from 'react';
 // daisyui
-import { Badge, Button, Modal } from 'react-daisyui';
+import { Badge } from 'react-daisyui';
 
-// hooks
-import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
+import { useRead, useSearchNotice } from '@/hooks/notice';
 
-// store
-import { noticeActions } from '@/store/notice';
-
-import { format } from 'date-fns';
-
-import DocumentTable from '@/components/DocumentTable';
-import DocumentPagination from '@/components/DocumentPagination';
 import { getTotalPageCount } from '@/utils/paginationUtils';
-import { PaginationParams } from '@/store/types';
 
-import { Notice } from '@/store/notice/types';
-
+import DocumentPagination from '@/components/DocumentPagination';
+import DocumentTable from '@/components/DocumentTable';
 import TimeAgo from 'timeago-react';
 import * as timeago from 'timeago.js';
 import ko from 'timeago.js/lib/lang/ko';
 
 timeago.register('ko', ko);
 
-// actions
-const { requestSearchNotice, requestReadNotice, requestGetNotice } =
-  noticeActions;
-
 const headers = [
-  // {
-  //   id: 'id',
-  //   value: '공지 번호',
-  // },
   {
     id: 'title',
     value: '공지',
@@ -53,73 +35,45 @@ const headers = [
 ];
 
 export default function NoticeList() {
-  // store
-  const dispatch = useAppDispatch();
-  const { searchParams, contents, detail } = useAppSelector(
-    (state) => state.notice,
-  );
-
   // state
   const [showNoticeDetail, setShowNoticeDetail] = useState<boolean>(false);
-  const [searchNoticeParams, setSearchNoticeParams] =
-    useState<PaginationParams>({
-      page: 0,
-      size: 10,
-    });
+  const [searchNoticeParams, setSearchNoticeParams] = useState<PageParams>({
+    page: 0,
+    size: 10,
+  });
+
+  // query
+  const { notices } = useSearchNotice(searchNoticeParams);
+  const { onRead } = useRead();
 
   // useEffect
-
   useEffect(() => {
     handleSearchRequest();
   }, [searchNoticeParams]);
 
-  useEffect(() => {
-      // ! 왜추가한거지?
-    // setSearchNoticeParams(searchParams);
-  }, [searchParams]);
-
   // handle
-  const handleSearchRequest = () => {
-    dispatch(
-      requestSearchNotice({
-        params: searchNoticeParams,
-        exceptionHandle: {},
-      }),
-    );
-  };
+  const handleSearchRequest = () => {};
 
   const handleReadNotice = (id: string) => {
-    dispatch(
-      requestReadNotice({
-        id,
-        exceptionHandle: {},
-      }),
-    );
-
-    dispatch(
-      requestGetNotice({
-        id,
-        exceptionHandle: {},
-        handleAfter: () => {
-          setShowNoticeDetail(true);
-        },
-      }),
-    );
+    onRead(id);
   };
 
   return (
     <>
-      <div className="bg-base-100 shadow-xl overflow-auto border rounded-xl">
+      <div className="overflow-auto rounded-xl border bg-base-100 shadow-xl">
         <DocumentTable
           headers={headers}
-          dataList={contents.content}
+          dataList={notices.content}
           onRowClick={(id: string) => handleReadNotice(id)}
         />
       </div>
       <div className="flex justify-center">
         <DocumentPagination
-          total={getTotalPageCount(contents.total, contents.pageable.size)}
-          current={contents.pageable.page + 1}
+          total={getTotalPageCount(
+            notices.total || 0,
+            notices.pageable?.size || 0,
+          )}
+          current={(notices.pageable?.page || 0) + 1}
           onPrev={() =>
             setSearchNoticeParams({
               ...searchNoticeParams,
@@ -134,25 +88,25 @@ export default function NoticeList() {
           }
         />
       </div>
-      <Modal className="w-11/12 max-w-5xl" open={showNoticeDetail}>
-        <Modal.Header>
-          <div className="flex gap-2 justify-between">
-            <div className="font-bold">{detail?.title}</div>
-            <div className="font-thin text-sm">
-              {detail &&
-                format(new Date(detail.createdDate), 'yyyy-MM-dd HH:mm:ss')}
-            </div>
-          </div>
-        </Modal.Header>
-        <Modal.Body>
-          <pre>{detail?.description}</pre>
-        </Modal.Body>
-        <Modal.Actions>
-          <Button color="primary" onClick={() => setShowNoticeDetail(false)}>
-            확인
-          </Button>
-        </Modal.Actions>
-      </Modal>
+      {/*<Modal className="w-11/12 max-w-5xl" open={showNoticeDetail}>*/}
+      {/*  <Modal.Header>*/}
+      {/*    <div className="flex justify-between gap-2">*/}
+      {/*      <div className="font-bold">{detail?.title}</div>*/}
+      {/*      <div className="text-sm font-thin">*/}
+      {/*        {detail &&*/}
+      {/*          format(new Date(detail.createdDate), 'yyyy-MM-dd HH:mm:ss')}*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*  </Modal.Header>*/}
+      {/*  <Modal.Body>*/}
+      {/*    <pre>{detail?.description}</pre>*/}
+      {/*  </Modal.Body>*/}
+      {/*  <Modal.Actions>*/}
+      {/*    <Button color="primary" onClick={() => setShowNoticeDetail(false)}>*/}
+      {/*      확인*/}
+      {/*    </Button>*/}
+      {/*  </Modal.Actions>*/}
+      {/*</Modal>*/}
     </>
   );
 }

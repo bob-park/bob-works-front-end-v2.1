@@ -10,11 +10,9 @@ import {
   Dropdown,
   Menu,
   Navbar,
-  Toast,
   Tooltip,
 } from 'react-daisyui';
 import { AiOutlineSetting, AiOutlineUnorderedList } from 'react-icons/ai';
-import { BsInfoCircle } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import { FaListUl } from 'react-icons/fa6';
 import { GrDocumentTime, GrDocumentUpdate } from 'react-icons/gr';
@@ -22,7 +20,6 @@ import { IoAddCircleOutline, IoNotificationsOutline } from 'react-icons/io5';
 // react-icon
 import { LuLayoutDashboard, LuLogOut } from 'react-icons/lu';
 import { MdOutlineHolidayVillage } from 'react-icons/md';
-import { VscError } from 'react-icons/vsc';
 
 import Link from 'next/link';
 // next
@@ -32,36 +29,14 @@ import {
   useSelectedLayoutSegments,
 } from 'next/navigation';
 
+import { useCountUnread } from '@/hooks/notice';
+
 // hooks
-import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
-
 import { useStore } from '@/shared/rootStore';
-
-// store
-import { commonActions } from '@/store/common';
-import { noticeActions } from '@/store/notice';
-import { userActions } from '@/store/user';
 
 import CustomerChat from './CustomerChat';
 
-// user actions
-const { readAlert } = commonActions;
-const { requestGetUser } = userActions;
-const { requestCountOfUnread } = noticeActions;
-
 const MANAGER_ROLES = ['ROLE_ADMIN', 'ROLE_MANAGER'];
-
-function getSystemAlertIcon(level: SystemAlertLevel) {
-  switch (level) {
-    case 'error':
-      return <VscError className="h-6 w-6 shrink-0 stroke-info text-red-600" />;
-
-    default:
-      return (
-        <BsInfoCircle className="h-6 w-6 shrink-0 stroke-info text-sky-600" />
-      );
-  }
-}
 
 function activeMenu(segments: string[], menuPaths: string[]) {
   if (
@@ -92,9 +67,11 @@ export default function DefaultNavBar({
   const segments = useSelectedLayoutSegments();
 
   // store
-  const dispatch = useAppDispatch();
-  const { alerts } = useAppSelector((state) => state.common);
-  const { countOfUnread } = useAppSelector((state) => state.notice);
+  // const dispatch = useAppDispatch();
+  // const { alerts } = useAppSelector((state) => state.common);
+  // const { countOfUnread } = useAppSelector((state) => state.notice);
+
+  const { count: countOfUnread } = useCountUnread();
 
   const setUser = useStore((state) => state.setUser);
 
@@ -103,23 +80,21 @@ export default function DefaultNavBar({
     if (!user) {
       return;
     }
-
-    dispatch(requestCountOfUnread({ exceptionHandle: {} }));
   }, []);
 
   useEffect(() => {
     setUser(user);
   }, [user]);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      alerts.length && handleReadAlert(0);
-    }, 5_000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [alerts]);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     alerts.length && handleReadAlert(0);
+  //   }, 5_000);
+  //
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, [alerts]);
 
   // handle
   const toggleVisible = () => {
@@ -143,7 +118,7 @@ export default function DefaultNavBar({
   };
 
   const handleReadAlert = (id: number) => {
-    dispatch(readAlert(id));
+    // dispatch(readAlert(id));
   };
 
   return (
@@ -377,27 +352,6 @@ export default function DefaultNavBar({
           </Tooltip>
         </div>
       </Drawer>
-      <Toast className="mr-5 mt-20" horizontal="end" vertical="top">
-        {alerts.map((item, index) => (
-          <div
-            key={`system_alert_id_${index}`}
-            className="alert bg-base-200 shadow-2xl"
-          >
-            {getSystemAlertIcon(item.level)}
-            <div>
-              <h3>{item.message}</h3>
-            </div>
-
-            <Button
-              color="ghost"
-              size="sm"
-              onClick={() => handleReadAlert(index)}
-            >
-              See
-            </Button>
-          </div>
-        ))}
-      </Toast>
     </>
   );
 }

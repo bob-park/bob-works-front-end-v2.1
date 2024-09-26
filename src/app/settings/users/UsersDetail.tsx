@@ -1,33 +1,17 @@
 'use client';
 
 // react
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-
+import { ChangeEvent, useRef, useState } from 'react';
 // daisyui
-import { Button, Modal, Input, Divider } from 'react-daisyui';
-
+import { Button } from 'react-daisyui';
 // react-icons
 import { GrEdit } from 'react-icons/gr';
-
-// hooks
-import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
-
-// store
-import { userActions } from '@/store/user';
-import { commonActions } from '@/store/common';
-
-// actions
-const { requestUpdateSignature } = userActions;
-const { addAlert } = commonActions;
 
 type UserDetailProps = {
   user: User;
 };
 
 export default function UserDetail({ user }: UserDetailProps) {
-  // store
-  const dispatch = useAppDispatch();
-
   // state
   const [userSignatureSrc, setUserSignatureSrc] = useState<string>(
     `/api/user/${user.id}/document/signature`,
@@ -35,6 +19,8 @@ export default function UserDetail({ user }: UserDetailProps) {
 
   // ref
   const signatureInputRef = useRef<HTMLInputElement>(null);
+
+  // query
 
   const handleEditClick = () => {
     signatureInputRef.current?.click();
@@ -52,33 +38,13 @@ export default function UserDetail({ user }: UserDetailProps) {
     const formData = new FormData();
 
     formData.append('signature', signatureFile);
-
-    dispatch(
-      requestUpdateSignature({
-        id: user.id,
-        formData,
-        handleAfter: () => {
-          const newSignatureSrc = URL.createObjectURL(signatureFile);
-          setUserSignatureSrc(newSignatureSrc);
-
-          dispatch(
-            addAlert({
-              level: 'info',
-              message: '사용자 결재 서명이 변경되었습니다.',
-              createAt: new Date(),
-            }),
-          );
-        },
-        exceptionHandle: {},
-      }),
-    );
   };
 
   return (
     <div className="col-span-3">
       <div className="grid grid-cols-1 gap-5">
         <h2 className="text-lg font-semibold">결재 서명</h2>
-        <div className="p-5 relative">
+        <div className="relative p-5">
           <input
             type="file"
             hidden
@@ -86,7 +52,7 @@ export default function UserDetail({ user }: UserDetailProps) {
             ref={signatureInputRef}
             onChange={handleSignatureChange}
           />
-          <div className="border border-gray-200 inline-block p-3 rounded-xl w-[256px]">
+          <div className="inline-block w-[256px] rounded-xl border border-gray-200 p-3">
             <img
               className="w-[256px]"
               src={userSignatureSrc}
@@ -97,11 +63,11 @@ export default function UserDetail({ user }: UserDetailProps) {
           </div>
 
           <Button
-            className="absolute bottom-0 -left-1 border border-solid border-gray-300"
+            className="absolute -left-1 bottom-0 border border-solid border-gray-300"
             animation
             onClick={handleEditClick}
           >
-            <GrEdit className="w-5 h-5" />
+            <GrEdit className="h-5 w-5" />
             Edit
           </Button>
         </div>

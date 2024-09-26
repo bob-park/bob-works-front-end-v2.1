@@ -6,7 +6,6 @@ import { BsSendFill } from 'react-icons/bs';
 
 import useGetChatAll from '@/hooks/maintenance/useGetChatAll';
 import useSendChat from '@/hooks/maintenance/useSendChat';
-import { useAppSelector } from '@/hooks/reduxHook';
 
 import { formatDate } from '@/utils/ParseUtils';
 
@@ -14,7 +13,6 @@ import { useStore } from '@/shared/rootStore';
 
 import dayjs from 'dayjs';
 import TimeAgo from 'timeago-react';
-import { v4 as uuid } from 'uuid';
 
 type ChatRoomProps = {
   room: MaintenanceCustomerChatRoom;
@@ -100,7 +98,7 @@ export default function ChatRoom({ room }: ChatRoomProps) {
   return (
     <div className="flex size-full flex-col items-center gap-2 rounded-2xl p-6 shadow-2xl">
       {/* chat list */}
-      <div className="h-max-without-appbar col-span-5 w-full overflow-auto">
+      <div className="col-span-5 h-max-without-appbar w-full overflow-auto">
         <div ref={messageEndRef}>
           {chatList.slice().map((chat, index) => {
             const prevChat = index - 1 >= 0 && chatList.slice()[index - 1];

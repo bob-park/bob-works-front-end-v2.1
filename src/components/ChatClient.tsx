@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Badge, ChatBubble, Divider } from 'react-daisyui';
 import { BsSendFill } from 'react-icons/bs';
 
@@ -27,6 +27,46 @@ type ChatClientProps = {
   userId: string;
 };
 
+const { BOB_CHAT_RS_HOST } = process.env;
+
+function createClient(
+  wsHost: string,
+  roomId: number,
+  receiver: (payload: ChatMessageResponse) => void,
+) {
+  // // receiver
+  const responder = {
+    fireAndForget(payload: Payload<ChatMessageResponse, Encodable>) {
+      payload.data && receiver(payload.data);
+    },
+  };
+
+  const client = new RSocketClient({
+    serializers: {
+      data: JsonSerializer,
+      metadata: IdentitySerializer,
+    },
+    setup: {
+      payload: {
+        data: {
+          id: roomId,
+        },
+        metadata: `${String.fromCharCode('connect'.length)}connect`,
+      },
+      keepAlive: 60000,
+      lifetime: 180000,
+      dataMimeType: 'application/json',
+      metadataMimeType: 'message/x.rsocket.routing.v0',
+    },
+    responder,
+    transport: new RSocketWebSocketClient({
+      url: `ws://${wsHost}`,
+    }),
+  });
+
+  return client.connect();
+}
+
 export default function ChatClient({
   wsHost,
   roomId,
@@ -41,20 +81,20 @@ export default function ChatClient({
     useState<ReactiveSocket<SendMessageRequest, Encodable>>();
   const [chatMessages, setChatMessages] = useState<ChatMessageResponse[]>([]);
 
-  // receiver
-  const messageReceiver = (payload: ChatMessageResponse) => {
-    setChatMessages((prev) => [...prev, payload]);
-  };
-
-  const responder = {
-    fireAndForget(payload: Payload<ChatMessageResponse, Encodable>) {
-      payload.data && messageReceiver(payload.data);
-    },
-  };
-
   // useEffect
   useEffect(() => {
-    connect();
+    const client = createClient(wsHost, roomId, (message) =>
+      setChatMessages((prev) => [...prev, message]),
+    );
+
+    client.subscribe({
+      onComplete: (comSocket) => {
+        setSocket(comSocket);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
 
     console.log('connect...');
 
@@ -100,45 +140,10 @@ export default function ChatClient({
       });
   };
 
-  const connect = useCallback(() => {
-    const client = new RSocketClient({
-      serializers: {
-        data: JsonSerializer,
-        metadata: IdentitySerializer,
-      },
-      setup: {
-        payload: {
-          data: {
-            id: roomId,
-          },
-          metadata: `${String.fromCharCode('connect'.length)}connect`,
-        },
-        keepAlive: 60000,
-        lifetime: 180000,
-        dataMimeType: 'application/json',
-        metadataMimeType: 'message/x.rsocket.routing.v0',
-      },
-      responder,
-      transport: new RSocketWebSocketClient({
-        url: `ws://${wsHost}`,
-      }),
-    });
-
-    client.connect().subscribe({
-      onComplete: (comSocket) => {
-        setSocket(comSocket);
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-      onSubscribe: () => {},
-    });
-  }, []);
-
   return (
     <div className="flex size-full flex-col items-center justify-center gap-4">
       {/* chat list */}
-      <div className="h-full overflow-auto" ref={chatMessagesRef}>
+      <div className="size-full overflow-auto" ref={chatMessagesRef}>
         {chatMessages.slice().map((chat, index) => {
           const prevChat = index - 1 >= 0 && chatMessages.slice()[index - 1];
 
