@@ -1,4 +1,4 @@
 interface UserInfoState {
-  user?: user;
+  user?: User;
   setUser: (user: User) => void;
 }

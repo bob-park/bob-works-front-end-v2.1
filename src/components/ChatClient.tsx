@@ -25,9 +25,8 @@ type ChatClientProps = {
   wsHost: string;
   roomId: number;
   userId: string;
+  users?: User[];
 };
-
-const { BOB_CHAT_RS_HOST } = process.env;
 
 function createClient(
   wsHost: string,
@@ -71,6 +70,7 @@ export default function ChatClient({
   wsHost,
   roomId,
   userId,
+  users = [],
 }: ChatClientProps) {
   // ref
   const chatMessagesRef = useRef<HTMLDivElement>(null);
@@ -140,6 +140,10 @@ export default function ChatClient({
       });
   };
 
+  const findUser = (id: string) => {
+    return users.find((item) => item.userId === id);
+  };
+
   return (
     <div className="flex size-full flex-col items-center justify-center gap-4">
       {/* chat list */}
@@ -155,6 +159,8 @@ export default function ChatClient({
               dayjs(chat.createdDate).format('YYYYMMDD');
           }
 
+          const u = findUser(chat.userId);
+
           return (
             <div key={chat.id}>
               {isDivide && (
@@ -166,9 +172,13 @@ export default function ChatClient({
               )}
               <ChatBubble end={chat.userId == userId}>
                 <ChatBubble.Header>
-                  {chat.userId == userId ? '나' : `${chat.userId}`}
+                  {chat.userId == userId
+                    ? '나'
+                    : `${u ? `${u.userId} (${u.name})` : chat.userId}`}
                 </ChatBubble.Header>
-
+                <ChatBubble.Avatar
+                  src={u ? `/api/user/${u.id}/avatar` : '/api/user/avatar'}
+                />
                 <ChatBubble.Message
                   color={chat.userId == userId ? 'primary' : 'neutral'}
                 >

@@ -66,11 +66,6 @@ export default function DefaultNavBar({
   const pathname = usePathname();
   const segments = useSelectedLayoutSegments();
 
-  // store
-  // const dispatch = useAppDispatch();
-  // const { alerts } = useAppSelector((state) => state.common);
-  // const { countOfUnread } = useAppSelector((state) => state.notice);
-
   const { count: countOfUnread } = useCountUnread();
 
   const setUser = useStore((state) => state.setUser);
@@ -85,16 +80,6 @@ export default function DefaultNavBar({
   useEffect(() => {
     setUser(user);
   }, [user]);
-
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     alerts.length && handleReadAlert(0);
-  //   }, 5_000);
-  //
-  //   return () => {
-  //     clearInterval(intervalId);
-  //   };
-  // }, [alerts]);
 
   // handle
   const toggleVisible = () => {
@@ -117,9 +102,7 @@ export default function DefaultNavBar({
     router.push('/api/logout');
   };
 
-  const handleReadAlert = (id: number) => {
-    // dispatch(readAlert(id));
-  };
+  const handleReadAlert = (id: number) => {};
 
   return (
     <>

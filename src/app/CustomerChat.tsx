@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
 
-import { useStore } from '@/shared/rootStore';
+import { useGetUserAll } from '@/hooks/user';
 
 import ChatClient from '@/components/ChatClient';
 import * as timeago from 'timeago.js';
@@ -23,6 +23,9 @@ export default function CustomerChat({ user }: CustomerChatProps) {
 
   // ref
   const messageEndRef = useRef<HTMLDivElement | null>(null);
+
+  // query
+  const { users } = useGetUserAll();
 
   // useEffect
   useEffect(() => {
@@ -78,6 +81,7 @@ export default function CustomerChat({ user }: CustomerChatProps) {
             wsHost="localhost:9001/rs"
             roomId={1}
             userId={user.userId}
+            users={users}
           />
         </div>
       </div>

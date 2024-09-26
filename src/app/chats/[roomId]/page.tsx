@@ -37,8 +37,7 @@ export default async function ChatRoomPage({
 
       {/* content */}
       <div className="justify-centergap-10 mt-6 flex h-max-without-appbar w-full flex-col items-center lg:w-[600px]">
-        {/*<ChatRoom room={room} />*/}
-        <ChatClient roomId={1} userId="hwpark" wsHost={'localhost:9001/rs'} />
+        <ChatRoom room={room} />
       </div>
     </div>
   );
