@@ -22,3 +22,11 @@ export async function addChatRoomUsers(
     .post(`/api/chat/room/${roomId}/users`, { json: body })
     .json<ChatRoomUserResponse[]>();
 }
+
+export async function getChats(roomId: number, params: PageParams) {
+  return await api
+    .get(`/api/chat/room/${roomId}/chats`, {
+      searchParams: params,
+    })
+    .json<Page<ChatMessageResponse>>();
+}

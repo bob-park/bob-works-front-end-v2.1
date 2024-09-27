@@ -4,6 +4,8 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Badge, ChatBubble, Divider } from 'react-daisyui';
 import { BsSendFill } from 'react-icons/bs';
 
+import { useChats } from '@/hooks/chat';
+
 import { formatDate } from '@/utils/ParseUtils';
 
 import dayjs from 'dayjs';
@@ -76,10 +78,17 @@ export default function ChatClient({
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
   // state
+  const [searchParams, setSearchParams] = useState<PageParams>({
+    page: 0,
+    size: 25,
+  });
   const [inputMessage, setInputMessage] = useState<string>('');
   const [socket, setSocket] =
     useState<ReactiveSocket<SendMessageRequest, Encodable>>();
   const [chatMessages, setChatMessages] = useState<ChatMessageResponse[]>([]);
+
+  // query
+  const { pages } = useChats(roomId, searchParams);
 
   // useEffect
   useEffect(() => {
@@ -107,6 +116,35 @@ export default function ChatClient({
       top: chatMessagesRef.current.scrollHeight,
     });
   }, [chatMessages]);
+
+  useEffect(() => {
+    const newChatList = new Array<ChatMessageResponse>();
+
+    pages.forEach((page) => {
+      let chats = page.content;
+
+      newChatList.push(...chats);
+
+      setChatMessages((prev) => {
+        const prevChats = prev.slice();
+
+        const filterChats = newChatList.filter((item) =>
+          prevChats.every((prevChat) => prevChat.id !== item.id),
+        );
+
+        prevChats.push(...filterChats);
+
+        prevChats.sort((o1, o2) => {
+          const o1Num = dayjs(o1.createdDate).unix();
+          const o2Num = dayjs(o2.createdDate).unix();
+
+          return o1Num > o2Num ? 1 : -1;
+        });
+
+        return prevChats;
+      });
+    });
+  }, [pages.length != 0 && pages[0].total]);
 
   // handle
   const handleSendMessage = (e: FormEvent<HTMLFormElement>) => {

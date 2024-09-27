@@ -2,9 +2,17 @@ import {
   addChatRoomUsers,
   createChatRoom,
   getChatRooms,
+  getChats,
 } from '@/entries/chat/api';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  QueryKey,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 export function useChatRoomAll(params: SearchChatRoomRequest) {
   const { data, isPending } = useQuery<ChatRoomResponse[]>({
@@ -43,4 +51,43 @@ export function useAddChatRoomUser() {
   });
 
   return { onAddChatRoomUser: mutate, isLoading: isPending };
+}
+
+export function useChats(roomId: number, params: PageParams) {
+  const { data, fetchNextPage, isLoading, refetch } = useInfiniteQuery<
+    Page<ChatMessageResponse>,
+    unknown,
+    InfiniteData<Page<ChatMessageResponse>>,
+    QueryKey,
+    PageParams
+  >({
+    queryKey: ['chat', 'room', roomId, 'messages'],
+    queryFn: ({ pageParam }) => getChats(roomId, pageParam),
+    initialPageParam: {
+      size: 25,
+      page: 0,
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      let totalPage = Math.ceil(lastPage.total / lastPage.pageable.size);
+
+      if (lastPage.total % lastPage.pageable.size > 0) {
+        totalPage = totalPage + 1;
+      }
+
+      const page = lastPage.pageable;
+      const nextPage = page.page + 1;
+
+      return {
+        ...page,
+        page: page.page + 1 > totalPage ? totalPage : nextPage,
+      };
+    },
+  });
+
+  return {
+    pages: data?.pages || [],
+    isLoading,
+    fetchNextPage,
+    reload: refetch,
+  };
 }
