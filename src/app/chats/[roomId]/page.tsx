@@ -1,12 +1,11 @@
 import { cookies } from 'next/headers';
 
 import BackDrop from '@/components/BackDrop';
-import ChatClient from '@/components/ChatClient';
 import ky from 'ky';
 
 import ChatRoom from './_component/ChatRoom';
 
-const { CLIENT_SERVICE_PATH, BOB_CHAT_RS_HOST } = process.env;
+const { CLIENT_SERVICE_PATH } = process.env;
 
 export default async function ChatRoomPage({
   params,
@@ -16,12 +15,12 @@ export default async function ChatRoomPage({
   const { roomId } = params;
 
   const room = await ky
-    .get(`${CLIENT_SERVICE_PATH}/maintenance/customer/chat/room/${roomId}`, {
+    .get(`${CLIENT_SERVICE_PATH}/chat/room/${roomId}`, {
       headers: {
         Cookie: `JSESSIONID=${cookies().get('JSESSIONID')?.value || ''}`,
       },
     })
-    .json<MaintenanceCustomerChatRoom>();
+    .json<ChatRoomResponse>();
 
   return (
     <div className="size-full">
@@ -30,7 +29,7 @@ export default async function ChatRoomPage({
         <div>
           <div className="inline-block">
             <BackDrop />
-            <span className="ml-2 text-xl font-semibold">{room.title}</span>
+            <span className="ml-2 text-xl font-semibold">{room.name}</span>
           </div>
         </div>
       </div>

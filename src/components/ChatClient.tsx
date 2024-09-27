@@ -96,8 +96,6 @@ export default function ChatClient({
       },
     });
 
-    console.log('connect...');
-
     return () => {
       socket?.close();
     };

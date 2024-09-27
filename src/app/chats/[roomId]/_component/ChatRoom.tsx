@@ -6,8 +6,10 @@ import { useStore } from '@/shared/rootStore';
 
 import ChatClient from '@/components/ChatClient';
 
+const BOB_CHAT_RS_HOST = process.env.NEXT_PUBLIC_BOB_CHAT_RS_HOST;
+
 type ChatRoomProps = {
-  room: MaintenanceCustomerChatRoom;
+  room: ChatRoomResponse;
 };
 
 export default function ChatRoom({ room }: ChatRoomProps) {
@@ -23,9 +25,9 @@ export default function ChatRoom({ room }: ChatRoomProps) {
 
   return (
     <ChatClient
-      roomId={1}
+      roomId={room.id}
       userId={user.userId}
-      wsHost={'localhost:9001/rs'}
+      wsHost={BOB_CHAT_RS_HOST || 'localhost:9001/rs'}
       users={users}
     />
   );

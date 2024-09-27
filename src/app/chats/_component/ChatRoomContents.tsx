@@ -4,7 +4,9 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { useChatRoomAll } from '@/hooks/chat';
 import useGetChatRoomsAll from '@/hooks/maintenance/useGetChatRoomsAll';
+import { useGetUserAll } from '@/hooks/user';
 
 import dayjs from 'dayjs';
 
@@ -15,10 +17,12 @@ export default function ChatRoomContents() {
   // state
   const [currentPage, setCurrentPage] = useState<number>(0);
 
-  const { page, fetchNextPage, isLoading } = useGetChatRoomsAll();
+  // query
+  const { chatRooms } = useChatRoomAll({});
+  const { users } = useGetUserAll();
 
   // handle
-  const handleClick = (roomId: string) => {
+  const handleClick = (roomId: number) => {
     router.push(`/chats/${roomId}`);
   };
 
@@ -35,23 +39,17 @@ export default function ChatRoomContents() {
         </thead>
         {/* contents */}
         <tbody>
-          {page?.pages[currentPage].content.map((item) => (
+          {(chatRooms || []).map((item) => (
             <tr
               key={`chat-room-id-${item.id}`}
               className="hover cursor-pointer"
               onClick={() => handleClick(item.id)}
             >
               <td className="text-left" width={400}>
-                {item.title}
+                {item.name}
               </td>
               <td className="text-center">
-                <span className="font-bold">
-                  {item.customer?.name || ''}
-                  <span className="font-normal">
-                    {' '}
-                    ({item.customer?.userId})
-                  </span>
-                </span>
+                <span className="font-bold"></span>
               </td>
               <td className="text-center">
                 {dayjs(item.createdDate).format('YYYY-MM-DD')}

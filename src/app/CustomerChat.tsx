@@ -4,6 +4,11 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
 
+import {
+  useAddChatRoomUser,
+  useChatRoomAll,
+  useCreateChatRoom,
+} from '@/hooks/chat';
 import { useGetUserAll } from '@/hooks/user';
 
 import ChatClient from '@/components/ChatClient';
@@ -12,47 +17,44 @@ import ko from 'timeago.js/lib/lang/ko';
 
 timeago.register('ko', ko);
 
+const BOB_CHAT_RS_HOST = process.env.NEXT_PUBLIC_BOB_CHAT_RS_HOST;
+
 type CustomerChatProps = {
   user: User;
 };
 
+function addRoomUser(
+  rooms: ChatRoomResponse[],
+  func: (roomId: number) => void,
+) {
+  if (rooms.length === 0) {
+    return;
+  }
+
+  const room = rooms[0];
+
+  func(room.id);
+}
+
 export default function CustomerChat({ user }: CustomerChatProps) {
   // state
-  const [chatContents, setChatContents] = useState<string>('');
-  const [chatList, setChatList] = useState<MaintenanceCustomerChat[]>([]);
-
-  // ref
-  const messageEndRef = useRef<HTMLDivElement | null>(null);
 
   // query
   const { users } = useGetUserAll();
+  const { chatRooms, isLoading } = useChatRoomAll({ userId: user.userId });
+  const { onCreateChatRoom } = useCreateChatRoom();
 
   // useEffect
   useEffect(() => {
-    handleScrollEnd();
-  }, [chatList]);
+    if (chatRooms && chatRooms.length === 0) {
+      onCreateChatRoom({
+        name: `${user.name} (${user.userId}) 님의 고객 소리`,
+        users: [{ userId: user.userId }],
+      });
+    }
+  }, [!!chatRooms]);
 
   // handle
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!chatContents) {
-      return;
-    }
-
-    // send(chatContents);
-
-    setChatContents('');
-  };
-
-  const handleScrollEnd = () => {
-    messageEndRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-      inline: 'nearest',
-    });
-  };
-
   return (
     <div className="h-[690px] w-[440px] rounded-3xl bg-base-100 p-8 shadow-2xl">
       <div className="flex size-full flex-col gap-4">
@@ -77,12 +79,14 @@ export default function CustomerChat({ user }: CustomerChatProps) {
 
         {/* chat client */}
         <div className="h-[90%]">
-          <ChatClient
-            wsHost="localhost:9001/rs"
-            roomId={1}
-            userId={user.userId}
-            users={users}
-          />
+          {chatRooms && chatRooms.length > 0 && (
+            <ChatClient
+              wsHost={BOB_CHAT_RS_HOST || 'localhost:9001/rs'}
+              roomId={chatRooms[0].id}
+              userId={user.userId}
+              users={users}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -98,10 +98,6 @@ export default function DefaultNavBar({
     return '';
   };
 
-  const handleLogout = () => {
-    router.push('/api/logout');
-  };
-
   const handleReadAlert = (id: number) => {};
 
   return (
@@ -296,10 +292,13 @@ export default function DefaultNavBar({
                   </li>
 
                   <hr />
-                  <Dropdown.Item onClick={handleLogout}>
-                    <LuLogOut />
-                    로그아웃
-                  </Dropdown.Item>
+
+                  <li>
+                    <a href="/logout">
+                      <LuLogOut />
+                      로그아웃
+                    </a>
+                  </li>
                 </Dropdown.Menu>
               </Dropdown>
             </Navbar.End>
