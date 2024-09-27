@@ -59,7 +59,7 @@ function createClient(
     },
     responder,
     transport: new RSocketWebSocketClient({
-      url: `ws://${wsHost}`,
+      url: `${wsHost}`,
     }),
   });
 
