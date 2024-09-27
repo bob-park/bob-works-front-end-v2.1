@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 
+import useGetLoanDetail from '@/hooks/loan/useGetDetailLoan';
+
 import dayjs from 'dayjs';
 
 import RepayLoanModal from './RepayLoanModal';
-import useGetLoanDetail from '@/hooks/loan/useGetDetailLoan';
-import useRepayLoan from '@/hooks/loan/useRepayLoan';
 
 type LoanRepaymentListProps = {
   loanId: number;
@@ -22,7 +22,7 @@ export default function LoanRepaymentList({ loanId }: LoanRepaymentListProps) {
 
   return (
     <>
-      <div className="w-full grid grid-cols-1 gap-6 rounded-2xl shadow-xl p-8">
+      <div className="grid w-full grid-cols-1 gap-6 rounded-2xl p-8 shadow-xl">
         <div className="">
           <h2 className="text-xl font-bold">대출 상환 내역</h2>
         </div>

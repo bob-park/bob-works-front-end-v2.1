@@ -1,12 +1,6 @@
-import {
-  DocumentApprovalLine,
-  HolidayWorkReport,
-  HolidayWorkUser,
-} from '@/store/document/types';
+import { formatDate } from '@/utils/ParseUtils';
 
-import { formatDate, parseSubType, parseType } from '@/utils/ParseUtils';
 import ApprovalLines, { ApprovalLine } from './ApprovalLines';
-import Image from 'next/image';
 
 type HolidayWorkReportDocumentProps = {
   document?: HolidayWorkReport;
@@ -29,11 +23,11 @@ const ExistWorkUserRow = ({
   workPurpose: string;
 }) => {
   return (
-    <tr className="border-b border-black h-[60px]">
-      <td className="text-center text-lg border-r pb-2 border-black">
+    <tr className="h-[60px] border-b border-black">
+      <td className="border-r border-black pb-2 text-center text-lg">
         {formatDate(user.workDate ?? new Date(), 'MM 월 dd 일')}
       </td>
-      <td className="text-center w-[130px] border-r border-black pb-2">
+      <td className="w-[130px] border-r border-black pb-2 text-center">
         {user.times.map((time, i) => (
           <p key={`workTime_${user.workUserName}_${i}`}>
             <span>{time.startTime.substring(0, 5)}</span> ~{' '}
@@ -41,17 +35,17 @@ const ExistWorkUserRow = ({
           </p>
         ))}
       </td>
-      <td className="text-center text-lg w-[70px] border-r border-black pb-2">
+      <td className="w-[70px] border-r border-black pb-2 text-center text-lg">
         {user.totalWorkTime}
       </td>
-      <td className="text-center border-r border-black pb-2">{workPurpose}</td>
-      <td className="text-center font-bold border-r border-black pb-2">
+      <td className="border-r border-black pb-2 text-center">{workPurpose}</td>
+      <td className="border-r border-black pb-2 text-center font-bold">
         {user.workUserName}
       </td>
-      <td className="text-center font-bold w-[80px] border-r border-black pb-2">
+      <td className="w-[80px] border-r border-black pb-2 text-center font-bold">
         {user.isVacation ? '유' : '무'}
       </td>
-      <td className="text-center font-bold w-[80px] border-r border-black pb-2">
+      <td className="w-[80px] border-r border-black pb-2 text-center font-bold">
         {user.paymentTime}
       </td>
       <td></td>
@@ -61,14 +55,14 @@ const ExistWorkUserRow = ({
 
 const EmptyWorkUserRow = () => {
   return (
-    <tr className="border-b border-black h-[60px]">
-      <td className="text-center text-lg border-r border-black"></td>
-      <td className="text-center w-[130px] border-r border-black"></td>
-      <td className="text-center text-lg w-[70px] border-r border-black"></td>
-      <td className="text-center border-r border-black"></td>
-      <td className="text-center font-bold border-r border-black"></td>
-      <td className="text-center font-bold w-[80px] border-r border-black"></td>
-      <td className="text-center font-bold w-[80px] border-r border-black"></td>
+    <tr className="h-[60px] border-b border-black">
+      <td className="border-r border-black text-center text-lg"></td>
+      <td className="w-[130px] border-r border-black text-center"></td>
+      <td className="w-[70px] border-r border-black text-center text-lg"></td>
+      <td className="border-r border-black text-center"></td>
+      <td className="border-r border-black text-center font-bold"></td>
+      <td className="w-[80px] border-r border-black text-center font-bold"></td>
+      <td className="w-[80px] border-r border-black text-center font-bold"></td>
       <td></td>
     </tr>
   );
@@ -109,30 +103,30 @@ export default function HolidayWorkReportDocument({
   return (
     <div
       id="holidayWorkReportDocument"
-      className="relative w-[996px] m-[5px] py-5 text-black bg-white"
+      className="relative m-[5px] w-[996px] bg-white py-5 text-black"
     >
       {document.status === 'CANCEL' && (
         <div className="absolute" style={{ top: '500px', left: '300px' }}>
-          <div className="grid place-content-center w-full h-full opacity-50">
-            <div className="text-red-700 font-black text-9xl tracking-widest -rotate-45 border-8 border-solid border-red-700 rounded p-10">
+          <div className="grid h-full w-full place-content-center opacity-50">
+            <div className="-rotate-45 rounded border-8 border-solid border-red-700 p-10 text-9xl font-black tracking-widest text-red-700">
               취 소
             </div>
           </div>
         </div>
       )}
-      <div className="m-5 grid grid-col-1 gap-10">
-        <div className="grid w-full justify-end m-1">
+      <div className="grid-col-1 m-5 grid gap-10">
+        <div className="m-1 grid w-full justify-end">
           <ApprovalLines lines={dummyLines} />
         </div>
 
         {/* title */}
-        <div className="flex w-full justify-center items-center mt-2">
+        <div className="mt-2 flex w-full items-center justify-center">
           <h1 className="text-4xl font-bold underline">휴일 근무 보고서</h1>
         </div>
 
         {/* 작성일 */}
-        <div className="flex w-full justify-end mt-3">
-          <div className="text-xl font-medium tracking-widest ">
+        <div className="mt-3 flex w-full justify-end">
+          <div className="text-xl font-medium tracking-widest">
             작 성 일 :
             <span className="ml-10">
               {formatDate(document.createdDate, 'yyyy 년 MM 월 dd 일')}
@@ -142,11 +136,11 @@ export default function HolidayWorkReportDocument({
 
         {/* contents */}
         <table className="table-fixed border-2 border-black">
-          <thead className="border-double border-b-2 border-black">
+          <thead className="border-b-2 border-double border-black">
             <tr>
               <th
                 rowSpan={2}
-                className="border-r border-black pb-2 w-[120px] text-xl"
+                className="w-[120px] border-r border-black pb-2 text-xl"
               >
                 근무일
               </th>
@@ -160,13 +154,13 @@ export default function HolidayWorkReportDocument({
               </th>
               <th
                 rowSpan={2}
-                className="border-r border-black pb-2 w-[280px] text-xl"
+                className="w-[280px] border-r border-black pb-2 text-xl"
               >
                 근무목적
               </th>
               <th
                 rowSpan={2}
-                className="border-r border-black pb-2 w-[100px] text-xl"
+                className="w-[100px] border-r border-black pb-2 text-xl"
               >
                 근무자
               </th>
@@ -174,17 +168,17 @@ export default function HolidayWorkReportDocument({
                 <p className="text-xl">휴개 대체</p>
                 <p>(8시간 이상)</p>
               </th>
-              <th rowSpan={2} className="text-xl pb-2">
+              <th rowSpan={2} className="pb-2 text-xl">
                 <p>본인</p>
                 <p>확인</p>
               </th>
             </tr>
             <tr>
-              <th className="border-t border-r border-black pb-2">
+              <th className="border-r border-t border-black pb-2">
                 <span className="text-lg">휴가</span>
                 <span className="font-medium">(유/무)</span>
               </th>
-              <th className="border-t border-r border-black pb-2">
+              <th className="border-r border-t border-black pb-2">
                 <p>수당</p>
                 <p>적용 시간</p>
               </th>

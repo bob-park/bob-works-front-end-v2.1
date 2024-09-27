@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useChatRoomAll } from '@/hooks/chat';
-import useGetChatRoomsAll from '@/hooks/maintenance/useGetChatRoomsAll';
 import { useGetUserAll } from '@/hooks/user';
 
 import dayjs from 'dayjs';

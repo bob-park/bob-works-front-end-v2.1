@@ -131,7 +131,7 @@ export default function SearchDocumentApprovalClient() {
     e.preventDefault();
   };
 
-  const handleMoveDetail = (id: number, type: DocumentType) => {
+  const handleMoveDetail = (id: number, type: DocumentsType) => {
     const moveUri = `/document/approve/${parsePageName(type)}/${id}`;
 
     router.push(moveUri);
