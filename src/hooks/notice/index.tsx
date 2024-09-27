@@ -13,7 +13,10 @@ export function useSearchNotice(params: PageParams) {
     queryFn: () => searchNotice(params),
   });
 
-  return { notices: data || { content: [], total: 0 }, isLoading: isPending };
+  return {
+    notices: data || { content: [], total: 0, pageable: { page: 0, size: 10 } },
+    isLoading: isPending,
+  };
 }
 
 export function useCountUnread() {

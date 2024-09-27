@@ -200,9 +200,9 @@ export default function SearchDocumentClient() {
         <DocumentPagination
           total={getTotalPageCount(
             documents.total || 0,
-            documents.pageable?.size || 0,
+            documents.pageable.size || 0,
           )}
-          current={(documents.pageable?.page || 0) + 1}
+          current={(documents.pageable.page || 0) + 1}
           onPrev={() => setPage({ ...page, page: page.page - 1 })}
           onNext={() => setPage({ ...page, page: page.page + 1 })}
         />

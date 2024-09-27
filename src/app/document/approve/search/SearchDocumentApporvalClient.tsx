@@ -212,9 +212,9 @@ export default function SearchDocumentApprovalClient() {
         <DocumentPagination
           total={getTotalPageCount(
             approvalDocuments.total || 0,
-            approvalDocuments.pageable?.size || 0,
+            approvalDocuments.pageable.size || 0,
           )}
-          current={(approvalDocuments.pageable?.page || 0) + 1}
+          current={(approvalDocuments.pageable.page || 0) + 1}
           onPrev={() => setPage({ ...page, page: page.page - 1 })}
           onNext={() => setPage({ ...page, page: page.page + 1 })}
         />

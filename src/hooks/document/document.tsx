@@ -29,7 +29,14 @@ export function useSearchDocument(params: PageParams) {
     queryFn: () => searchDocument(params),
   });
 
-  return { documents: data || { content: [], total: 0 }, isLoading: isPending };
+  return {
+    documents: data || {
+      content: [],
+      total: 0,
+      pageable: { page: 0, size: 10 },
+    },
+    isLoading: isPending,
+  };
 }
 
 export function useGetVacationDocument(id: number) {
@@ -48,7 +55,11 @@ export function useGetApprovalDocument(params: PageParams) {
   });
 
   return {
-    approvalDocuments: data || { content: [], total: 0 },
+    approvalDocuments: data || {
+      content: [],
+      total: 0,
+      pageable: { page: 0, size: 10 },
+    },
     isLoading: isPending,
   };
 }
