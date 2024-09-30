@@ -3,6 +3,7 @@ import {
   createChatRoom,
   getChatRooms,
   getChats,
+  getMyRoom,
 } from '@/entries/chat/api';
 
 import {
@@ -90,4 +91,13 @@ export function useChats(roomId: number, params: PageParams) {
     fetchNextPage,
     reload: refetch,
   };
+}
+
+export function useMyChatRoom() {
+  const { data, isPending } = useQuery<ChatRoomResponse>({
+    queryKey: ['chat', 'room', 'me'],
+    queryFn: () => getMyRoom(),
+  });
+
+  return { myRoom: data, isLoading: isPending };
 }

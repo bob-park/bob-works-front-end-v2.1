@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import Image from 'next/image';
 
-import { useChatRoomAll, useCreateChatRoom } from '@/hooks/chat';
+import { useChatRoomAll, useCreateChatRoom, useMyChatRoom } from '@/hooks/chat';
 import { useGetUserAll } from '@/hooks/user';
 
 import ChatClient from '@/components/ChatClient';
@@ -37,18 +37,9 @@ export default function CustomerChat({ user }: CustomerChatProps) {
 
   // query
   const { users } = useGetUserAll();
-  const { chatRooms, isLoading } = useChatRoomAll({ userId: user.userId });
-  const { onCreateChatRoom } = useCreateChatRoom();
+  const { myRoom, isLoading } = useMyChatRoom();
 
   // useEffect
-  useEffect(() => {
-    if (chatRooms && chatRooms.length === 0) {
-      onCreateChatRoom({
-        name: `${user.name} (${user.userId}) 님의 고객 소리`,
-        users: [{ userId: user.userId }],
-      });
-    }
-  }, [!!chatRooms]);
 
   // handle
   return (
@@ -75,10 +66,10 @@ export default function CustomerChat({ user }: CustomerChatProps) {
 
         {/* chat client */}
         <div className="h-[90%]">
-          {chatRooms && chatRooms.length > 0 && (
+          {myRoom && (
             <ChatClient
               wsHost={BOB_CHAT_RS_HOST || 'localhost:9001/rs'}
-              roomId={chatRooms[0].id}
+              roomId={myRoom.id}
               userId={user.userId}
               users={users}
             />

@@ -30,3 +30,7 @@ export async function getChats(roomId: number, params: PageParams) {
     })
     .json<Page<ChatMessageResponse>>();
 }
+
+export async function getMyRoom() {
+  return await api.get('/api/chat/room/me').json<ChatRoomResponse>();
+}
