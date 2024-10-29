@@ -98,7 +98,7 @@ type VacationDocumentDetail = {
 };
 
 type HolidayWorkTime = {
-  id: number;
+  id?: number;
   existBreakTime: boolean;
   startTime: string;
   endTime: string;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { formatDate } from '@/utils/ParseUtils';
 
-import HolidayTooltip from '@/components/HolidayTooltip';
+import HolidayTooltip from '@/components/document/HolidayTooltip';
 
 import ApprovalLines, { ApprovalLine } from './ApprovalLines';
 
@@ -48,7 +48,9 @@ const ExistWorkUserRow = ({
         onMouseLeave={() => setOpenTooltip(false)}
       >
         <div>{user.totalWorkTime}</div>
-        <HolidayTooltip open={openTooltip} workTimeId={user.times[0].id} />
+        {user.times[0].id && (
+          <HolidayTooltip open={openTooltip} workTimeId={user.times[0].id} />
+        )}
       </td>
       <td className="border-r border-black pb-2 text-center">{workPurpose}</td>
       <td className="border-r border-black pb-2 text-center font-bold">
