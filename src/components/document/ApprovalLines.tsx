@@ -1,8 +1,9 @@
-import { DocumentsStatus } from '@/store/document/types';
+import { Tooltip } from 'react-daisyui';
+
+import { format } from 'date-fns';
+
 import ApproveStamp from './ApproveStamp';
 import RejectStamp from './RejectStamp';
-import { Tooltip } from 'react-daisyui';
-import { format } from 'date-fns';
 
 export type ApprovalLine = {
   id: number;
@@ -33,7 +34,7 @@ const Stamp = ({
   }
 
   return (
-    <div className="grid justify-center items-center">
+    <div className="grid items-center justify-center">
       <Tooltip
         message={`${format(new Date(approveDate), 'yyyy-MM-dd HH:mm:ss')} ${
           reason || ''

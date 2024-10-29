@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-query": "^5.35.1",
     "@types/next-redux-saga": "^3.0.2",
     "@types/node": "20.4.8",
@@ -19,7 +18,7 @@
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "classnames": "^2.5.1",
-    "daisyui": "^4.7.2",
+    "daisyui": "^4.12.10",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.13",
     "eslint": "8.46.0",
@@ -27,17 +26,14 @@
     "html2canvas-pro": "^1.4.3",
     "immer": "^10.1.1",
     "jspdf": "^2.5.1",
-    "next": "^14.1.4",
-    "next-redux-saga": "^4.1.2",
-    "next-redux-wrapper": "^8.1.0",
+    "ky": "^1.7.2",
+    "next": "^14.2.13",
     "postcss": "8.4.27",
-    "react": "18.2.0",
-    "react-daisyui": "^5.0.0",
-    "react-dom": "18.2.0",
+    "react": "^18",
+    "react-daisyui": "^5.0.5",
+    "react-dom": "^18",
     "react-icons": "^4.12.0",
-    "react-redux": "^8.1.2",
     "react-tailwindcss-datepicker": "^1.7.2",
-    "redux-saga": "^1.2.3",
     "sharp": "0.32.6",
     "tailwindcss": "3.4.3",
     "timeago-react": "^3.0.6",
@@ -45,11 +41,15 @@
     "typesafe-actions": "^5.1.0",
     "typescript": "5.1.6",
     "uuid": "^9.0.0",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "rsocket-core": "^0.0.29-alpha.0",
+    "rsocket-websocket-client": "^0.0.29-alpha.0"
   },
   "devDependencies": {
+    "@bob-park/prettier-config-bobpark": "0.0.3",
     "@tanstack/react-query-devtools": "^5.35.1",
-    "@bob-park/prettier-config-bobpark": "0.0.3"
+    "@types/rsocket-core": "^0.0.11",
+    "@types/rsocket-websocket-client": "^0.0.7"
   },
   "prettier": "@bob-park/prettier-config-bobpark"
 }

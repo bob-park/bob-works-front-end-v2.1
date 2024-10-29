@@ -1,16 +1,9 @@
-import {
-  DocumentType,
-  DocumentsStatus,
-  DocumentsType,
-  VacationSubType,
-  VacationType,
-} from '@/store/document/types';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 export function getDocumentTypeId(
-  types: DocumentsType[],
-  typeName: DocumentType,
+  types: DocumentTypeResponse[],
+  typeName: DocumentsType,
 ): number {
   const type = findDocumentType(types, typeName);
 
@@ -18,8 +11,8 @@ export function getDocumentTypeId(
 }
 
 export function findDocumentType(
-  types: DocumentsType[],
-  typeName: DocumentType,
+  types: DocumentTypeResponse[],
+  typeName: DocumentsType,
 ) {
   const type = types.find((type) => type.type === typeName);
 
@@ -108,7 +101,7 @@ export function parseSubType(id: VacationSubType) {
   return vacationSubTypes.find((item) => item.id == id)?.name;
 }
 
-export function parsePageName(documentType: DocumentType): string {
+export function parsePageName(documentType: DocumentsType): string {
   switch (documentType) {
     case 'VACATION':
       return 'vacation';

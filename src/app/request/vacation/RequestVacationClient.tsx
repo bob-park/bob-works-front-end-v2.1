@@ -17,21 +17,14 @@ import Datepicker from 'react-tailwindcss-datepicker';
 
 import { useRouter } from 'next/navigation';
 
+import { useAddVacation, useGetDocumentType } from '@/hooks/document/document';
+import useToast from '@/hooks/useToast';
 // hooks
-import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
+import { useGetUsableAlternativeVacation } from '@/hooks/user';
 
 import { getDocumentTypeId } from '@/utils/ParseUtils';
 
 import DocumentTable from '@/components/DocumentTable';
-// store
-import { commonActions } from '@/store/common';
-import { documentActions } from '@/store/document';
-import {
-  AddVacationRequest,
-  VacationSubType,
-  VacationType,
-} from '@/store/document/types';
-import { userActions } from '@/store/user';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -46,10 +39,6 @@ type VacationDate = {
 };
 
 dayjs.extend(utc);
-
-const { addAlert } = commonActions;
-const { requestGetUsableAlternativeVacation } = userActions;
-const { requestGetDocumentType, requestAddVacationDocument } = documentActions;
 
 const vacationTypes: VacationSelect[] = [
   {
@@ -104,6 +93,9 @@ export default function RequestVacationClient() {
   //router
   const router = useRouter();
 
+  // toast
+  const { push } = useToast();
+
   //state
   const [selectVacationType, setSelectVacationType] = useState<VacationSelect>(
     vacationTypes[0],
@@ -121,17 +113,16 @@ export default function RequestVacationClient() {
     [],
   );
 
-  // hooks
-  const dispatch = useAppDispatch();
-  const { alternativeVacations } = useAppSelector((state) => state.user);
-  const { types, isLoading } = useAppSelector((state) => state.document);
+  // query
+  const { documentsTypes } = useGetDocumentType();
+  const { usableAlternativeVacation } = useGetUsableAlternativeVacation();
+  const { onAddVacation, isLoading } = useAddVacation(() => {
+    push('휴가계가 신청되었습니다.', 'info');
+    router.push('/document/search');
+  });
 
   // useEffect
-  useEffect(() => {
-    dispatch(requestGetUsableAlternativeVacation({}));
-
-    dispatch(requestGetDocumentType({}));
-  }, []);
+  useEffect(() => {}, []);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -140,15 +131,11 @@ export default function RequestVacationClient() {
       selectVacationType.id === 'ALTERNATIVE' &&
       selectAlternativeList.length === 0
     ) {
-      handleAddSystemAlert(
-        'error',
-        '대체휴가인 경우 사용 가능한 대체휴가를 선택해야합니다.',
-      );
       return;
     }
 
     const addVacationRequest: AddVacationRequest = {
-      typeId: getDocumentTypeId(types, 'VACATION'),
+      typeId: getDocumentTypeId(documentsTypes, 'VACATION'),
       vacationType: selectVacationType.id as VacationType,
       vacationSubType:
         selectVacationSubType.id !== 'ALL'
@@ -163,13 +150,9 @@ export default function RequestVacationClient() {
           : undefined,
     };
 
-    dispatch(
-      requestAddVacationDocument({
-        body: addVacationRequest,
-        afterHandle: () => router.push('/document/search'),
-        handleException: {},
-      }),
-    );
+    console.log(addVacationRequest);
+
+    onAddVacation(addVacationRequest);
   };
 
   const handleAlternativeChecked = (id: number, checked: boolean) => {
@@ -187,7 +170,7 @@ export default function RequestVacationClient() {
 
   const handleAlternativeCheckedAll = (checked: boolean) => {
     setSelectAlternativeList(
-      checked ? alternativeVacations.map((item) => item.id) : [],
+      checked ? usableAlternativeVacation.map((item) => item.id) : [],
     );
   };
 
@@ -199,15 +182,7 @@ export default function RequestVacationClient() {
     setSelectAlternativeList([]);
   };
 
-  const handleAddSystemAlert = (level: SystemAlertLevel, message: string) => {
-    dispatch(
-      addAlert({
-        level,
-        message,
-        createAt: new Date(),
-      }),
-    );
-  };
+  // const handleAddSystemAlert = (level: SystemAlertLevel, message: string) => {};
 
   return (
     <>
@@ -299,11 +274,11 @@ export default function RequestVacationClient() {
                     <div className="col-span-3">
                       {selectAlternativeList
                         .sort((o1, o2) => {
-                          const findO1 = alternativeVacations.find(
+                          const findO1 = usableAlternativeVacation.find(
                             (i) => i.id == o1,
                           );
 
-                          const findO2 = alternativeVacations.find(
+                          const findO2 = usableAlternativeVacation.find(
                             (i) => i.id == o2,
                           );
 
@@ -316,7 +291,7 @@ export default function RequestVacationClient() {
                             : -1;
                         })
                         .map((item) => {
-                          const findItem = alternativeVacations.find(
+                          const findItem = usableAlternativeVacation.find(
                             (i) => i.id == item,
                           );
 
@@ -391,7 +366,7 @@ export default function RequestVacationClient() {
           <DocumentTable
             firstCheckbox
             headers={alternativeHeaderList}
-            dataList={alternativeVacations}
+            dataList={usableAlternativeVacation}
             checkedList={selectAlternativeList}
             onChecked={handleAlternativeChecked}
             onCheckedAll={handleAlternativeCheckedAll}

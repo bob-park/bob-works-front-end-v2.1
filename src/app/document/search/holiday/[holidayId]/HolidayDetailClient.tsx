@@ -1,33 +1,28 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
-import { FiPrinter, FiDownload } from 'react-icons/fi';
-import { MdOutlineCancel } from 'react-icons/md';
-
+import { useState } from 'react';
 // daisyui
 import { Button, Modal } from 'react-daisyui';
+import { FiDownload, FiPrinter } from 'react-icons/fi';
+import { MdOutlineCancel } from 'react-icons/md';
 
 import { useRouter } from 'next/navigation';
 
+import {
+  useCancelDocument,
+  useGetHolidayWorkReports,
+} from '@/hooks/document/document';
+import useToast from '@/hooks/useToast';
+
 // hooks
-import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
-
-import { documentActions } from '@/store/document';
-import { DocumentsStatus } from '@/store/document/types';
-
+import HolidayWorkReportDocument from '@/components/document/HolidayWorkReportDocument';
 // utils
 import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
-import HolidayWorkReportDocument from '@/components/document/HolidayWorkReportDocument';
 
 type HolidayDetailClientProps = {
   documentId: string;
 };
-
-// actions
-const { requestCancelDocument, requestGetHolidayWorkReportDetail } =
-  documentActions;
 
 function checkDisabledBtn(status?: DocumentsStatus): boolean {
   if (!status) {
@@ -43,21 +38,22 @@ export default function HolidayDetailClient({
   // router
   const router = useRouter();
 
-  // store
-  const dispatch = useAppDispatch();
-  const { holidayWorkReportDetail } = useAppSelector((state) => state.document);
-  const { document: documents, lines } = holidayWorkReportDetail;
+  // toast
+  const { push } = useToast();
 
   // state
   const [showConfirmCancel, setShowConfirmCancel] = useState<boolean>(false);
   const [loaddingPdf, setLoaddingPdf] = useState<boolean>(false);
 
-  // useEffect
-  useEffect(() => {
-    dispatch(
-      requestGetHolidayWorkReportDetail({ documentId: Number(documentId) }),
-    );
-  }, []);
+  // query
+  const { workReport } = useGetHolidayWorkReports(Number(documentId));
+  const { document: documents, lines } = workReport || {};
+
+  const { onCancel, isLoading } = useCancelDocument(() => {
+    setShowConfirmCancel(false);
+    push('휴일 근무 보고서가 취소되었습니다.', 'success');
+    router.refresh();
+  });
 
   // handle
   const handlePrint = () => {};
@@ -87,23 +83,14 @@ export default function HolidayDetailClient({
     if (!documents) {
       return;
     }
-
-    setShowConfirmCancel(false);
-
-    dispatch(
-      requestCancelDocument({
-        id: documents.id,
-        afterHandle: () => router.push('/document/search'),
-        exceptionHandle: {},
-      }),
-    );
+    onCancel(Number(documentId));
   };
 
   return (
     <>
       {/* buttons */}
       <div>
-        <div className="grid grid-cols-3 gap-10 mt-3 justify-end">
+        <div className="mt-3 grid grid-cols-3 justify-end gap-10">
           <Button color="accent" onClick={handlePrint} disabled>
             <FiPrinter className="mr-2 h-5 w-5" size="" />
             인쇄
@@ -133,7 +120,7 @@ export default function HolidayDetailClient({
       </div>
 
       {/* contents */}
-      <div className="bg-base-100 shadow-lg overflow-auto border rounded-xl">
+      <div className="overflow-auto rounded-xl border bg-base-100 shadow-lg">
         <HolidayWorkReportDocument document={documents} lines={lines} />
       </div>
 
