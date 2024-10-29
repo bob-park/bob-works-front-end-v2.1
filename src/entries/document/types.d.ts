@@ -28,6 +28,11 @@ interface UsageVacation {
   alternativeVacations: AlterVacationInfo[];
 }
 
+interface HolidayWorkTimeLogResponse {
+  id: number;
+  calculationLog: string;
+}
+
 type AddVacationRequest = {
   typeId: number;
   vacationType: VacationType;
@@ -93,6 +98,7 @@ type VacationDocumentDetail = {
 };
 
 type HolidayWorkTime = {
+  id: number;
   existBreakTime: boolean;
   startTime: string;
   endTime: string;

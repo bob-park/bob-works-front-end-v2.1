@@ -98,3 +98,9 @@ export async function cancelDocument(documentId: number) {
     .delete(`/api/document/${documentId}/cancel`)
     .json<Documents>();
 }
+
+export async function getHolidayWorkTimeLogs(workTimeId: number) {
+  return await api
+    .get(`/api/document/holiday/work/time/${workTimeId}/logs`)
+    .json<HolidayWorkTimeLogResponse[]>();
+}
