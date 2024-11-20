@@ -18,7 +18,7 @@ const UseAlternativeVacationList = ({
   return (
     <div className="grid grid-cols-1 gap-2">
       {useAlternativeVacations.map((item) => (
-        <div key={`alternative_vacation_list_${item.id}`} className="text-xl">
+        <div key={`alternative_vacation_list_${item.id}`} className="text-base">
           <span>{formatDate(item.effectiveDate)}</span> -{' '}
           <span>{item.effectiveReason}</span>
         </div>
@@ -28,10 +28,6 @@ const UseAlternativeVacationList = ({
 };
 
 function parseDays(days: number, subType?: VacationSubType) {
-  // if (days === 0.5) {
-  //   return ` ${subType === 'AM' ? '오전' : '오후'} 반차 `;
-  // }
-
   return `${days} 일`;
 }
 
@@ -138,7 +134,10 @@ export default function VacationDocument({
                   )} ~ ${formatDate(document.vacationDateTo as Date)}`
                 : formatDate(document.vacationDateFrom as Date)}
             </span>
-            {document.daysCount > 0.5 && (
+            {((document.vacationType === 'ALTERNATIVE' &&
+              document.daysCount !== 1) ||
+              (document.vacationType === 'GENERAL' &&
+                document.daysCount > 1)) && (
               <span className="ml-4">
                 (
                 <span className="font-semibold">
@@ -155,12 +154,29 @@ export default function VacationDocument({
               휴 가 구 분 :
             </div>
             <div className="ml-10 w-full flex-initial">
-              <div className="flex w-full justify-start gap-2">
-                <div className="w-[135px] flex-none text-xl font-semibold">
+              <div className="flex w-full flex-row justify-start gap-2">
+                <div className="flex-none text-xl font-semibold">
                   <span className="tracking-widest">
                     {parseType(document.vacationType, document.vacationSubType)}
                   </span>
                 </div>
+                {/* 대체휴가 사유 */}
+                {document.vacationType === 'ALTERNATIVE' && (
+                  <>
+                    <div className=""> - </div>
+                    <div className="">
+                      <div className="flex flex-col items-center justify-start gap-1">
+                        <div className="w-full">
+                          {useAlternativeVacations && (
+                            <UseAlternativeVacationList
+                              useAlternativeVacations={useAlternativeVacations}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -171,17 +187,7 @@ export default function VacationDocument({
               사 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;유 :
             </div>
             <div className="ml-10 text-xl">
-              {document.vacationType === 'GENERAL' ? (
-                <span className="">{document.reason}</span>
-              ) : (
-                <div className="w-full">
-                  {useAlternativeVacations && (
-                    <UseAlternativeVacationList
-                      useAlternativeVacations={useAlternativeVacations}
-                    />
-                  )}
-                </div>
-              )}
+              <span className="">{document.reason}</span>
             </div>
           </div>
         </div>

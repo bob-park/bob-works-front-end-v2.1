@@ -94,7 +94,22 @@ export function parseType(id: VacationType, subType?: VacationSubType) {
     }
   }
 
-  return vacationTypes.find((item) => item.id == id)?.name;
+  let result = vacationTypes.find((item) => item.id == id)?.name;
+
+  if (id === 'ALTERNATIVE' && subType) {
+    switch (subType) {
+      case 'AM':
+        result += '(오 전)';
+        break;
+      case 'PM':
+        result += '(오 후)';
+        break;
+      default:
+        break;
+    }
+  }
+
+  return result;
 }
 
 export function parseSubType(id: VacationSubType) {
