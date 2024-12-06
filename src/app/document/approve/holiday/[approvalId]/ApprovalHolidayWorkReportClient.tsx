@@ -1,24 +1,18 @@
 'use client';
 
 // react
-import { useEffect, useState } from 'react';
-// daisyui
-import { Button, Input, Modal } from 'react-daisyui';
+import { useState } from 'react';
 
 // next
 import { useRouter } from 'next/navigation';
 
-import {
-  useApproveDocument,
-  useGetApprovalDocumentDetail,
-  useGetHolidayWorkReports,
-} from '@/hooks/document/document';
+import { useApproveDocument, useGetApprovalDocumentDetail, useGetHolidayWorkReports } from '@/hooks/document/document';
 
 import HolidayWorkReportDocument from '@/components/document/HolidayWorkReportDocument';
 
-type ApprovalHolidayWorkReportClientProps = {
+interface ApprovalHolidayWorkReportClientProps {
   approvalId: string;
-};
+}
 
 function checkDisabledBtn(status?: DocumentsStatus): boolean {
   if (!status) {
@@ -28,9 +22,7 @@ function checkDisabledBtn(status?: DocumentsStatus): boolean {
   return status === 'CANCEL' || status === 'REJECT' || status === 'APPROVE';
 }
 
-export default function ApprovalHolidayWorkReportClient({
-  approvalId,
-}: ApprovalHolidayWorkReportClientProps) {
+export default function ApprovalHolidayWorkReportClient({ approvalId }: ApprovalHolidayWorkReportClientProps) {
   // router
   const router = useRouter();
 
@@ -42,10 +34,8 @@ export default function ApprovalHolidayWorkReportClient({
 
   // query
   const { approveDocument } = useGetApprovalDocumentDetail(Number(approvalId));
-  const { workReport } = useGetHolidayWorkReports(
-    approveDocument?.document?.id || -1,
-  );
-  const { onApprove, isLoading } = useApproveDocument(() => {
+  const { workReport } = useGetHolidayWorkReports(approveDocument?.document?.id || -1);
+  const { onApprove } = useApproveDocument(() => {
     router.push('/document/approve/search');
   });
 
@@ -70,11 +60,7 @@ export default function ApprovalHolidayWorkReportClient({
     setOpenApproveModal(false);
   };
 
-  const handleProceedApprove = (
-    approvalId: number,
-    status: DocumentsStatus,
-    reason?: string,
-  ) => {
+  const handleProceedApprove = (approvalId: number, status: DocumentsStatus, reason?: string) => {
     onApprove({ id: approvalId, body: { status, reason } });
   };
 
@@ -82,13 +68,15 @@ export default function ApprovalHolidayWorkReportClient({
     <>
       <div>
         <div className="mt-3 grid grid-cols-2 justify-end gap-10">
-          <Button
+          <button
+            type="button"
+            className=""
             color="error"
             disabled={checkDisabledBtn(approveDocument?.status)}
             onClick={() => setOpenRejectModal(true)}
           >
             반려
-          </Button>
+          </button>
           <Button
             color="primary"
             disabled={checkDisabledBtn(approveDocument?.status)}
@@ -102,10 +90,7 @@ export default function ApprovalHolidayWorkReportClient({
       {/* contents */}
       {workReport && (
         <div className="overflow-auto rounded-xl border bg-base-100 shadow-lg">
-          <HolidayWorkReportDocument
-            document={workReport.document}
-            lines={workReport.lines}
-          />
+          <HolidayWorkReportDocument document={workReport.document} lines={workReport.lines} />
         </div>
       )}
 
