@@ -1,19 +1,19 @@
 import BackDrop from '@/components/BackDrop';
+
 import ApprovalHolidayWorkReportClient from './ApprovalHolidayWorkReportClient';
 
-export default function ApprovalHolidayWorkReportPage({
-  params,
-}: {
-  params: { approvalId: string };
+export default async function ApprovalHolidayWorkReportPage(props: {
+  params: Promise<{ approvalId: string }>;
 }) {
+  const params = await props.params;
   return (
-    <main className="w-full h-full">
+    <main className="h-full w-full">
       <div className="grid grid-cols-1 gap-10">
         {/* title */}
         <div>
           <div className="inline-block">
             <BackDrop />
-            <span className="text-xl font-semibold ml-2">결재</span>
+            <span className="ml-2 text-xl font-semibold">결재</span>
           </div>
         </div>
         <ApprovalHolidayWorkReportClient approvalId={params.approvalId} />

@@ -1,8 +1,9 @@
+import type { Metadata } from 'next';
+
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import ToastProvider from '@/components/toast/ToastProvider';
-import type { Metadata } from 'next';
 
 import DefaultNavBar from './DefaultNavBar';
 import RQProvider from './_component/RQProvider';
@@ -13,17 +14,16 @@ const CLIENT_SERVICE_PATH = process.env.CLIENT_SERVICE_PATH;
 export const metadata: Metadata = {
   title: 'Bob Works',
   description: 'Bob 의 만든 통합 사내 결재',
+  icons: ['/favicon.ico'],
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies();
+
   const apiResponse = await fetch(CLIENT_SERVICE_PATH + '/user', {
     method: 'get',
     headers: {
-      Cookie: `JSESSIONID=${cookies().get('JSESSIONID')?.value || ''}`,
+      Cookie: `JSESSIONID=${cookieStore.get('JSESSIONID')?.value || ''}`,
     },
   });
 
@@ -36,8 +36,7 @@ export default async function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <link rel="icon" href="/favicon.ico" />
-        <title>Bob Works</title>
+        {process.env.NODE_ENV !== 'production' && <script src="https://unpkg.com/react-scan/dist/auto.global.js" />}
       </head>
       <body>
         <ToastProvider limit={5} timeout={5}>

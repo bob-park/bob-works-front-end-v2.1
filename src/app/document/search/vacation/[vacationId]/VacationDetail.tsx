@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // daisyui
 import { Button, Modal } from 'react-daisyui';
 import { FiDownload, FiPrinter } from 'react-icons/fi';
@@ -21,9 +21,9 @@ import VacationDocument from '@/components/document/VacationDocument';
 import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
 
-type VacationDetailProps = {
+interface VacationDetailProps {
   documentId: string;
-};
+}
 
 function checkDisabledBtn(status?: DocumentsStatus): boolean {
   if (!status) {
@@ -52,7 +52,7 @@ export default function VacationDetail({ documentId }: VacationDetailProps) {
     useAlternativeVacations,
   } = vacationDocuments || {};
 
-  const { onCancel, isLoading } = useCancelDocument(() => {
+  const { onCancel } = useCancelDocument(() => {
     setShowConfirmCancel(false);
     push('휴가계가 취소되었습니다.', 'success');
     router.refresh();

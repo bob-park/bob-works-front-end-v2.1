@@ -7,17 +7,16 @@ import ChatRoom from './_component/ChatRoom';
 
 const { CLIENT_SERVICE_PATH } = process.env;
 
-export default async function ChatRoomPage({
-  params,
-}: {
-  params: { roomId: string };
+export default async function ChatRoomPage(props: {
+  params: Promise<{ roomId: string }>;
 }) {
+  const params = await props.params;
   const { roomId } = params;
 
   const room = await ky
     .get(`${CLIENT_SERVICE_PATH}/chat/room/${roomId}`, {
       headers: {
-        Cookie: `JSESSIONID=${cookies().get('JSESSIONID')?.value || ''}`,
+        Cookie: `JSESSIONID=${(await cookies()).get('JSESSIONID')?.value || ''}`,
       },
     })
     .json<ChatRoomResponse>();

@@ -3,11 +3,10 @@ import BackDrop from '@/components/BackDrop';
 import LoanDetailContents from './_component/LoanDetailContents';
 import LoanRepaymentList from './_component/LoanRepaymentList';
 
-export default async function LoanDetailPage({
-  params,
-}: {
-  params: { loanId: number };
+export default async function LoanDetailPage(props: {
+  params: Promise<{ loanId: number }>;
 }) {
+  const params = await props.params;
   const { loanId } = params;
 
   return (
