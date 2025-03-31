@@ -10,10 +10,7 @@ type HolidayTooltipProps = {
   workTimeId: number;
 };
 
-export default function HolidayTooltip({
-  open,
-  workTimeId,
-}: HolidayTooltipProps) {
+export default function HolidayTooltip({ open, workTimeId }: HolidayTooltipProps) {
   // query
   const { logs } = useHolidayWorkTimeLog(workTimeId);
 
@@ -28,10 +25,7 @@ export default function HolidayTooltip({
       )}
     >
       {logs.map((log) => (
-        <div
-          key={`holiday_work_time_log_${log.id}`}
-          className="w-full text-left"
-        >
+        <div key={`holiday_work_time_log_${log.id}`} className="w-full text-left">
           {log.calculationLog}
         </div>
       ))}

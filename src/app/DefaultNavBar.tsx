@@ -1,17 +1,7 @@
 'use client';
 
 import { ReactNode, useEffect, useState } from 'react';
-// daisyui
-import {
-  Avatar,
-  Badge,
-  Button,
-  Drawer,
-  Dropdown,
-  Menu,
-  Navbar,
-  Tooltip,
-} from 'react-daisyui';
+
 import { AiOutlineSetting, AiOutlineUnorderedList } from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
 import { FaListUl } from 'react-icons/fa6';
@@ -23,40 +13,29 @@ import { MdOutlineHolidayVillage } from 'react-icons/md';
 
 import Link from 'next/link';
 // next
-import {
-  usePathname,
-  useRouter,
-  useSelectedLayoutSegments,
-} from 'next/navigation';
+import { usePathname, useRouter, useSelectedLayoutSegments } from 'next/navigation';
 
 import { useCountUnread } from '@/hooks/notice';
 
 // hooks
 import { useStore } from '@/shared/rootStore';
 
+// daisyui
+import { Avatar, Badge, Button, Drawer, Dropdown, Menu, Navbar, Tooltip } from 'react-daisyui';
+
 import CustomerChat from './CustomerChat';
 
 const MANAGER_ROLES = ['ROLE_ADMIN', 'ROLE_MANAGER'];
 
 function activeMenu(segments: string[], menuPaths: string[]) {
-  if (
-    menuPaths.every((menuPath) =>
-      segments.some((segment) => segment === menuPath),
-    )
-  ) {
+  if (menuPaths.every((menuPath) => segments.some((segment) => segment === menuPath))) {
     return 'active';
   }
 
   return '';
 }
 
-export default function DefaultNavBar({
-  user,
-  children,
-}: {
-  user: User;
-  children: ReactNode;
-}) {
+export default function DefaultNavBar({ user, children }: { user: User; children: ReactNode }) {
   // state
   const [visible, setVisible] = useState<boolean>(false);
   const [showChat, setShowChat] = useState<boolean>(false);
@@ -108,10 +87,7 @@ export default function DefaultNavBar({
         side={
           <aside className="h-full w-80 bg-base-100 lg:fixed">
             <div className="sticky top-0 items-center gap-2 bg-base-100 bg-opacity-90 px-4 py-2 backdrop-blur lg:flex">
-              <Link
-                className="btn btn-ghost mx-2 px-2 text-2xl font-bold normal-case"
-                href="/"
-              >
+              <Link className="btn btn-ghost mx-2 px-2 text-2xl font-bold normal-case" href="/">
                 Bob Works
               </Link>
             </div>
@@ -124,10 +100,7 @@ export default function DefaultNavBar({
                 </Link>
               </Menu.Item>
               <Menu.Item>
-                <Link
-                  className={activeMenuItem('/vacation/usage')}
-                  href="/vacation/usage"
-                >
+                <Link className={activeMenuItem('/vacation/usage')} href="/vacation/usage">
                   <LuLayoutDashboard />
                   연차 사용 내역
                 </Link>
@@ -137,19 +110,13 @@ export default function DefaultNavBar({
                 <h2>문서 결재</h2>
               </Menu.Title>
               <Menu.Item>
-                <Link
-                  className={activeMenuItem('/document/search')}
-                  href="/document/search"
-                >
+                <Link className={activeMenuItem('/document/search')} href="/document/search">
                   <AiOutlineUnorderedList />
                   결재 신청 목록
                 </Link>
               </Menu.Item>
               <Menu.Item>
-                <Link
-                  className={activeMenuItem('/document/approve')}
-                  href="/document/approve/search"
-                >
+                <Link className={activeMenuItem('/document/approve')} href="/document/approve/search">
                   <GrDocumentTime />
                   결재 대기 목록
                 </Link>
@@ -159,19 +126,13 @@ export default function DefaultNavBar({
                 <h2>문서 신청</h2>
               </Menu.Title>
               <Menu.Item>
-                <Link
-                  className={activeMenuItem('/request/vacation')}
-                  href="/request/vacation"
-                >
+                <Link className={activeMenuItem('/request/vacation')} href="/request/vacation">
                   <GrDocumentUpdate />
                   휴가계 신청
                 </Link>
               </Menu.Item>
               <Menu.Item>
-                <Link
-                  className={activeMenuItem('/request/holiday')}
-                  href="/request/holiday"
-                >
+                <Link className={activeMenuItem('/request/holiday')} href="/request/holiday">
                   <MdOutlineHolidayVillage />
                   휴일 근무 보고서 신청
                 </Link>
@@ -181,19 +142,13 @@ export default function DefaultNavBar({
                 <h2>가계 대출</h2>
               </Menu.Title>
               <Menu.Item>
-                <Link
-                  className={activeMenu(segments, ['loan', 'add'])}
-                  href="/loan/add"
-                >
+                <Link className={activeMenu(segments, ['loan', 'add'])} href="/loan/add">
                   <IoAddCircleOutline />
                   대출 추가
                 </Link>
               </Menu.Item>
               <Menu.Item>
-                <Link
-                  className={activeMenu(segments, ['loan', 'list'])}
-                  href="/loan/list"
-                >
+                <Link className={activeMenu(segments, ['loan', 'list'])} href="/loan/list">
                   <FaListUl />
                   대출 목록
                 </Link>
@@ -206,10 +161,7 @@ export default function DefaultNavBar({
                     <h2>고객의 소리</h2>
                   </Menu.Title>
                   <Menu.Item>
-                    <Link
-                      className={activeMenu(segments, ['chats'])}
-                      href="/chats"
-                    >
+                    <Link className={activeMenu(segments, ['chats'])} href="/chats">
                       <FaListUl />
                       잼나는 소리들
                     </Link>
@@ -233,18 +185,11 @@ export default function DefaultNavBar({
                     viewBox="0 0 24 24"
                     className="inline-block h-6 w-6 stroke-current"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                 </Button>
               </div>
-              <div className="mx-2 flex-1 px-2 text-2xl font-bold lg:hidden">
-                Bob Works
-              </div>
+              <div className="mx-2 flex-1 px-2 text-2xl font-bold lg:hidden">Bob Works</div>
             </Navbar.Start>
             <Navbar.End className="lg:w-full">
               <div className="mr-5">
@@ -252,30 +197,17 @@ export default function DefaultNavBar({
                 <b className="ml-4">{user?.name}</b>
               </div>
               <div className="relative mr-8">
-                <Button
-                  color="ghost"
-                  shape="circle"
-                  onClick={() => router.push('/notice')}
-                >
+                <Button color="ghost" shape="circle" onClick={() => router.push('/notice')}>
                   <IoNotificationsOutline className="h-7 w-7" />
                 </Button>
                 {!!countOfUnread && (
-                  <Badge
-                    className="absolute right-1"
-                    color="secondary"
-                    size="md"
-                  >
+                  <Badge className="absolute right-1" color="secondary" size="md">
                     +{countOfUnread}
                   </Badge>
                 )}
               </div>
               <Dropdown className="mr-10" hover end>
-                <Avatar
-                  src="/api/user/avatar"
-                  size="sm"
-                  shape="circle"
-                  border
-                />
+                <Avatar src="/api/user/avatar" size="sm" shape="circle" border />
                 <Dropdown.Menu className="w-48 bg-base-100 shadow-xl">
                   <li>
                     <Link href="/settings/profile">
@@ -312,17 +244,12 @@ export default function DefaultNavBar({
         <div className="fixed bottom-10 right-10">
           <div
             className={`absolute bottom-[80px] right-0 transition-all duration-300 ${
-              showChat
-                ? 'visible translate-y-0 opacity-100'
-                : 'invisible translate-y-6 opacity-0'
+              showChat ? 'visible translate-y-0 opacity-100' : 'invisible translate-y-6 opacity-0'
             }`}
           >
             <CustomerChat user={user} />
           </div>
-          <Tooltip
-            className="hover:animate-bounce"
-            message="무엇을 도와드릴까요?"
-          >
+          <Tooltip className="hover:animate-bounce" message="무엇을 도와드릴까요?">
             <Avatar
               size="sm"
               shape="circle"

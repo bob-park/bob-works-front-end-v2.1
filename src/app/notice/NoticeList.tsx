@@ -1,15 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-// daisyui
-import { Badge } from 'react-daisyui';
 
 import { useRead, useSearchNotice } from '@/hooks/notice';
 
-import { getTotalPageCount } from '@/utils/paginationUtils';
-
 import DocumentPagination from '@/components/DocumentPagination';
 import DocumentTable from '@/components/DocumentTable';
+
+import { getTotalPageCount } from '@/utils/paginationUtils';
+
+// daisyui
+import { Badge } from 'react-daisyui';
 import TimeAgo from 'timeago-react';
 import * as timeago from 'timeago.js';
 import ko from 'timeago.js/lib/lang/ko';
@@ -61,18 +62,11 @@ export default function NoticeList() {
   return (
     <>
       <div className="overflow-auto rounded-xl border bg-base-100 shadow-xl">
-        <DocumentTable
-          headers={headers}
-          dataList={notices.content}
-          onRowClick={(id: string) => handleReadNotice(id)}
-        />
+        <DocumentTable headers={headers} dataList={notices.content} onRowClick={(id: string) => handleReadNotice(id)} />
       </div>
       <div className="flex justify-center">
         <DocumentPagination
-          total={getTotalPageCount(
-            notices.total || 0,
-            notices.pageable?.size || 0,
-          )}
+          total={getTotalPageCount(notices.total || 0, notices.pageable?.size || 0)}
           current={(notices.pageable?.page || 0) + 1}
           onPrev={() =>
             setSearchNoticeParams({

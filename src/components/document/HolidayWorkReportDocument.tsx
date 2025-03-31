@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { formatDate } from '@/utils/ParseUtils';
-
 import HolidayTooltip from '@/components/document/HolidayTooltip';
+
+import { formatDate } from '@/utils/ParseUtils';
 
 import ApprovalLines, { ApprovalLine } from './ApprovalLines';
 
@@ -19,13 +19,7 @@ const emptyWorkUser: HolidayWorkUser = {
   times: [],
 };
 
-const ExistWorkUserRow = ({
-  user,
-  workPurpose,
-}: {
-  user: HolidayWorkUser;
-  workPurpose: string;
-}) => {
+const ExistWorkUserRow = ({ user, workPurpose }: { user: HolidayWorkUser; workPurpose: string }) => {
   // state
   const [openTooltip, setOpenTooltip] = useState<boolean>(false);
 
@@ -37,8 +31,7 @@ const ExistWorkUserRow = ({
       <td className="w-[130px] border-r border-black pb-2 text-center">
         {user.times.map((time, i) => (
           <p key={`workTime_${user.workUserName}_${i}`}>
-            <span>{time.startTime.substring(0, 5)}</span> ~{' '}
-            <span>{time.endTime.substring(0, 5)}</span>
+            <span>{time.startTime.substring(0, 5)}</span> ~ <span>{time.endTime.substring(0, 5)}</span>
           </p>
         ))}
       </td>
@@ -48,20 +41,12 @@ const ExistWorkUserRow = ({
         onMouseLeave={() => setOpenTooltip(false)}
       >
         <div>{user.totalWorkTime}</div>
-        {user.times[0].id && (
-          <HolidayTooltip open={openTooltip} workTimeId={user.times[0].id} />
-        )}
+        {user.times[0].id && <HolidayTooltip open={openTooltip} workTimeId={user.times[0].id} />}
       </td>
       <td className="border-r border-black pb-2 text-center">{workPurpose}</td>
-      <td className="border-r border-black pb-2 text-center font-bold">
-        {user.workUserName}
-      </td>
-      <td className="w-[80px] border-r border-black pb-2 text-center font-bold">
-        {user.isVacation ? '유' : '무'}
-      </td>
-      <td className="w-[80px] border-r border-black pb-2 text-center font-bold">
-        {user.paymentTime}
-      </td>
+      <td className="border-r border-black pb-2 text-center font-bold">{user.workUserName}</td>
+      <td className="w-[80px] border-r border-black pb-2 text-center font-bold">{user.isVacation ? '유' : '무'}</td>
+      <td className="w-[80px] border-r border-black pb-2 text-center font-bold">{user.paymentTime}</td>
       <td></td>
     </tr>
   );
@@ -82,10 +67,7 @@ const EmptyWorkUserRow = () => {
   );
 };
 
-export default function HolidayWorkReportDocument({
-  document,
-  lines,
-}: HolidayWorkReportDocumentProps) {
+export default function HolidayWorkReportDocument({ document, lines }: HolidayWorkReportDocumentProps) {
   if (!document || !lines) {
     return;
   }
@@ -115,10 +97,7 @@ export default function HolidayWorkReportDocument({
   const workUsers: HolidayWorkUser[] = [...document.users, ...emptyUsers];
 
   return (
-    <div
-      id="holidayWorkReportDocument"
-      className="relative m-[5px] w-[996px] bg-white py-5 text-black"
-    >
+    <div id="holidayWorkReportDocument" className="relative m-[5px] w-[996px] bg-white py-5 text-black">
       {document.status === 'CANCEL' && (
         <div className="absolute" style={{ top: '500px', left: '300px' }}>
           <div className="grid h-full w-full place-content-center opacity-50">
@@ -141,10 +120,7 @@ export default function HolidayWorkReportDocument({
         {/* 작성일 */}
         <div className="mt-3 flex w-full justify-end">
           <div className="text-xl font-medium tracking-widest">
-            작 성 일 :
-            <span className="ml-10">
-              {formatDate(document.createdDate, 'yyyy 년 MM 월 dd 일')}
-            </span>
+            작 성 일 :<span className="ml-10">{formatDate(document.createdDate, 'yyyy 년 MM 월 dd 일')}</span>
           </div>
         </div>
 
@@ -152,30 +128,17 @@ export default function HolidayWorkReportDocument({
         <table className="table-fixed border-2 border-black">
           <thead className="border-b-2 border-double border-black">
             <tr>
-              <th
-                rowSpan={2}
-                className="w-[120px] border-r border-black pb-2 text-xl"
-              >
+              <th rowSpan={2} className="w-[120px] border-r border-black pb-2 text-xl">
                 근무일
               </th>
-              <th
-                rowSpan={2}
-                colSpan={2}
-                className="border-r border-black pb-2 text-xl"
-              >
+              <th rowSpan={2} colSpan={2} className="border-r border-black pb-2 text-xl">
                 <p>근무시간</p>
                 <p>(비행시간)</p>
               </th>
-              <th
-                rowSpan={2}
-                className="w-[280px] border-r border-black pb-2 text-xl"
-              >
+              <th rowSpan={2} className="w-[280px] border-r border-black pb-2 text-xl">
                 근무목적
               </th>
-              <th
-                rowSpan={2}
-                className="w-[100px] border-r border-black pb-2 text-xl"
-              >
+              <th rowSpan={2} className="w-[100px] border-r border-black pb-2 text-xl">
                 근무자
               </th>
               <th colSpan={2} className="border-r border-black pb-2">

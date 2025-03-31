@@ -8,12 +8,7 @@ type DocumentPaginationProps = {
   onPrev?: () => void;
 };
 
-export default function DocumentPagination({
-  total,
-  current,
-  onNext,
-  onPrev,
-}: DocumentPaginationProps) {
+export default function DocumentPagination({ total, current, onNext, onPrev }: DocumentPaginationProps) {
   // useEffect
 
   // handle
@@ -27,19 +22,11 @@ export default function DocumentPagination({
 
   return (
     <div className="join">
-      <button
-        className="join-item btn"
-        disabled={current === 1}
-        onClick={handlePrev}
-      >
+      <button className="btn join-item" disabled={current === 1} onClick={handlePrev}>
         «
       </button>
-      <button className="join-item btn">Page {current}</button>
-      <button
-        className="join-item btn"
-        disabled={current === total}
-        onClick={handleNext}
-      >
+      <button className="btn join-item">Page {current}</button>
+      <button className="btn join-item" disabled={current === total} onClick={handleNext}>
         »
       </button>
     </div>

@@ -54,12 +54,7 @@ type Documents = {
   lastModifiedBy?: string;
 };
 
-type DocumentsStatus =
-  | 'WAITING'
-  | 'PROCEEDING'
-  | 'APPROVE'
-  | 'REJECT'
-  | 'CANCEL';
+type DocumentsStatus = 'WAITING' | 'PROCEEDING' | 'APPROVE' | 'REJECT' | 'CANCEL';
 
 type DocumentApproval = {
   id: nubmer;

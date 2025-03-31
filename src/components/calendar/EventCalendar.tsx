@@ -3,11 +3,11 @@
 // react
 import { useState } from 'react';
 
-// dayisy ui
-import { Badge, Button, Join } from 'react-daisyui';
-
 // icon
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+
+// dayisy ui
+import { Badge, Button, Join } from 'react-daisyui';
 
 // day of week
 const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
@@ -45,12 +45,7 @@ function getTotalWeekNumber(date: Date): number {
   return count;
 }
 
-function EventCalendar({
-  events,
-  onPrev,
-  onNext,
-  onToday,
-}: EventCalendarProps) {
+function EventCalendar({ events, onPrev, onNext, onToday }: EventCalendarProps) {
   // state
   const [nowDate, setNowDate] = useState<Date>(new Date());
 
@@ -76,16 +71,14 @@ function EventCalendar({
   };
 
   return (
-    <div className="grid grid-cols-3 gap-10 w-full">
+    <div className="grid w-full grid-cols-3 gap-10">
       {/* header */}
       <div></div>
-      <div className="flex justify-center items-center">
+      <div className="flex items-center justify-center">
         <Button className="join-item" onClick={handlePrevMonth}>
           <FaAngleLeft />
         </Button>
-        <strong className="text-xl w-[120px] mx-5">
-          {parseHeaderDate(nowDate)}
-        </strong>
+        <strong className="mx-5 w-[120px] text-xl">{parseHeaderDate(nowDate)}</strong>
         <Button className="join-item" onClick={handleNextMonth}>
           <FaAngleRight />
         </Button>
@@ -104,7 +97,7 @@ function EventCalendar({
       </div>
       {/* contents */}
 
-      <div className="col-span-3 border-l border-t border-b border-gray-300">
+      <div className="col-span-3 border-b border-l border-t border-gray-300">
         <div className="grid grid-cols-7 text-center text-xl font-extrabold">
           {/* day of the week */}
           {daysOfWeek.map((item, index) => (
@@ -126,7 +119,7 @@ function EventCalendar({
                 key={`event-calendar-week-${weekIndex}`}
                 className="col-span-7 h-32 border-t border-gray-300 text-lg font-semibold"
               >
-                <div className="grid grid-cols-7 h-full">
+                <div className="grid h-full grid-cols-7">
                   {Array(7)
                     .fill('')
                     .map((item, daysIndex) => {
@@ -149,10 +142,7 @@ function EventCalendar({
                       } else {
                         // prev Month date
                         const prevMonthDate = new Date(calendarDate);
-                        prevMonthDate.setDate(
-                          calendarDate.getDate() -
-                            (calendarDate.getDay() - daysIndex),
-                        );
+                        prevMonthDate.setDate(calendarDate.getDate() - (calendarDate.getDay() - daysIndex));
 
                         outputDate = prevMonthDate.getDate();
                         tempDate = prevMonthDate;
@@ -162,44 +152,32 @@ function EventCalendar({
                       return (
                         <div
                           key={`event-calendar-day-of-week-${daysIndex}`}
-                          className="border-r border-gray-300 h-full"
+                          className="h-full border-r border-gray-300"
                         >
                           <div
-                            className={`text-right pt-1 pr-3 ${
+                            className={`pr-3 pt-1 text-right ${
                               daysIndex === 0 && 'text-red-600'
                             } ${daysIndex === 6 && 'text-blue-600'}`}
                           >
                             {isNow ? (
-                              <Badge
-                                className="text-white"
-                                color="primary"
-                                size="lg"
-                              >
+                              <Badge className="text-white" color="primary" size="lg">
                                 {outputDate}
                               </Badge>
                             ) : (
-                              <span
-                                className={`${
-                                  (isPrevMonth || isNextMonth) &&
-                                  'text-gray-300'
-                                }`}
-                              >
-                                {outputDate}
-                              </span>
+                              <span className={`${(isPrevMonth || isNextMonth) && 'text-gray-300'}`}>{outputDate}</span>
                             )}
                           </div>
-                          <div className="text-xs text-left h-24 overflow-auto">
+                          <div className="h-24 overflow-auto text-left text-xs">
                             {events
                               .filter(
                                 (event) =>
-                                  tempDate.getTime() >=
-                                    event.startDate.getTime() &&
+                                  tempDate.getTime() >= event.startDate.getTime() &&
                                   tempDate.getTime() <= event.endDate.getTime(),
                               )
                               .map((event) => (
                                 <div
                                   key={`calender-event_date_${tempDate}`}
-                                  className={`mb-1 mx-1 pl-2 border border-blue-500 rounded-xl bg-blue-500 text-white`}
+                                  className={`mx-1 mb-1 rounded-xl border border-blue-500 bg-blue-500 pl-2 text-white`}
                                 >
                                   {event.name}
                                 </div>

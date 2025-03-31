@@ -36,11 +36,7 @@ export default function UsageVacationList() {
         <div className="flex flex-row items-center gap-4">
           <div className="">총 사용 개수</div>:
           <div className="text-lg font-bold">
-            <span>
-              {usageVacations
-                .map((item) => item.daysCount)
-                .reduce((patialSum, a) => patialSum + a, 0)}
-            </span>
+            <span>{usageVacations.map((item) => item.daysCount).reduce((patialSum, a) => patialSum + a, 0)}</span>
             <span> 개</span>
           </div>
         </div>
@@ -69,9 +65,7 @@ export default function UsageVacationList() {
                 </td>
                 <td className="text-center" width={200}>
                   {parseVacationType(item.vacationType)}{' '}
-                  {item.vacationSubType && (
-                    <span>({parseVacationSubType(item.vacationSubType)})</span>
-                  )}
+                  {item.vacationSubType && <span>({parseVacationSubType(item.vacationSubType)})</span>}
                 </td>
                 <td className="text-center" width={150}>
                   {item.daysCount}
@@ -79,18 +73,12 @@ export default function UsageVacationList() {
                 <td className="text-center" width={250}>
                   {item.daysCount > 1 ? (
                     <div>
-                      <span>
-                        {dayjs(item.vacationDateFrom).format('YYYY-MM-DD')}
-                      </span>
+                      <span>{dayjs(item.vacationDateFrom).format('YYYY-MM-DD')}</span>
                       <span> ~ </span>
-                      <span>
-                        {dayjs(item.vacationDateTo).format('YYYY-MM-DD')}
-                      </span>
+                      <span>{dayjs(item.vacationDateTo).format('YYYY-MM-DD')}</span>
                     </div>
                   ) : (
-                    <div>
-                      {dayjs(item.vacationDateFrom).format('YYYY-MM-DD')}
-                    </div>
+                    <div>{dayjs(item.vacationDateFrom).format('YYYY-MM-DD')}</div>
                   )}
                 </td>
                 <td className="text-left" width={150}>
@@ -99,9 +87,7 @@ export default function UsageVacationList() {
                 <td className="text-left" width={300}>
                   {item.alternativeVacations?.map((alter) => (
                     <p key={`usage-vacation-alter-${alter.id}`}>
-                      <span>
-                        {dayjs(alter.effectiveDate).format('YYYY-MM-DD')}
-                      </span>
+                      <span>{dayjs(alter.effectiveDate).format('YYYY-MM-DD')}</span>
                       <span> - </span>
                       <span>{alter.effectiveReason}</span>
                     </p>

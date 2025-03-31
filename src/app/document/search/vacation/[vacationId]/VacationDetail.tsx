@@ -1,25 +1,24 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-// daisyui
-import { Button, Modal } from 'react-daisyui';
+
 import { FiDownload, FiPrinter } from 'react-icons/fi';
 import { MdOutlineCancel } from 'react-icons/md';
 
 import { useRouter } from 'next/navigation';
 
-import {
-  useCancelDocument,
-  useGetVacationDocument,
-} from '@/hooks/document/document';
+import { useCancelDocument, useGetVacationDocument } from '@/hooks/document/document';
 import useToast from '@/hooks/useToast';
 
 // hooks
 // store
 import VacationDocument from '@/components/document/VacationDocument';
+
 // utils
 import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
+// daisyui
+import { Button, Modal } from 'react-daisyui';
 
 type VacationDetailProps = {
   documentId: string;
@@ -46,11 +45,7 @@ export default function VacationDetail({ documentId }: VacationDetailProps) {
 
   // query
   const { vacationDocuments } = useGetVacationDocument(Number(documentId));
-  const {
-    document: documents,
-    lines,
-    useAlternativeVacations,
-  } = vacationDocuments || {};
+  const { document: documents, lines, useAlternativeVacations } = vacationDocuments || {};
 
   const { onCancel, isLoading } = useCancelDocument(() => {
     setShowConfirmCancel(false);
@@ -100,10 +95,7 @@ export default function VacationDetail({ documentId }: VacationDetailProps) {
             인쇄
           </Button>
 
-          <Button
-            onClick={handleCapture}
-            disabled={checkDisabledBtn(documents?.status) || loaddingPdf}
-          >
+          <Button onClick={handleCapture} disabled={checkDisabledBtn(documents?.status) || loaddingPdf}>
             {loaddingPdf ? (
               <span className="loading loading-spinner loading-lg" />
             ) : (
@@ -124,11 +116,7 @@ export default function VacationDetail({ documentId }: VacationDetailProps) {
       </div>
       {/* contents */}
       <div className="overflow-auto rounded-xl border bg-base-100 shadow-lg">
-        <VacationDocument
-          document={documents}
-          lines={lines}
-          useAlternativeVacations={useAlternativeVacations}
-        />
+        <VacationDocument document={documents} lines={lines} useAlternativeVacations={useAlternativeVacations} />
       </div>
       {/* 취소 modal */}
       <Modal open={showConfirmCancel}>

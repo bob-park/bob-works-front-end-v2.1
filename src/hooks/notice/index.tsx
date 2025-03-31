@@ -1,9 +1,4 @@
-import {
-  countUnread,
-  getNotice,
-  read,
-  searchNotice,
-} from '@/entries/notice/api';
+import { countUnread, getNotice, read, searchNotice } from '@/entries/notice/api';
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 

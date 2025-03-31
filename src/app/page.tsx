@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import DabashBoard from './DashBoard';
 
 export default function Home() {

@@ -1,9 +1,7 @@
 import api from '@/entries';
 
 export async function searchNotice(params: PageParams) {
-  return await api
-    .get('/api/notice/search', { searchParams: params })
-    .json<Page<Notice>>();
+  return await api.get('/api/notice/search', { searchParams: params }).json<Page<Notice>>();
 }
 
 export async function countUnread() {

@@ -5,9 +5,7 @@ export async function getUser() {
 }
 
 export async function getUsableAlternativeVacation() {
-  return await api
-    .get('/api/user/alternative/vacation/usable')
-    .json<AlternativeVacation[]>();
+  return await api.get('/api/user/alternative/vacation/usable').json<AlternativeVacation[]>();
 }
 
 export async function updateUserAvatar(formData: FormData) {
@@ -15,9 +13,7 @@ export async function updateUserAvatar(formData: FormData) {
 }
 
 export async function updateSignature(id: number, formData: FormData) {
-  return await api
-    .post(`/api/user/${id}/document/signature`, { body: formData })
-    .json<User>();
+  return await api.post(`/api/user/${id}/document/signature`, { body: formData }).json<User>();
 }
 
 export async function getAllUser() {

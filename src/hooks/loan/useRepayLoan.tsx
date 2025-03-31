@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import { repayLoan } from '@/entries/loan/api';
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function useRepayLoan(loanId: number, onSuccess?: () => void) {
   const queryClient = useQueryClient();

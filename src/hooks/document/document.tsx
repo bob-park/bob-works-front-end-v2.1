@@ -69,13 +69,8 @@ export function useApproveDocument(onSuccess?: () => void) {
 
   const { mutate, isPending } = useMutation({
     mutationKey: ['documents', 'approve'],
-    mutationFn: ({
-      id,
-      body,
-    }: {
-      id: number;
-      body: { status: DocumentsStatus; reason?: string };
-    }) => approveDocument(id, body),
+    mutationFn: ({ id, body }: { id: number; body: { status: DocumentsStatus; reason?: string } }) =>
+      approveDocument(id, body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] });
 
@@ -91,8 +86,7 @@ export function useAddHolidayWorkReport(onSuccess?: () => void) {
 
   const { mutate, isPending } = useMutation({
     mutationKey: ['documents', 'holiday'],
-    mutationFn: (body: AddHolidayWorkReportRequest) =>
-      addHolidayWorkReport(body),
+    mutationFn: (body: AddHolidayWorkReportRequest) => addHolidayWorkReport(body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] });
 

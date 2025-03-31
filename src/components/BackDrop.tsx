@@ -1,9 +1,10 @@
 'use client';
 
+import { IoChevronBackSharp } from 'react-icons/io5';
+
 import { useRouter } from 'next/navigation';
 
 import { Button } from 'react-daisyui';
-import { IoChevronBackSharp } from 'react-icons/io5';
 
 export default function BackDrop() {
   const router = useRouter();
@@ -14,7 +15,7 @@ export default function BackDrop() {
 
   return (
     <Button color="ghost" onClick={handleBackDrop}>
-      <IoChevronBackSharp className="w-5 h-5" />
+      <IoChevronBackSharp className="h-5 w-5" />
     </Button>
   );
 }

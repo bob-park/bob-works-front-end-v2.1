@@ -2,7 +2,7 @@ import SearchDocumentApprovalClient from './SearchDocumentApporvalClient';
 
 export default function ApproveDocumentSearchPage() {
   return (
-    <main className="w-full h-full">
+    <main className="h-full w-full">
       <div className="grid grid-cols-1 gap-8"></div>
 
       <div className="my-4">

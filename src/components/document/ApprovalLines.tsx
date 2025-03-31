@@ -1,6 +1,5 @@
-import { Tooltip } from 'react-daisyui';
-
 import { format } from 'date-fns';
+import { Tooltip } from 'react-daisyui';
 
 import ApproveStamp from './ApproveStamp';
 import RejectStamp from './RejectStamp';
@@ -35,12 +34,7 @@ const Stamp = ({
 
   return (
     <div className="grid items-center justify-center">
-      <Tooltip
-        message={`${format(new Date(approveDate), 'yyyy-MM-dd HH:mm:ss')} ${
-          reason || ''
-        }`}
-        position="bottom"
-      >
+      <Tooltip message={`${format(new Date(approveDate), 'yyyy-MM-dd HH:mm:ss')} ${reason || ''}`} position="bottom">
         {status === 'APPROVE' && <ApproveStamp userId={userId} />}
         {status === 'REJECT' && <RejectStamp />}
       </Tooltip>
@@ -50,10 +44,7 @@ const Stamp = ({
 
 export default function ApprovalLines({ lines }: ApprovalLinesProps) {
   return (
-    <table
-      className="text-center font-bold"
-      style={{ border: '1px solid black' }}
-    >
+    <table className="text-center font-bold" style={{ border: '1px solid black' }}>
       <tbody className="">
         <tr className="">
           <td

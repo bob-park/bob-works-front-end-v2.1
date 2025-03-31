@@ -2,31 +2,26 @@
 
 // react
 import { FormEvent, useState } from 'react';
-// daisyui
-import { Button, Form, Select } from 'react-daisyui';
+
 // react-icons
 import { BiSearch } from 'react-icons/bi';
 import { GrPowerCycle } from 'react-icons/gr';
 
 import { useRouter } from 'next/navigation';
 
-import {
-  useGetDocumentType,
-  useSearchDocument,
-} from '@/hooks/document/document';
-
-// hooks
-// utils
-import {
-  parseDocumentStatus,
-  parseDocumentType,
-  parsePageName,
-} from '@/utils/ParseUtils';
-import { getTotalPageCount } from '@/utils/paginationUtils';
+import { useGetDocumentType, useSearchDocument } from '@/hooks/document/document';
 
 import DocumentPagination from '@/components/DocumentPagination';
 // component
 import DocumentTable from '@/components/DocumentTable';
+
+// hooks
+// utils
+import { parseDocumentStatus, parseDocumentType, parsePageName } from '@/utils/ParseUtils';
+import { getTotalPageCount } from '@/utils/paginationUtils';
+
+// daisyui
+import { Button, Form, Select } from 'react-daisyui';
 // store
 import TimeAgo from 'timeago-react';
 import * as timeago from 'timeago.js';
@@ -135,16 +130,11 @@ export default function SearchDocumentClient() {
               </div>
               <div className="col-span-1">
                 <Select color="primary">
-                  {new Array({ id: -1, name: '전체' })
-                    .concat(documentsTypes)
-                    .map((type) => (
-                      <Select.Option
-                        key={`documentType_${type.id}`}
-                        value={type.id}
-                      >
-                        {type.name}
-                      </Select.Option>
-                    ))}
+                  {new Array({ id: -1, name: '전체' }).concat(documentsTypes).map((type) => (
+                    <Select.Option key={`documentType_${type.id}`} value={type.id}>
+                      {type.name}
+                    </Select.Option>
+                  ))}
                 </Select>
               </div>
               <div className="col-span-1 pt-2 text-center">
@@ -153,10 +143,7 @@ export default function SearchDocumentClient() {
               <div className="col-span-1">
                 <Select color="primary">
                   {documentStatus.map((type) => (
-                    <Select.Option
-                      key={`documentStatus_${type.id}`}
-                      value={type.id}
-                    >
+                    <Select.Option key={`documentStatus_${type.id}`} value={type.id}>
                       {type.name}
                     </Select.Option>
                   ))}
@@ -188,20 +175,12 @@ export default function SearchDocumentClient() {
       </div>
 
       <div className="overflow-auto rounded-xl border bg-base-100 shadow-xl">
-        <DocumentTable
-          firstCheckbox
-          headers={headers}
-          dataList={dataList}
-          onRowClick={handleMoveDetail}
-        />
+        <DocumentTable firstCheckbox headers={headers} dataList={dataList} onRowClick={handleMoveDetail} />
       </div>
 
       <div className="flex justify-center">
         <DocumentPagination
-          total={getTotalPageCount(
-            documents.total || 0,
-            documents.pageable.size || 0,
-          )}
+          total={getTotalPageCount(documents.total || 0, documents.pageable.size || 0)}
           current={(documents.pageable.page || 0) + 1}
           onPrev={() => setPage({ ...page, page: page.page - 1 })}
           onNext={() => setPage({ ...page, page: page.page + 1 })}

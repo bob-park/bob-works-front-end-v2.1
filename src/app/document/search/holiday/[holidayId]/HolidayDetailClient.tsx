@@ -1,24 +1,23 @@
 'use client';
 
 import { useState } from 'react';
-// daisyui
-import { Button, Modal } from 'react-daisyui';
+
 import { FiDownload, FiPrinter } from 'react-icons/fi';
 import { MdOutlineCancel } from 'react-icons/md';
 
 import { useRouter } from 'next/navigation';
 
-import {
-  useCancelDocument,
-  useGetHolidayWorkReports,
-} from '@/hooks/document/document';
+import { useCancelDocument, useGetHolidayWorkReports } from '@/hooks/document/document';
 import useToast from '@/hooks/useToast';
 
 // hooks
 import HolidayWorkReportDocument from '@/components/document/HolidayWorkReportDocument';
+
 // utils
 import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
+// daisyui
+import { Button, Modal } from 'react-daisyui';
 
 type HolidayDetailClientProps = {
   documentId: string;
@@ -32,9 +31,7 @@ function checkDisabledBtn(status?: DocumentsStatus): boolean {
   return status === 'CANCEL' || status === 'REJECT';
 }
 
-export default function HolidayDetailClient({
-  documentId,
-}: HolidayDetailClientProps) {
+export default function HolidayDetailClient({ documentId }: HolidayDetailClientProps) {
   // router
   const router = useRouter();
 
@@ -96,10 +93,7 @@ export default function HolidayDetailClient({
             인쇄
           </Button>
 
-          <Button
-            onClick={handleCapture}
-            disabled={checkDisabledBtn(documents?.status) || loaddingPdf}
-          >
+          <Button onClick={handleCapture} disabled={checkDisabledBtn(documents?.status) || loaddingPdf}>
             {loaddingPdf ? (
               <span className="loading loading-spinner loading-lg" />
             ) : (

@@ -8,6 +8,7 @@ import { useChatRoomAll, useCreateChatRoom, useMyChatRoom } from '@/hooks/chat';
 import { useGetUserAll } from '@/hooks/user';
 
 import ChatClient from '@/components/ChatClient';
+
 import * as timeago from 'timeago.js';
 import ko from 'timeago.js/lib/lang/ko';
 
@@ -19,10 +20,7 @@ type CustomerChatProps = {
   user: User;
 };
 
-function addRoomUser(
-  rooms: ChatRoomResponse[],
-  func: (roomId: number) => void,
-) {
+function addRoomUser(rooms: ChatRoomResponse[], func: (roomId: number) => void) {
   if (rooms.length === 0) {
     return;
   }
@@ -48,13 +46,7 @@ export default function CustomerChat({ user }: CustomerChatProps) {
         {/* chat header */}
         <div className="flex flex-row gap-2">
           <div>
-            <Image
-              className="rounded-lg"
-              width={56}
-              height={56}
-              src="/bob-works-icon.png"
-              alt="bob-works-logo"
-            />
+            <Image className="rounded-lg" width={56} height={56} src="/bob-works-icon.png" alt="bob-works-logo" />
           </div>
           <div className="col-span-4">
             <h2 className="mb-1 text-xl font-extrabold">고객센터</h2>

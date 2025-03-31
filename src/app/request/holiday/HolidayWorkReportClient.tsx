@@ -1,39 +1,26 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
-import {
-  Badge,
-  Button,
-  Card,
-  Divider,
-  Form,
-  Input,
-  Modal,
-  Radio,
-  Select,
-  Toggle,
-  Tooltip,
-} from 'react-daisyui';
+
 import { BiSolidMinusCircle, BiSolidPlusCircle } from 'react-icons/bi';
 import { BsFileArrowUp } from 'react-icons/bs';
 import { ImCancelCircle } from 'react-icons/im';
-// datepicker
-import Datepicker from 'react-tailwindcss-datepicker';
 
 import { useRouter } from 'next/navigation';
 
-import {
-  useAddHolidayWorkReport,
-  useGetDocumentType,
-} from '@/hooks/document/document';
+import { useAddHolidayWorkReport, useGetDocumentType } from '@/hooks/document/document';
 import useToast from '@/hooks/useToast';
 import { useGetUserAll } from '@/hooks/user';
+
+import DocumentTable from '@/components/DocumentTable';
+import TimePicker from '@/components/TimePicker';
 
 // utils
 import { getDocumentTypeId } from '@/utils/ParseUtils';
 
-import DocumentTable from '@/components/DocumentTable';
-import TimePicker from '@/components/TimePicker';
+import { Badge, Button, Card, Divider, Form, Input, Modal, Radio, Select, Toggle, Tooltip } from 'react-daisyui';
+// datepicker
+import Datepicker from 'react-tailwindcss-datepicker';
 
 type SelectDate = {
   startDate: Date | null;
@@ -106,12 +93,7 @@ export default function HolidayWorkReportClient() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (
-      !holidayDate?.endDate ||
-      !workPurpose ||
-      workUsers.length === 0 ||
-      workTimes.length === 0
-    ) {
+    if (!holidayDate?.endDate || !workPurpose || workUsers.length === 0 || workTimes.length === 0) {
       return;
     }
 
@@ -183,17 +165,13 @@ export default function HolidayWorkReportClient() {
       return;
     }
 
-    const checkUsers = users.filter((item) =>
-      selectWorkUsers.some((workUser) => workUser === item.id),
-    );
+    const checkUsers = users.filter((item) => selectWorkUsers.some((workUser) => workUser === item.id));
 
     setWorkUsers((prev) => {
       const newWorkUsers = prev.slice();
 
       const newUsers = checkUsers
-        .filter((item) =>
-          newWorkUsers.every((workUser) => workUser.workUserId !== item.id),
-        )
+        .filter((item) => newWorkUsers.every((workUser) => workUser.workUserId !== item.id))
         .map((checkUser) => ({
           workUserId: checkUser.id,
           workUserName: checkUser.name,
@@ -266,17 +244,11 @@ export default function HolidayWorkReportClient() {
               <div className="col-span-3 content-center pt-2 text-center">
                 <div className="grid grid-cols-9 gap-2">
                   <div className="col-span-2">
-                    <TimePicker
-                      time={selectStartTime}
-                      onChange={(time) => setSelectStartTime(time)}
-                    />
+                    <TimePicker time={selectStartTime} onChange={(time) => setSelectStartTime(time)} />
                   </div>
                   <div className="pt-2"> ~ </div>
                   <div className="col-span-2">
-                    <TimePicker
-                      time={selectEndTime}
-                      onChange={(time) => setSelectEndTime(time)}
-                    />
+                    <TimePicker time={selectEndTime} onChange={(time) => setSelectEndTime(time)} />
                   </div>
                   <div className="col-span-3 ml-2">
                     <Tooltip message="점심 시간 포함 여부 (12:00 ~ 13:00)">
@@ -291,12 +263,7 @@ export default function HolidayWorkReportClient() {
                     </Tooltip>
                   </div>
                   <div>
-                    <Button
-                      type="button"
-                      shape="circle"
-                      color="ghost"
-                      onClick={handleAddWorkTime}
-                    >
+                    <Button type="button" shape="circle" color="ghost" onClick={handleAddWorkTime}>
                       <BiSolidPlusCircle className="h-5 w-5" />
                     </Button>
                   </div>
@@ -306,17 +273,10 @@ export default function HolidayWorkReportClient() {
               <div className="col-span-1"></div>
               <div className="col-span-3">
                 {workTimes.map((workTime, i) => (
-                  <div
-                    key={`workTime_${i}`}
-                    className="mt-2 grid grid-cols-8 items-center justify-items-center gap-2"
-                  >
-                    <div className="col-span-2 text-center">
-                      {workTime.startTime}
-                    </div>
+                  <div key={`workTime_${i}`} className="mt-2 grid grid-cols-8 items-center justify-items-center gap-2">
+                    <div className="col-span-2 text-center">{workTime.startTime}</div>
                     <div className="text-center">~</div>
-                    <div className="col-span-2 text-center">
-                      {workTime.endTime}
-                    </div>
+                    <div className="col-span-2 text-center">{workTime.endTime}</div>
                     <div className="col-span-2">
                       {workTime.existBreakTime && (
                         <Badge color="neutral" size="md">
@@ -325,12 +285,7 @@ export default function HolidayWorkReportClient() {
                       )}
                     </div>
                     <div>
-                      <Button
-                        type="button"
-                        shape="circle"
-                        color="ghost"
-                        onClick={() => handleRemoveWorkTime(i)}
-                      >
+                      <Button type="button" shape="circle" color="ghost" onClick={() => handleRemoveWorkTime(i)}>
                         <BiSolidMinusCircle className="h-5 w-5" />
                       </Button>
                     </div>
@@ -361,12 +316,7 @@ export default function HolidayWorkReportClient() {
                 <span className="">근무자</span>
               </div>
               <div className="col-span-3 pt-2">
-                <Button
-                  type="button"
-                  color="primary"
-                  variant="outline"
-                  onClick={() => setShowSelectUser(true)}
-                >
+                <Button type="button" color="primary" variant="outline" onClick={() => setShowSelectUser(true)}>
                   추가
                 </Button>
               </div>
@@ -376,10 +326,7 @@ export default function HolidayWorkReportClient() {
               <div className="col-span-1"></div>
               <div className="col-span-3">
                 {workUsers.map((workUser, i) => (
-                  <div
-                    key={`workUser_${i}`}
-                    className="m-2 grid grid-cols-3 items-center justify-items-center gap-3"
-                  >
+                  <div key={`workUser_${i}`} className="m-2 grid grid-cols-3 items-center justify-items-center gap-3">
                     <div className="text-lg font-bold">
                       <span>{workUser.workUserName}</span>
                     </div>
@@ -389,12 +336,7 @@ export default function HolidayWorkReportClient() {
                       </Badge>
                     </div>
                     <div>
-                      <Button
-                        type="button"
-                        shape="circle"
-                        color="ghost"
-                        onClick={() => handleRemoveWorkUser(i)}
-                      >
+                      <Button type="button" shape="circle" color="ghost" onClick={() => handleRemoveWorkUser(i)}>
                         <BiSolidMinusCircle className="h-5 w-5" />
                       </Button>
                     </div>
@@ -409,12 +351,7 @@ export default function HolidayWorkReportClient() {
                     <ImCancelCircle className="h-5 w-5" />
                     취소
                   </Button>
-                  <Button
-                    className="w-52"
-                    type="submit"
-                    color="primary"
-                    disabled={isLoading}
-                  >
+                  <Button className="w-52" type="submit" color="primary" disabled={isLoading}>
                     {isLoading ? (
                       <span className="loading loading-spinner loading-md" />
                     ) : (
@@ -471,10 +408,7 @@ export default function HolidayWorkReportClient() {
             </div>
             <div className="col-span-1">
               <div className="form-control">
-                <label
-                  className="label cursor-pointer"
-                  htmlFor="check_alternative_vacation"
-                >
+                <label className="label cursor-pointer" htmlFor="check_alternative_vacation">
                   <span className="label-text">대체 휴가</span>
                   <input
                     type="radio"
@@ -540,22 +474,13 @@ export default function HolidayWorkReportClient() {
           {/* </Form> */}
         </Modal.Body>
         <Modal.Actions>
-          <Button
-            color="ghost"
-            type="button"
-            variant="outline"
-            onClick={() => setShowSelectUser(false)}
-          >
+          <Button color="ghost" type="button" variant="outline" onClick={() => setShowSelectUser(false)}>
             취소
           </Button>
           <Button
             color="primary"
             type="button"
-            onClick={() =>
-              isManualInput
-                ? handleAddManualWorkUser()
-                : handleAddRagisteredWorkUser()
-            }
+            onClick={() => (isManualInput ? handleAddManualWorkUser() : handleAddRagisteredWorkUser())}
           >
             추가
           </Button>

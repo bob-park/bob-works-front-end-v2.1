@@ -1,6 +1,7 @@
 'use client';
 
 import useGetLoanDetail from '@/hooks/loan/useGetDetailLoan';
+
 import dayjs from 'dayjs';
 
 type LoanDetailContentsProps = {
@@ -20,9 +21,7 @@ function parseRepaymentType(type: LoanRepaymentType) {
   }
 }
 
-export default function LoanDetailContents({
-  loanId,
-}: LoanDetailContentsProps) {
+export default function LoanDetailContents({ loanId }: LoanDetailContentsProps) {
   // query
   const { loan } = useGetLoanDetail(loanId);
 
@@ -31,12 +30,12 @@ export default function LoanDetailContents({
   }
 
   return (
-    <div className="w-full grid grid-cols-6 gap-6 rounded-2xl shadow-xl p-10">
+    <div className="grid w-full grid-cols-6 gap-6 rounded-2xl p-10 shadow-xl">
       {/* 대출 아이디 */}
       <div className="col-span-1 text-right">
         <span>대출 아이디</span> :
       </div>
-      <div className="col-span-3 text-xl text-right font-bold">
+      <div className="col-span-3 text-right text-xl font-bold">
         <p>{loan.id}</p>
       </div>
       <div className="col-span-2"></div>
@@ -45,7 +44,7 @@ export default function LoanDetailContents({
       <div className="col-span-1 text-right">
         <span>대출명</span> :
       </div>
-      <div className="col-span-3 text-xl text-right font-bold">
+      <div className="col-span-3 text-right text-xl font-bold">
         <p>{loan.name}</p>
       </div>
       <div className="col-span-2"></div>
@@ -63,7 +62,7 @@ export default function LoanDetailContents({
       <div className="col-span-1 text-right">
         <span>상환 방식</span> :
       </div>
-      <div className="col-span-3 text-xl font-bold text-right">
+      <div className="col-span-3 text-right text-xl font-bold">
         <p>{parseRepaymentType(loan.repaymentType)}</p>
       </div>
       <div className="col-span-2"></div>
@@ -72,7 +71,7 @@ export default function LoanDetailContents({
       <div className="col-span-1 text-right">
         <span>대출 기간</span> :
       </div>
-      <div className="col-span-3 text-xl text-right font-bold">
+      <div className="col-span-3 text-right text-xl font-bold">
         <span>{dayjs(loan.startDate).format('YYYY-MM-DD')}</span>
         <span> ~ </span>
         <span>{dayjs(loan.endDate).format('YYYY-MM-DD')}</span>

@@ -48,8 +48,7 @@ export function useUpdateAvatar() {
 export function useUpdateSignature() {
   const { mutate, isPending } = useMutation({
     mutationKey: ['user', 'signature'],
-    mutationFn: ({ id, formData }: { id: number; formData: FormData }) =>
-      updateSignature(id, formData),
+    mutationFn: ({ id, formData }: { id: number; formData: FormData }) => updateSignature(id, formData),
   });
 
   return { onUpdateSignature: mutate, isLoading: isPending };

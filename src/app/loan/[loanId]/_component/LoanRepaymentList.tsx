@@ -63,9 +63,7 @@ export default function LoanRepaymentList({ loanId }: LoanRepaymentListProps) {
                     </td>
                     <td className="text-center">
                       {item.repaymentDate ? (
-                        <span>
-                          {dayjs(item.repaymentDate).format('YYYY-MM-DD')}
-                        </span>
+                        <span>{dayjs(item.repaymentDate).format('YYYY-MM-DD')}</span>
                       ) : (
                         <button
                           className="btn btn-primary btn-sm"
@@ -87,12 +85,7 @@ export default function LoanRepaymentList({ loanId }: LoanRepaymentListProps) {
       </div>
 
       {/* repay modal */}
-      <RepayLoanModal
-        open={showRepay}
-        loanId={loanId}
-        repayId={repayId}
-        onBackdrop={() => setShowRepay(false)}
-      />
+      <RepayLoanModal open={showRepay} loanId={loanId} repayId={repayId} onBackdrop={() => setShowRepay(false)} />
     </>
   );
 }

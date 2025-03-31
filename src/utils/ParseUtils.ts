@@ -1,19 +1,13 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
-export function getDocumentTypeId(
-  types: DocumentTypeResponse[],
-  typeName: DocumentsType,
-): number {
+export function getDocumentTypeId(types: DocumentTypeResponse[], typeName: DocumentsType): number {
   const type = findDocumentType(types, typeName);
 
   return type.id;
 }
 
-export function findDocumentType(
-  types: DocumentTypeResponse[],
-  typeName: DocumentsType,
-) {
+export function findDocumentType(types: DocumentTypeResponse[], typeName: DocumentsType) {
   const type = types.find((type) => type.type === typeName);
 
   if (!type) {

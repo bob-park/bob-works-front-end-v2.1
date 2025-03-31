@@ -1,7 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import { Badge, ChatBubble, Divider } from 'react-daisyui';
+
 import { BsSendFill } from 'react-icons/bs';
 
 import { useChats } from '@/hooks/chat';
@@ -9,12 +9,8 @@ import { useChats } from '@/hooks/chat';
 import { formatDate } from '@/utils/ParseUtils';
 
 import dayjs from 'dayjs';
-import {
-  Encodable,
-  IdentitySerializer,
-  JsonSerializer,
-  RSocketClient,
-} from 'rsocket-core';
+import { Badge, ChatBubble, Divider } from 'react-daisyui';
+import { Encodable, IdentitySerializer, JsonSerializer, RSocketClient } from 'rsocket-core';
 import { Payload, ReactiveSocket } from 'rsocket-types';
 import RSocketWebSocketClient from 'rsocket-websocket-client';
 import TimeAgo from 'timeago-react';
@@ -30,11 +26,7 @@ type ChatClientProps = {
   users?: User[];
 };
 
-function createClient(
-  wsHost: string,
-  roomId: number,
-  receiver: (payload: ChatMessageResponse) => void,
-) {
+function createClient(wsHost: string, roomId: number, receiver: (payload: ChatMessageResponse) => void) {
   // // receiver
   const responder = {
     fireAndForget(payload: Payload<ChatMessageResponse, Encodable>) {
@@ -68,12 +60,7 @@ function createClient(
   return client.connect();
 }
 
-export default function ChatClient({
-  wsHost,
-  roomId,
-  userId,
-  users = [],
-}: ChatClientProps) {
+export default function ChatClient({ wsHost, roomId, userId, users = [] }: ChatClientProps) {
   // ref
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
@@ -83,8 +70,7 @@ export default function ChatClient({
     size: 25,
   });
   const [inputMessage, setInputMessage] = useState<string>('');
-  const [socket, setSocket] =
-    useState<ReactiveSocket<SendMessageRequest, Encodable>>();
+  const [socket, setSocket] = useState<ReactiveSocket<SendMessageRequest, Encodable>>();
   const [chatMessages, setChatMessages] = useState<ChatMessageResponse[]>([]);
 
   // query
@@ -92,9 +78,7 @@ export default function ChatClient({
 
   // useEffect
   useEffect(() => {
-    const client = createClient(wsHost, roomId, (message) =>
-      setChatMessages((prev) => [...prev, message]),
-    );
+    const client = createClient(wsHost, roomId, (message) => setChatMessages((prev) => [...prev, message]));
 
     client.subscribe({
       onComplete: (comSocket) => {
@@ -128,9 +112,7 @@ export default function ChatClient({
       setChatMessages((prev) => {
         const prevChats = prev.slice();
 
-        const filterChats = newChatList.filter((item) =>
-          prevChats.every((prevChat) => prevChat.id !== item.id),
-        );
+        const filterChats = newChatList.filter((item) => prevChats.every((prevChat) => prevChat.id !== item.id));
 
         prevChats.push(...filterChats);
 
@@ -190,9 +172,7 @@ export default function ChatClient({
           let isDivide = true;
 
           if (!!prevChat) {
-            isDivide =
-              dayjs(prevChat.createdDate).format('YYYYMMDD') !==
-              dayjs(chat.createdDate).format('YYYYMMDD');
+            isDivide = dayjs(prevChat.createdDate).format('YYYYMMDD') !== dayjs(chat.createdDate).format('YYYYMMDD');
           }
 
           const u = findUser(chat.userId);
@@ -201,23 +181,15 @@ export default function ChatClient({
             <div key={chat.id}>
               {isDivide && (
                 <Divider>
-                  <Badge color="ghost">
-                    {formatDate(chat.createdDate, 'yyyy년 MM월 dd일 (iii)')}
-                  </Badge>
+                  <Badge color="ghost">{formatDate(chat.createdDate, 'yyyy년 MM월 dd일 (iii)')}</Badge>
                 </Divider>
               )}
               <ChatBubble end={chat.userId == userId}>
                 <ChatBubble.Header>
-                  {chat.userId == userId
-                    ? '나'
-                    : `${u ? `${u.userId} (${u.name})` : chat.userId}`}
+                  {chat.userId == userId ? '나' : `${u ? `${u.userId} (${u.name})` : chat.userId}`}
                 </ChatBubble.Header>
-                <ChatBubble.Avatar
-                  src={u ? `/api/user/${u.id}/avatar` : '/api/user/avatar'}
-                />
-                <ChatBubble.Message
-                  color={chat.userId == userId ? 'primary' : 'neutral'}
-                >
+                <ChatBubble.Avatar src={u ? `/api/user/${u.id}/avatar` : '/api/user/avatar'} />
+                <ChatBubble.Message color={chat.userId == userId ? 'primary' : 'neutral'}>
                   {chat.contents}
                 </ChatBubble.Message>
                 <ChatBubble.Footer>

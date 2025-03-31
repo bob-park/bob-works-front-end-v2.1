@@ -39,20 +39,14 @@ export default function ChatRoomContents() {
         {/* contents */}
         <tbody>
           {(chatRooms || []).map((item) => (
-            <tr
-              key={`chat-room-id-${item.id}`}
-              className="hover cursor-pointer"
-              onClick={() => handleClick(item.id)}
-            >
+            <tr key={`chat-room-id-${item.id}`} className="hover cursor-pointer" onClick={() => handleClick(item.id)}>
               <td className="text-left" width={400}>
                 {item.name}
               </td>
               <td className="text-center">
                 <span className="font-bold"></span>
               </td>
-              <td className="text-center">
-                {dayjs(item.createdDate).format('YYYY-MM-DD')}
-              </td>
+              <td className="text-center">{dayjs(item.createdDate).format('YYYY-MM-DD')}</td>
             </tr>
           ))}
         </tbody>

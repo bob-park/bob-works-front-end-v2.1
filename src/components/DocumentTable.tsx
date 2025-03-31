@@ -2,6 +2,7 @@
 
 // daisyui
 import { ChangeEvent } from 'react';
+
 import { Checkbox, Table } from 'react-daisyui';
 
 type DocumentTableHeader = {
@@ -61,9 +62,7 @@ export default function DocumentTable({
             <Checkbox
               key={head.id}
               checked={dataList.length === checkedList.length}
-              indeterminate={
-                dataList.length !== checkedList.length && checkedList.length > 0
-              }
+              indeterminate={dataList.length !== checkedList.length && checkedList.length > 0}
               onChange={handleCheckedAll}
             />
           ) : (
@@ -73,11 +72,7 @@ export default function DocumentTable({
       </Table.Head>
       <Table.Body className="">
         {dataList?.map((data) => (
-          <Table.Row
-            key={`data_${data.id}`}
-            hover
-            onClick={() => handleRowClick(data.id, data.type)}
-          >
+          <Table.Row key={`data_${data.id}`} hover onClick={() => handleRowClick(data.id, data.type)}>
             {heads.map((head) =>
               head.checkbox ? (
                 <Checkbox

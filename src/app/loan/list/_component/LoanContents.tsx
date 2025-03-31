@@ -1,9 +1,10 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import useGetAllLoan from '@/hooks/loan/useGetAllLoan';
 
 import dayjs from 'dayjs';
-import { useRouter } from 'next/navigation';
 
 export default function LoanContents() {
   // router
@@ -18,8 +19,8 @@ export default function LoanContents() {
   };
 
   return (
-    <div className="rounded-xl shadow-2xl p-8">
-      <table className="table ">
+    <div className="rounded-xl p-8 shadow-2xl">
+      <table className="table">
         {/* head */}
         <thead className="bg-base-300">
           <tr>
@@ -35,11 +36,7 @@ export default function LoanContents() {
         {/* contents */}
         <tbody>
           {loans.map((loan, index) => (
-            <tr
-              key={`loan-row-${loan.id}`}
-              className="hover cursor-pointer"
-              onClick={() => handleMoveDetail(loan.id)}
-            >
+            <tr key={`loan-row-${loan.id}`} className="hover cursor-pointer" onClick={() => handleMoveDetail(loan.id)}>
               <td className="text-right" width={50}>
                 {index + 1}
               </td>

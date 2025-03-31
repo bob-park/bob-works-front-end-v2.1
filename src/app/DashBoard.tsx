@@ -1,17 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-// daisyui
-import { Stats } from 'react-daisyui';
 
 import { useGetVacation } from '@/hooks/document/document';
 import { useGetUser } from '@/hooks/user';
 
-import EventCalendar, {
-  CalendarEvent,
-} from '@/components/calendar/EventCalendar';
+import EventCalendar, { CalendarEvent } from '@/components/calendar/EventCalendar';
+
 import { formatISO, parse } from 'date-fns';
 import dayjs from 'dayjs';
+// daisyui
+import { Stats } from 'react-daisyui';
 
 type SearchVacationParams = {
   startDate: Date;
@@ -34,10 +33,7 @@ function parseDate(input: string): Date {
   return parse(input, 'yyyy-MM-dd', new Date());
 }
 
-function parseVacationType(
-  type: VacationType,
-  subType: VacationSubType | undefined,
-): string {
+function parseVacationType(type: VacationType, subType: VacationSubType | undefined): string {
   let vacationType: string = '';
 
   switch (type) {
@@ -78,8 +74,7 @@ function parseVacationType(
 
 export default function DabashBoard() {
   // state
-  const [searchVacationParams, setSearchVacationParams] =
-    useState<SearchVacationParams>(initializeDate);
+  const [searchVacationParams, setSearchVacationParams] = useState<SearchVacationParams>(initializeDate);
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
 
   // query
@@ -102,10 +97,7 @@ export default function DabashBoard() {
         .filter((item) => item.writer.id === user?.id)
         .map((item) => {
           return {
-            name: `${user?.name}${user?.position?.name} ${parseVacationType(
-              item.vacationType,
-              item.vacationSubType,
-            )}`,
+            name: `${user?.name}${user?.position?.name} ${parseVacationType(item.vacationType, item.vacationSubType)}`,
             startDate: parseDate(item.vacationDateFrom as string),
             endDate: parseDate(item.vacationDateTo as string),
           };
@@ -133,11 +125,7 @@ export default function DabashBoard() {
         searchVacationParams.startDate.getMonth() - 1,
         1,
       ),
-      endDate: new Date(
-        searchVacationParams.startDate.getFullYear(),
-        searchVacationParams.startDate.getMonth(),
-        0,
-      ),
+      endDate: new Date(searchVacationParams.startDate.getFullYear(), searchVacationParams.startDate.getMonth(), 0),
     });
   };
 
@@ -148,11 +136,7 @@ export default function DabashBoard() {
         searchVacationParams.startDate.getMonth() + 1,
         1,
       ),
-      endDate: new Date(
-        searchVacationParams.startDate.getFullYear(),
-        searchVacationParams.startDate.getMonth() + 2,
-        0,
-      ),
+      endDate: new Date(searchVacationParams.startDate.getFullYear(), searchVacationParams.startDate.getMonth() + 2, 0),
     });
   };
 
@@ -165,45 +149,33 @@ export default function DabashBoard() {
       <Stats className="font-sans shadow" direction="horizontal">
         <Stats.Stat className="w-48">
           <Stat.Title>연차 개수</Stat.Title>
-          <Stat.Value className="text-primary">
-            {generalVacation.total}
-          </Stat.Value>
+          <Stat.Value className="text-primary">{generalVacation.total}</Stat.Value>
         </Stats.Stat>
 
         <Stats.Stat className="w-48">
           <Stat.Title>사용한 수</Stat.Title>
-          <Stat.Value className="text-secondary">
-            {generalVacation.used}
-          </Stat.Value>
+          <Stat.Value className="text-secondary">{generalVacation.used}</Stat.Value>
         </Stats.Stat>
 
         <Stats.Stat className="w-48">
           <Stat.Title>남은 수</Stat.Title>
-          <Stat.Value>
-            {generalVacation.total - generalVacation.used}
-          </Stat.Value>
+          <Stat.Value>{generalVacation.total - generalVacation.used}</Stat.Value>
         </Stats.Stat>
       </Stats>
       <Stats className="font-sans shadow" direction="horizontal">
         <Stats.Stat className="w-48">
           <Stat.Title>대체 휴가 개수</Stat.Title>
-          <Stat.Value className="text-primary">
-            {alternativeVacation.total}
-          </Stat.Value>
+          <Stat.Value className="text-primary">{alternativeVacation.total}</Stat.Value>
         </Stats.Stat>
 
         <Stats.Stat className="w-48">
           <Stat.Title>사용한 수</Stat.Title>
-          <Stat.Value className="text-secondary">
-            {alternativeVacation.used}
-          </Stat.Value>
+          <Stat.Value className="text-secondary">{alternativeVacation.used}</Stat.Value>
         </Stats.Stat>
 
         <Stats.Stat className="w-48">
           <Stat.Title>남은 수</Stat.Title>
-          <Stat.Value>
-            {alternativeVacation.total - alternativeVacation.used}
-          </Stat.Value>
+          <Stat.Value>{alternativeVacation.total - alternativeVacation.used}</Stat.Value>
         </Stats.Stat>
       </Stats>
 

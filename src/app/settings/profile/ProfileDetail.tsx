@@ -2,13 +2,15 @@
 
 // react
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
-// daisyui
-import { Button, Input } from 'react-daisyui';
+
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 // react-icons
 import { GrEdit } from 'react-icons/gr';
 
 import { useUpdateAvatar, useUpdatePassword } from '@/hooks/user';
+
+// daisyui
+import { Button, Input } from 'react-daisyui';
 
 type ProfileDetailProps = {
   user: User;
@@ -16,9 +18,7 @@ type ProfileDetailProps = {
 
 export default function ProfileDetail({ user }: ProfileDetailProps) {
   // state
-  const [userAvatarSrc, setUserAvatarSrc] = useState<string>(
-    '/api/user/avatar' || '/default_avatar.jpg',
-  );
+  const [userAvatarSrc, setUserAvatarSrc] = useState<string>('/api/user/avatar');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [changePassword, setChangePassword] = useState<string>('');
 
@@ -35,7 +35,7 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
   }, [user]);
 
   const handleEditAvatar = () => {
-    avatarInputRef.current?.click();
+      avatarInputRef.current?.click();
   };
 
   const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +48,6 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
     const avatarFile = files[0];
 
     // ? 확장자...확인 필요할까?
-
     const formData = new FormData();
 
     formData.append('avatar', avatarFile);
@@ -92,17 +91,8 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
       </div>
       <div className="col-span-1">
         <div className="relative w-[256px]">
-          <img
-            className="h-[256px] w-[256px] rounded-full border"
-            src={userAvatarSrc}
-          />
-          <input
-            type="file"
-            hidden
-            ref={avatarInputRef}
-            accept=".png,.jpg"
-            onChange={handleAvatarChange}
-          />
+          <img className="h-[256px] w-[256px] rounded-full border" src={userAvatarSrc} />
+          <input type="file" hidden ref={avatarInputRef} accept=".png,.jpg" onChange={handleAvatarChange} />
           <Button
             className="absolute bottom-0 border border-solid border-gray-300"
             animation
@@ -134,11 +124,7 @@ export default function ProfileDetail({ user }: ProfileDetailProps) {
                 color="ghost"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? (
-                  <AiOutlineEyeInvisible className="h-5 w-5" />
-                ) : (
-                  <AiOutlineEye className="h-5 w-5" />
-                )}
+                {showPassword ? <AiOutlineEyeInvisible className="h-5 w-5" /> : <AiOutlineEye className="h-5 w-5" />}
               </Button>
             </div>
             <Button type="submit">변경</Button>

@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-
 import { getAll } from '@/entries/loan/api';
+
+import { useQuery } from '@tanstack/react-query';
 
 export default function useGetAllLoan() {
   const { data, isLoading } = useQuery<Loan[]>({

@@ -3,6 +3,7 @@
 import React, { ReactNode, createContext, useEffect, useState } from 'react';
 
 import Toast from '@/components/toast/Toast';
+
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { v4 as uuid } from 'uuid';
@@ -25,11 +26,7 @@ export const ToastContext = createContext<ToastProviderContextState>({
   push: (message, level) => {},
 });
 
-export default function ToastProvider({
-  children,
-  limit,
-  timeout,
-}: ToastProviderProps) {
+export default function ToastProvider({ children, limit, timeout }: ToastProviderProps) {
   // state
   const [messages, setMessages] = useState<ToastMessage[]>([]);
 
@@ -37,9 +34,7 @@ export default function ToastProvider({
   useEffect(() => {
     const intervalId = setInterval(() => {
       messages
-        .filter(
-          (item) => dayjs(item.createdDate).unix() < dayjs().unix() - timeout,
-        )
+        .filter((item) => dayjs(item.createdDate).unix() < dayjs().unix() - timeout)
         .forEach((item) => handleRemove(item.id));
     }, 1_000);
 

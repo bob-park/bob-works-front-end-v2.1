@@ -27,21 +27,18 @@ export default function TimePicker({ time, onChange }: TimePickerProps) {
   };
 
   return (
-    <div className="px-5 py-2 w-full bg-white rounded-lg shadow-xl ">
+    <div className="w-full rounded-lg bg-white px-5 py-2 shadow-xl">
       <div className="flex justify-center">
         <select
           name="hours"
-          className="bg-transparent text-md appearance-none outline-none mr-3"
+          className="text-md mr-3 appearance-none bg-transparent outline-none"
           value={hour}
           onChange={(e) => setHour(e.target.value)}
         >
           {Array(24)
             .fill('')
             .map((item, i) => (
-              <option
-                key={`timepicker_hour_${i}`}
-                value={`${i}`.padStart(2, '0')}
-              >
+              <option key={`timepicker_hour_${i}`} value={`${i}`.padStart(2, '0')}>
                 {`${i}`.padStart(2, '0')}
               </option>
             ))}
@@ -49,7 +46,7 @@ export default function TimePicker({ time, onChange }: TimePickerProps) {
         <span className="text-md mr-3">:</span>
         <select
           name="minutes"
-          className="bg-transparent text-md appearance-none outline-none"
+          className="text-md appearance-none bg-transparent outline-none"
           value={minutes}
           onChange={(e) => setMinutes(e.target.value)}
         >

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import { FaCheckCircle } from 'react-icons/fa';
 import { IoClose, IoWarning } from 'react-icons/io5';
 import { RiErrorWarningFill, RiInformationLine } from 'react-icons/ri';
@@ -65,11 +66,7 @@ export default function Toast({ message, timeout, onRemove }: ToastProps) {
       <div>
         <h3 className="font-bold">{message.message}</h3>
       </div>
-      <button
-        className="btn btn-circle btn-sm"
-        type="button"
-        onClick={handleRemove}
-      >
+      <button className="btn btn-circle btn-sm" type="button" onClick={handleRemove}>
         <IoClose className="h-6 w-6" />
       </button>
     </div>

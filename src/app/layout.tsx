@@ -1,8 +1,9 @@
+import type { Metadata } from 'next';
+
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import ToastProvider from '@/components/toast/ToastProvider';
-import type { Metadata } from 'next';
 
 import DefaultNavBar from './DefaultNavBar';
 import RQProvider from './_component/RQProvider';
@@ -15,11 +16,7 @@ export const metadata: Metadata = {
   description: 'Bob 의 만든 통합 사내 결재',
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const apiResponse = await fetch(CLIENT_SERVICE_PATH + '/user', {
     method: 'get',
     headers: {

@@ -1,8 +1,4 @@
-type LoanRepaymentType =
-  | 'LEVEL_PAYMENT'
-  | 'EQUAL_PRINCIPAL_PAYMENT'
-  | 'BALLOON_PAYMENT'
-  | 'CUSTOM';
+type LoanRepaymentType = 'LEVEL_PAYMENT' | 'EQUAL_PRINCIPAL_PAYMENT' | 'BALLOON_PAYMENT' | 'CUSTOM';
 
 interface LoanRepaymentHistory {
   id: number;

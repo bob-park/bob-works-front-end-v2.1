@@ -1,17 +1,14 @@
 import { cookies } from 'next/headers';
 
 import BackDrop from '@/components/BackDrop';
+
 import ky from 'ky';
 
 import ChatRoom from './_component/ChatRoom';
 
 const { CLIENT_SERVICE_PATH } = process.env;
 
-export default async function ChatRoomPage({
-  params,
-}: {
-  params: { roomId: string };
-}) {
+export default async function ChatRoomPage({ params }: { params: { roomId: string } }) {
   const { roomId } = params;
 
   const room = await ky

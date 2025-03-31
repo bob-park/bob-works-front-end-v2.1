@@ -1,19 +1,9 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
-import {
-  Badge,
-  Button,
-  Card,
-  Form,
-  Input,
-  Modal,
-  Radio,
-  Select,
-} from 'react-daisyui';
+
 import { BsFileArrowUp } from 'react-icons/bs';
 import { ImCancelCircle } from 'react-icons/im';
-import Datepicker from 'react-tailwindcss-datepicker';
 
 import { useRouter } from 'next/navigation';
 
@@ -22,11 +12,14 @@ import useToast from '@/hooks/useToast';
 // hooks
 import { useGetUsableAlternativeVacation } from '@/hooks/user';
 
+import DocumentTable from '@/components/DocumentTable';
+
 import { getDocumentTypeId } from '@/utils/ParseUtils';
 
-import DocumentTable from '@/components/DocumentTable';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { Badge, Button, Card, Form, Input, Modal, Radio, Select } from 'react-daisyui';
+import Datepicker from 'react-tailwindcss-datepicker';
 
 type VacationSelect = {
   id: string;
@@ -97,21 +90,15 @@ export default function RequestVacationClient() {
   const { push } = useToast();
 
   //state
-  const [selectVacationType, setSelectVacationType] = useState<VacationSelect>(
-    vacationTypes[0],
-  );
-  const [selectVacationSubType, setSelectVacationSubType] =
-    useState<VacationSelect>(vacationSubTypes[0]);
+  const [selectVacationType, setSelectVacationType] = useState<VacationSelect>(vacationTypes[0]);
+  const [selectVacationSubType, setSelectVacationSubType] = useState<VacationSelect>(vacationSubTypes[0]);
   const [dateValue, setDateValue] = useState<VacationDate>({
     startDate: new Date(),
     endDate: new Date(),
   });
   const [reason, setReason] = useState<string>('개인 사유');
-  const [openSelectAlternative, setOpenSelectAlternative] =
-    useState<boolean>(false);
-  const [selectAlternativeList, setSelectAlternativeList] = useState<number[]>(
-    [],
-  );
+  const [openSelectAlternative, setOpenSelectAlternative] = useState<boolean>(false);
+  const [selectAlternativeList, setSelectAlternativeList] = useState<number[]>([]);
 
   // query
   const { documentsTypes } = useGetDocumentType();
@@ -127,27 +114,18 @@ export default function RequestVacationClient() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (
-      selectVacationType.id === 'ALTERNATIVE' &&
-      selectAlternativeList.length === 0
-    ) {
+    if (selectVacationType.id === 'ALTERNATIVE' && selectAlternativeList.length === 0) {
       return;
     }
 
     const addVacationRequest: AddVacationRequest = {
       typeId: getDocumentTypeId(documentsTypes, 'VACATION'),
       vacationType: selectVacationType.id as VacationType,
-      vacationSubType:
-        selectVacationSubType.id !== 'ALL'
-          ? (selectVacationSubType.id as VacationSubType)
-          : undefined,
+      vacationSubType: selectVacationSubType.id !== 'ALL' ? (selectVacationSubType.id as VacationSubType) : undefined,
       vacationDateFrom: parseUTCDate(dateValue.startDate),
       vacationDateTo: parseUTCDate(dateValue.endDate),
       reason,
-      useAlternativeVacationIds:
-        selectVacationType.id === 'ALTERNATIVE'
-          ? selectAlternativeList
-          : undefined,
+      useAlternativeVacationIds: selectVacationType.id === 'ALTERNATIVE' ? selectAlternativeList : undefined,
     };
 
     console.log(addVacationRequest);
@@ -169,9 +147,7 @@ export default function RequestVacationClient() {
   };
 
   const handleAlternativeCheckedAll = (checked: boolean) => {
-    setSelectAlternativeList(
-      checked ? usableAlternativeVacation.map((item) => item.id) : [],
-    );
+    setSelectAlternativeList(checked ? usableAlternativeVacation.map((item) => item.id) : []);
   };
 
   const handleCancel = () => {
@@ -203,9 +179,7 @@ export default function RequestVacationClient() {
                       checked={selectVacationType.id === vacationType.id}
                       onChange={(e) =>
                         setSelectVacationType(
-                          vacationTypes.find(
-                            (item) => item.id == e.target.value,
-                          ) || vacationTypes[0],
+                          vacationTypes.find((item) => item.id == e.target.value) || vacationTypes[0],
                         )
                       }
                     />
@@ -221,9 +195,7 @@ export default function RequestVacationClient() {
                   value={selectVacationSubType.id}
                   onChange={(e) =>
                     setSelectVacationSubType(
-                      vacationSubTypes.find(
-                        (item) => item.id === e.target.value,
-                      ) || vacationSubTypes[0],
+                      vacationSubTypes.find((item) => item.id === e.target.value) || vacationSubTypes[0],
                     )
                   }
                 >
@@ -274,41 +246,26 @@ export default function RequestVacationClient() {
                     <div className="col-span-3">
                       {selectAlternativeList
                         .sort((o1, o2) => {
-                          const findO1 = usableAlternativeVacation.find(
-                            (i) => i.id == o1,
-                          );
+                          const findO1 = usableAlternativeVacation.find((i) => i.id == o1);
 
-                          const findO2 = usableAlternativeVacation.find(
-                            (i) => i.id == o2,
-                          );
+                          const findO2 = usableAlternativeVacation.find((i) => i.id == o2);
 
                           if (!findO1 || !findO2) {
                             return 0;
                           }
 
-                          return findO1.effectiveDate > findO2.effectiveDate
-                            ? 1
-                            : -1;
+                          return findO1.effectiveDate > findO2.effectiveDate ? 1 : -1;
                         })
                         .map((item) => {
-                          const findItem = usableAlternativeVacation.find(
-                            (i) => i.id == item,
-                          );
+                          const findItem = usableAlternativeVacation.find((i) => i.id == item);
 
                           if (!findItem) {
                             return;
                           }
 
                           return (
-                            <Badge
-                              key={`selected_alternative_${item}`}
-                              className="m-1"
-                              size="lg"
-                              color="accent"
-                            >
-                              {`${findItem.effectiveDate} (${
-                                findItem.effectiveCount - findItem.usedCount
-                              })`}
+                            <Badge key={`selected_alternative_${item}`} className="m-1" size="lg" color="accent">
+                              {`${findItem.effectiveDate} (${findItem.effectiveCount - findItem.usedCount})`}
                             </Badge>
                           );
                         })}
@@ -337,12 +294,7 @@ export default function RequestVacationClient() {
                     <ImCancelCircle className="h-5 w-5" />
                     취소
                   </Button>
-                  <Button
-                    className="w-52"
-                    type="submit"
-                    color="primary"
-                    disabled={isLoading}
-                  >
+                  <Button className="w-52" type="submit" color="primary" disabled={isLoading}>
                     {isLoading ? (
                       <span className="loading loading-spinner loading-md" />
                     ) : (
@@ -356,11 +308,7 @@ export default function RequestVacationClient() {
           </Form>
         </Card.Body>
       </Card>
-      <Modal
-        className="w-11/12 max-w-5xl"
-        open={openSelectAlternative}
-        backdrop
-      >
+      <Modal className="w-11/12 max-w-5xl" open={openSelectAlternative} backdrop>
         <Modal.Header className="font-bold">대체 휴가 선택</Modal.Header>
         <Modal.Body>
           <DocumentTable
@@ -373,10 +321,7 @@ export default function RequestVacationClient() {
           />
         </Modal.Body>
         <Modal.Actions>
-          <Button
-            color="primary"
-            onClick={() => setOpenSelectAlternative(false)}
-          >
+          <Button color="primary" onClick={() => setOpenSelectAlternative(false)}>
             완료
           </Button>
         </Modal.Actions>

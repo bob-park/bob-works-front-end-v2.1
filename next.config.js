@@ -13,8 +13,7 @@ const nextConfig = {
       },
       {
         source: '/api/oauth2/authorization/bob-works',
-        destination:
-          process.env.CLIENT_SERVICE_PATH + '/oauth2/authorization/bob-works',
+        destination: process.env.CLIENT_SERVICE_PATH + '/oauth2/authorization/bob-works',
       },
     ];
   },

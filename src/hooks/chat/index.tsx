@@ -1,19 +1,6 @@
-import {
-  addChatRoomUsers,
-  createChatRoom,
-  getChatRooms,
-  getChats,
-  getMyRoom,
-} from '@/entries/chat/api';
+import { addChatRoomUsers, createChatRoom, getChatRooms, getChats, getMyRoom } from '@/entries/chat/api';
 
-import {
-  InfiniteData,
-  QueryKey,
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { InfiniteData, QueryKey, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useChatRoomAll(params: SearchChatRoomRequest) {
   const { data, isPending } = useQuery<ChatRoomResponse[]>({
@@ -42,13 +29,7 @@ export function useCreateChatRoom(onSuccess?: () => void) {
 export function useAddChatRoomUser() {
   const { mutate, isPending } = useMutation({
     mutationKey: ['add', 'chat', 'room', 'user'],
-    mutationFn: ({
-      roomId,
-      body,
-    }: {
-      roomId: number;
-      body: AddChatRoomUserRequest;
-    }) => addChatRoomUsers(roomId, body),
+    mutationFn: ({ roomId, body }: { roomId: number; body: AddChatRoomUserRequest }) => addChatRoomUsers(roomId, body),
   });
 
   return { onAddChatRoomUser: mutate, isLoading: isPending };

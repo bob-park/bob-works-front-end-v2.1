@@ -2,9 +2,9 @@
 
 import { useGetUserAll } from '@/hooks/user';
 
-import { useStore } from '@/shared/rootStore';
-
 import ChatClient from '@/components/ChatClient';
+
+import { useStore } from '@/shared/rootStore';
 
 const BOB_CHAT_RS_HOST = process.env.NEXT_PUBLIC_BOB_CHAT_RS_HOST;
 
@@ -24,11 +24,6 @@ export default function ChatRoom({ room }: ChatRoomProps) {
   }
 
   return (
-    <ChatClient
-      roomId={room.id}
-      userId={user.userId}
-      wsHost={BOB_CHAT_RS_HOST || 'localhost:9001/rs'}
-      users={users}
-    />
+    <ChatClient roomId={room.id} userId={user.userId} wsHost={BOB_CHAT_RS_HOST || 'localhost:9001/rs'} users={users} />
   );
 }
